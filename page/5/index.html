@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>blog.joshmcarthur.com</title>
+  <meta name="author" content="@sudojosh">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://joshmcarthur.com/blog/page/5/index.html"/>
+  <link href="/favicon.ico" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog.joshmcarthur.com" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+
+<body  >
+  <div id="container">
+      <header><hgroup>
+  <h1><a href="/">blog.joshmcarthur.com</a></h1>
+  
+</hgroup>
+<hgroup class="search">
+    <form action="http://google.com/search" method="get">
+      <fieldset role="site-search">
+        <input type="hidden" name="q" value="site:joshmcarthur.com/blog" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+</hgroup>
+
+
+</header>
+
+      <div id="main" role="main">
+        <div id="content">
+          <div class="blog-index">
+
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/04/08/i18n-always-escapes-dots-in-chained-backends/">I18n ALWAYS Escapes Dots in Chained Backends :-(</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-04-08T00:00:00+12:00" pubdate  data-updated="true" >Apr 8<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Just a quick tip I&#8217;ve come across while browsing through the comments on a
+Railscast_I&#8217;ve_been_watching. It looks like the I18n gems that get
+automatically installed with Rails 3 have a teensy bug.
+When storing a translation to the backend (be it YAML, Redis, whatever), there
+is an :escape option that can be passed to enable (or prevent) the key from
+containing the dot character (.) (Among others, I&#8217;m sure). This seems to work
+fine when dealing with a single backend, but unfortunately when you are using
+chained backends (For example I am using Redis preferentially, but falling back
+on YAML when necessary), the options hash that you would pass the :escape
+option in is mistakenly initialized to an empty hash.
+It&#8217;s a simple fix - there is already a closed pull request on the issue here.
+It looks like the latest stable version is only 0.50 though, so the fix isn&#8217;t
+going to filter through to the actual gem just yet. For now, the best option is
+probably to class_eval into that particular section, or just change the file
+yourself.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/10/spree-hosted-gateway/">Spree Hosted Gateway</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-10T00:00:00+13:00" pubdate  data-updated="true" >Mar 10<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Spree Hosted Gateway is my second &#8216;big&#8217; extension - one of the ones that isn&#8217;t
+just adding one or two bits of nice functionality, but actually and end-to-end
+solution to add something that I think would be useful to a broad range of
+Spree developers (My first was spree-import-products, see my post on it here).
+Spree (for those of you unfamiliar with it), is an open-source eCommerce
+framework written in Ruby on Rails, and has recently been upgraded to Rails 3,
+which has enabled extensions to now be packaged as Rails engines, making them
+far easier to create, implement and share. Out of the box, Spree is able to
+provide much of what a basic online store requires, but something I have felt
+is missing is support for alternative payment methods that are much more
+rudimentary than those catered for by Railsdog&#8217;s_fork_of_ActiveShipping.Â 
+Inspired by a project I was working on at 3Months, I decided to develop an
+extension that provided a new type of Payment Method (Alongside Cheque and
+Creditcard) - External (Or Hosted) Gateway - this type of payment method was
+characterized in the following ways:</p>
+
+<pre><code>* Redirection - the customer was required by the gateway to be redirected
+  to an off-site form to make payment.
+* Tracing the payment and order: attributes required for payment (Amount,
+  etc.) were gathered by the payment gateway from POSTed form data.
+* Communications: there was no type of complex back-and-forth between Spree
+  and the gateway provider behind the scenes - information was transmitted
+  to the gateway, and all Spree is able to do from that point is listen for
+  a postback and collect any information from that.
+</code></pre>
+
+<p>These type of gateways are (unfortunately) quite prevalent, especially around
+small-to-medium independent companies - they tend to be cheaper than more
+widely-known solutions, at the expense of a more reliable and secure
+transaction for the customer.
+Spree Hosted Gateway, as I have mentioned, hooks into Spree in the form of
+registering itself as a Payment Method that can be configured from the admin
+interface. After seeing all theÂ arbitraryÂ information that I was required to
+POST to the payment gateway I was testing against, I also made it easily
+extendable, and used Spree&#8217;s preferences system to allow any number of key-
+value pairs to be created (Which could be modified in the Spree Admin UI),
+which are automatically posted to the payment gateway when I customer is
+redirected (Unless the preference key is added to the exclusion list, of
+course!).Â 
+I conjunction to the &#8216;transmit&#8217; function of the extension, I have also
+implemented a kind of &#8216;landing pad&#8217; for postbacks from the Payment Gateway to
+hit. When this happens, the extension is able to detect whether the transaction
+was successful or not, and continue processing the order. If the customer has
+made an payment that is not sufficient to cover the cost of the order they are
+redirected back to the payment page, and if the transaction was not successful,
+an error message is presented to them.
+All in all, I&#8217;m happy with this extension - it was a great way to learn about
+how Spree itself handles payment methods, different types of gateway and
+payment validation and handling, and I&#8217;m hoping this extension will help out
+some of the Spree developers out there working on smaller stores that don&#8217;t
+need such a large (expensive) gateway.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/09/running-rake-tasks-with-cron-rvm/">Running Rake Tasks With Cron (RVM)</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-09T00:00:00+13:00" pubdate  data-updated="true" >Mar 9<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently I&#8217;ve had to deal with a strange problem with rake tasks being run
+using Cron, a UNIX tool for running commands on a scheduled basis. The problem
+was basically the server being slowly strangled of resources across a forty to
+fifty minute time period, as each time the rake task was run it would leave an
+entire bash process sitting there consuming resources.
+I had assumed that this problem was relating to the rake task exiting in a non-
+normal fashion - an exception maybe, or just not returning something that bash
+was requiring to say &#8216;OK, I can close now&#8217;. As it turned out, the solution was
+even more basic than that.
+The server is question is a bit of a prototype, as it&#8217;s using a system-wide
+installation of RVM to mange two very different sets of gems. To help
+integration with Passenger, each project directory has an .rvmrc file that
+automatically sets the correct Ruby version and Gemset when that directory is
+entered. RVM has a neat security feature however, that prompts you to view and
+approve the file before it is executed for the first time - and, you guessed
+it, this is what was tripping up Cron.
+What was happening, is that Cron was changing directory to the release path in
+order to execute the rake task - but not getting as far as actually executing
+the Rake task. Instead, Cron was being presented with a security warning from
+RVM, which was very cleverly sitting there waiting for input to approve the
+file - causing Bash to sit there&#8230; for ever.
+Fortunately, I did find a solution - it is possible to turn this security
+mechanism file off, to stop it from prompting for approval of the .rvmrc file,
+by adding a configuration flag to the default rvmrc file in /etc/rvmrc - here&#8217;s
+the configuration flag:
+export rvm_trust_rvmrcs_flag=1
+(It goes inside what should be an if block).
+From now on, when Cron runs the rake tasks, it won&#8217;t be presented with this
+prompt - approval will be assumed. No more server resources limits exceeded
+alerts!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/07/ok-so-i-was-wrong/">OK, So I Was Wrong</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-07T00:00:00+13:00" pubdate  data-updated="true" >Mar 7<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>OK,_So_I_Was_Wrong
+So I was just flipping through my archives of blog posts, when I found this_one
+- my first ever post to Tumblr, where I vowed to stop posting enormously long
+essays on silly ideas I have to change the world.
+Oops.
+Sorry everyone!</p>
+</div>
+  
+  
+
+
+  </article>
+
+<nav role="pagination">
+  <div>
+    
+      <a class="prev" href="/page/6/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/page/4/">Newer &rarr;</a>
+    
+  </div>
+</nav>
+
+<script type="text/javascript">
+    var disqus_shortname = 'sudojosh-blogtesting';
+    (function () {
+      var s = document.createElement('script'); s.async = true;
+      s.type = 'text/javascript';
+      s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+      (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+</div>
+<aside role=sidebar>
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/09/select-anything-from-everything/">Select Anything From Everything with Select</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano rvm-shell: command not found error</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no/">Arbitrary Ordering in PostgreSQL when Rails + ENUM = No.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/10/quick-clear-gemset/">Quick: Clear Gemset</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/joshmcarthur">@joshmcarthur</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'joshmcarthur',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("sudojosh", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/sudojosh" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @sudojosh</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+        </div>
+      </div>
+      <footer><p>
+  Copyright &copy; 2011 - @sudojosh -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  </div>
+  
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>
+
