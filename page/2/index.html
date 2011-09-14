@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>blog.joshmcarthur.com</title>
+  <meta name="author" content="@sudojosh">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://joshmcarthur.com/blog/page/2/index.html"/>
+  <link href="/blog/favicon.ico" rel="shortcut icon" />
+  <link href="/blog/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/blog/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/blog/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog.joshmcarthur.com" type="application/atom+xml"/>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+
+<body  >
+  <div id="container">
+      <header><hgroup>
+  <h1><a href="/blog/">blog.joshmcarthur.com</a></h1>
+  
+</hgroup>
+<hgroup class="search">
+    <form action="http://google.com/search" method="get">
+      <fieldset role="site-search">
+        <input type="hidden" name="q" value="site:joshmcarthur.com/blog" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+</hgroup>
+
+
+</header>
+
+      <div id="main" role="main">
+        <div id="content">
+          <div class="blog-index">
+
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no/">Arbitrary Ordering in PostgreSQL When Rails + ENUM = No.</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-07-14T00:00:00+12:00" pubdate  data-updated="true" >Jul 14<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve recently had to do a custom sort for a work project that has required a
+sort on something that is not naturally sortable correctly (For example,
+alphabetical or numerical sorting). While searching for a completely different
+solution, I came across <a href="http://stackoverflow.com/questions/1309624/%0Asimulating-mysqls-order-by-field-in-postgresql">this post</a> that outlined a nice technique.
+Basically, when you have a field in your Rails model with a predefined set of
+possible values, you can use a CASE statement in PostgreSQL to perform the sort
+in whichever order these values should appear. Here&#8217;s a sample of how this
+could be achieved using Rails: <code>Result.order("CASE " + "WHEN medal='gold'
+THEN 1 " + "WHEN medal='silver' THEN 2 " + "WHEN medal='bronze' THEN 3 " +
+"ELSE 4 " + + "END,name")</code> It&#8217;s messy of course - how you want to format the
+SQL string is up to you, but it&#8217;s a great solution when you don&#8217;t have the
+normal sorting capabilities of a ENUM datatype available to you.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/07/10/quick-clear-gemset/">Quick: Clear Gemset</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-07-10T00:00:00+12:00" pubdate  data-updated="true" >Jul 10<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you&#8217;re finding that you have to change something fairly significant in your
+bundler dependencies, it&#8217;s usually a good idea to get rid of what you&#8217;ve got
+loaded in an RVM gemset so that you don&#8217;t end up with different versions of
+gems fighting with each other. To do this, simply run <strong><code>rvm gemset empty</code></strong> -
+it&#8217;ll delete all the gems currently in your gemset, giving you a blank slate.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/06/27/the-dictionary-of-new-zealand-sign-language/">The Dictionary of New Zealand Sign Language</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-06-27T00:00:00+12:00" pubdate  data-updated="true" >Jun 27<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://nzsl.vuw.ac.nz">The Dictionary of New Zealand Sign Language</a> went live
+on Friday - it&#8217;s a project that I have worked on with <a href="http://%0Awww.danielsherson.com">Daniel</a>, Chris and <a href="http://www.linkedin.com/in/%0Ajamesarobertson">James R</a>, at 3Months. I attended a launch event at Victoria University
+on the Friday, and it really was quite a humbling experience - this dictionary
+has been the effort of a team of people for years and years - really, what
+3Months has done has just been the tip of the iceberg. It really does seem like
+this project has been rewarding - we&#8217;ve taken a comprehensive database of sign
+information and images (Built with what seems to be a lot of time and effort by
+<a href="http://dave.moskovitz.co.nz/2011/06/24/the-online-dictionary-%0Aof-new-zealand-sign-language/">Dave Moskozitz</a>), and given it a public presence - hopefully,
+something that everyone can use - whether it&#8217;s to learn New Zealand Sign
+Language, or just to learn how to finger spell names and words. I&#8217;m mostly
+posting this in the hope that everyone who reads this goes to check out the
+site, and to learn something of this language - give it a spin! <a href="http://nzsl.vuw.ac.nz">http://
+nzsl.vuw.ac.nz</a></p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/06/23/-password-or-passphrase/">&#8216;Password&#8217; or &#8216;Passphrase&#8217;</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-06-23T00:00:00+12:00" pubdate  data-updated="true" >Jun 23<span>rd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So apparently pass phrases are the new &#8216;secure password&#8217; - kinda the step you
+get to when you finally accept that your users are going to use something like
+&#8216;password&#8217; for their account password. The natural step here is to reinforce a
+secure password strategy by requiring x numbers, x special characters and a
+certain length - but I find this really annoying when I just want to get signed
+up, and that means that other users do as well. Something I&#8217;ve just been
+thinking about is the naming semantics of password field - labeling it
+&#8216;password&#8217; immediately prompts users to think of an actual word - if they are
+computer-savvy, then they might throw a symbol or number in, but most likely it
+will still be based on an actual word. I wonder what would happen if you
+labelled this field &#8216;Passphrase&#8217; though? I think it is inevitable that many
+users will recognize the pattern of the form rather than the labelling of the
+fields and still enter their &#8216;password&#8217;, but just maybe there will be some
+users who get the semantics of the label, and enter a sentence, instead of a
+word. Even though there may not be special characters in that sentence, it&#8217;s
+still just as, if not more secure from dictionary attacks - guessing one word
+is pretty easy, but it&#8217;s much, much harder to guess a string of words, in the
+correct order - especially if one or two of those words are obfuscated with
+some special characters or numbers. Just a thought&#8230;. but interesting
+nonetheless.</p>
+</div>
+  
+  
+
+
+  </article>
+
+<nav role="pagination">
+  <div>
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/">Newer &rarr;</a>
+    
+  </div>
+</nav>
+
+<script type="text/javascript">
+    var disqus_shortname = 'sudojosh';
+    (function () {
+      var s = document.createElement('script'); s.async = true;
+      s.type = 'text/javascript';
+      s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+      (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+</div>
+<aside role=sidebar>
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/09/14/introducing-blog-broadcaster/">Introducing Blog Broadcaster</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/09/09/select-anything-from-everything/">Select Anything From Everything with <select></a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano rvm-shell: command not found error</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no/">Arbitrary Ordering in PostgreSQL when Rails + ENUM = No.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/joshmcarthur">@joshmcarthur</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'joshmcarthur',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/blog/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("sudojosh", 5, false);
+    });
+  </script>
+  <script src="/blog/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/sudojosh" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @sudojosh</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+        </div>
+      </div>
+      <footer><p>
+  Copyright &copy; 2011 - @sudojosh -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  </div>
+  
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+</body>
+</html>
+
