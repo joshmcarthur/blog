@@ -4,7 +4,7 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://joshmcarthur.com/blog/atom.xml" rel="self"/>
   <link href="http://joshmcarthur.com/blog/"/>
-  <updated>2011-09-23T14:06:48+12:00</updated>
+  <updated>2011-09-23T14:21:15+12:00</updated>
   <id>http://joshmcarthur.com/blog/</id>
   <author>
     <name>@sudojosh</name>
@@ -45,7 +45,7 @@
 &lt;p&gt;Let me explain these options and why I use them:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;--no-owner&lt;/code&gt;: By default, Postgres dumps the database with lots of SET OWNER TO statements. I like to take these out of the dump, as I'm not necessarily restoring the dump to exactly the same server with exactly the same users. Using --no-dump means that ownership statements will be excluded.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--no-owner&lt;/code&gt;: By default, Postgres dumps the database with lots of SET OWNER TO statements. I like to take these out of the dump, as I'm not necessarily restoring the dump to exactly the same server with exactly the same users. Using --no-owner means that ownership statements will be excluded.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;-U [username]&lt;/code&gt;: This lets you pass in the database user name your web application usually uses to connect - using this is just good practise, as it ensures that what you're dumping is exactly what the web application has.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;-W&lt;/code&gt;: This option, used in conjunction with the &lt;code&gt;-U&lt;/code&gt; flag, prompts for the password when you run the command&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;[database_name]&lt;/code&gt;: This is the name of the database that you want to dump&lt;/li&gt;

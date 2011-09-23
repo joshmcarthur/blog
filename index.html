@@ -94,7 +94,7 @@
 <p>Let me explain these options and why I use them:</p>
 
 <ul>
-<li><code>--no-owner</code>: By default, Postgres dumps the database with lots of SET OWNER TO statements. I like to take these out of the dump, as I&#8217;m not necessarily restoring the dump to exactly the same server with exactly the same users. Using &#8211;no-dump means that ownership statements will be excluded.</li>
+<li><code>--no-owner</code>: By default, Postgres dumps the database with lots of SET OWNER TO statements. I like to take these out of the dump, as I&#8217;m not necessarily restoring the dump to exactly the same server with exactly the same users. Using &#8211;no-owner means that ownership statements will be excluded.</li>
 <li><code>-U [username]</code>: This lets you pass in the database user name your web application usually uses to connect - using this is just good practise, as it ensures that what you&#8217;re dumping is exactly what the web application has.</li>
 <li><code>-W</code>: This option, used in conjunction with the <code>-U</code> flag, prompts for the password when you run the command</li>
 <li><code>[database_name]</code>: This is the name of the database that you want to dump</li>
