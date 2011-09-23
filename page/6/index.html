@@ -36,14 +36,7 @@
   <h1><a href="/">blog.joshmcarthur.com</a></h1>
   
 </hgroup>
-<hgroup class="search">
-    <form action="http://google.com/search" method="get">
-      <fieldset role="site-search">
-        <input type="hidden" name="q" value="site:joshmcarthur.com/blog" />
-        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-      </fieldset>
-    </form>
-</hgroup>
+
 
 
 </header>
@@ -52,6 +45,102 @@
         <div id="content">
           <div class="blog-index">
 
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/09/running-rake-tasks-with-cron-rvm/">Running Rake Tasks With Cron (RVM)</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-09T00:00:00+13:00" pubdate  data-updated="true" >Mar 9<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently I&#8217;ve had to deal with a strange problem with rake tasks being run
+using Cron, a UNIX tool for running commands on a scheduled basis. The problem
+was basically the server being slowly strangled of resources across a forty to
+fifty minute time period, as each time the rake task was run it would leave an
+entire bash process sitting there consuming resources.
+I had assumed that this problem was relating to the rake task exiting in a non-
+normal fashion - an exception maybe, or just not returning something that bash
+was requiring to say &#8216;OK, I can close now&#8217;. As it turned out, the solution was
+even more basic than that.
+The server is question is a bit of a prototype, as it&#8217;s using a system-wide
+installation of RVM to mange two very different sets of gems. To help
+integration with Passenger, each project directory has an .rvmrc file that
+automatically sets the correct Ruby version and Gemset when that directory is
+entered. RVM has a neat security feature however, that prompts you to view and
+approve the file before it is executed for the first time - and, you guessed
+it, this is what was tripping up Cron.
+What was happening, is that Cron was changing directory to the release path in
+order to execute the rake task - but not getting as far as actually executing
+the Rake task. Instead, Cron was being presented with a security warning from
+RVM, which was very cleverly sitting there waiting for input to approve the
+file - causing Bash to sit there&#8230; for ever.
+Fortunately, I did find a solution - it is possible to turn this security
+mechanism file off, to stop it from prompting for approval of the .rvmrc file,
+by adding a configuration flag to the default rvmrc file in /etc/rvmrc - here&#8217;s
+the configuration flag:
+export rvm_trust_rvmrcs_flag=1
+(It goes inside what should be an if block).
+From now on, when Cron runs the rake tasks, it won&#8217;t be presented with this
+prompt - approval will be assumed. No more server resources limits exceeded
+alerts!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/07/ok-so-i-was-wrong/">OK, So I Was Wrong</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-07T00:00:00+13:00" pubdate  data-updated="true" >Mar 7<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>OK,_So_I_Was_Wrong
+So I was just flipping through my archives of blog posts, when I found this_one
+- my first ever post to Tumblr, where I vowed to stop posting enormously long
+essays on silly ideas I have to change the world.
+Oops.
+Sorry everyone!</p>
+</div>
+  
+  
+
+
+  </article>
 
 
   <article>
@@ -213,96 +302,6 @@ ethos of community-oriented &#8216;responsible web applications&#8217;.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/02/04/ah-the-rugby-sevens-it-s-a-hot-day-13-sorry-you-ll-ha/">Ah, the Rugby Sevens (It&#8217;s a Hot Day).</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-02-04T00:00:00+13:00" pubdate  data-updated="true" >Feb 4<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>[/images/posts/2011-02-04-ruby-sevens-1.jpg]
-Ah, the Rugby Sevens (It&#8217;s a hot day).
-Sorry, you&#8217;ll have to imagine the sound effects for yourself&#8230;</p>
-</div>
-  
-  
-
-
-  </article>
-
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/12/23/radiant-as-a-service-delivery-platform/">Radiant as a Service-delivery Platform</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2010-12-23T00:00:00+13:00" pubdate  data-updated="true" >Dec 23<span>rd</span>, 2010</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Tonight I&#8217;ve been playing round with Radiant - it looks really impressive as a
-content-management system, and I&#8217;ve been thinking about ways I can change it
-round to support vendors - that is, one person or organization offering Radiant
-as a service to multiple clients - basically, it would be one big Radiant
-application (to simplify administration and server maintenance), but would be
-scoped (for administrative users) just to that organization - nothing would be
-different from them, aside from the fact that the vendor can use one instance
-of the application to create, modify and maintain many organizations&#8217; Radiant
-content management systems.Â 
-My motivation for doing this is to try and create something I thought of a bit
-earlier today - a service to help low-level, low-budget schools (Primary to
-Intermediate) to move services and content online in a way that they can manage
-themselves. Radiant seems to be an excellent option in this regard - supporting
-diverse and flexible themes, and with plenty of extensions to offer additional
-functionality for little work. What I want, though, is a sort of dashboard for
-myself - I want to have a nice interface to have overall control over each
-installation, and for me to administer the site myself if that is a client&#8217;s
-preference. In addition, by using the method of scoping a &#8216;site&#8217; to an
-organization, some cool things are possible, like an online signup wizard that
-would allow a client to set up a site without any initial involvement from me -
-because it is just records being inserted into a database, and not an entire
-application being created, this type of process becomes very easy.
-It&#8217;s early days yet, of course, but something in the educational area is what
-I&#8217;ve been wanting to tackle for a while now - let&#8217;s see how it goes.
-For more information about Radiant CMS, seeÂ http://radiantcms.org/
-For more information about what I am doing, follow my github repository:
-Â https://github.com/joshmcarthur/radiant-for-vendor</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -329,8 +328,25 @@ For more information about what I am doing, follow my github repository:
 <aside role=sidebar>
   
     <section>
+  <h1>Search</h1>
+  <form action="http://google.com/search" method="get" class="search">
+    <fieldset role="site-search">
+      <input type="hidden" name="q" value="site:joshmcarthur.com/blog" />
+      <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    </fieldset>
+  </form>
+</section>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/14/introducing-blog-broadcaster/">Introducing Blog Broadcaster</a>
+      </li>
     
       <li class="post">
         <a href="/2011/09/09/select-anything-from-everything/">Select Anything From Everything with Select</a>
@@ -342,14 +358,6 @@ For more information about what I am doing, follow my github repository:
     
       <li class="post">
         <a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no/">Arbitrary Ordering in PostgreSQL when Rails + ENUM = No.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/10/quick-clear-gemset/">Quick: Clear Gemset</a>
       </li>
     
   </ul>

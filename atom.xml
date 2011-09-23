@@ -4,13 +4,136 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://joshmcarthur.com/blog/atom.xml" rel="self"/>
   <link href="http://joshmcarthur.com/blog/"/>
-  <updated>2011-09-12T17:15:35+12:00</updated>
+  <updated>2011-09-23T14:06:48+12:00</updated>
   <id>http://joshmcarthur.com/blog/</id>
   <author>
     <name>@sudojosh</name>
     
   </author>
 
+  
+  <entry>
+    <title>Howto: Database Backup and Restore</title>
+    <link href="http://joshmcarthur.com/blog/2011/09/23/howto-database-backup-and-restore/"/>
+    <updated>2011-09-23T13:26:00+12:00</updated>
+    <id>http://joshmcarthur.com/blog/2011/09/23/howto-database-backup-and-restore</id>
+    <content type="html">&lt;p&gt;An inherent part of developing web applications is managing your datastores - typically, a relational database such as MySQL or PostgreSQL. Today, I'm going to quickly cover off how to backup and restore for both of these databases.&lt;/p&gt;
+
+&lt;h2&gt;What you'll need&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Either PostgreSQL or MySQL&lt;/li&gt;
+&lt;li&gt;Access to a database (preferably one with data in it)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Why this is useful to know&lt;/h2&gt;
+
+&lt;p&gt;Lots of interactions with databases have the potential to destroy or modify data (in a bad way). When using frameworks such as Ruby on Rails, it's even easier to, say, accidently delete all of your Users (Horribly easy in DataMapper, unfortunately). It's important that before you do anything with data that's destructive, you have a backup of your database that you can restore from quickly and easily.&lt;/p&gt;
+
+&lt;h2&gt;PostgreSQL&lt;/h2&gt;
+
+&lt;p&gt;Postgres databases are backed up using the &lt;code&gt;pg_dump&lt;/code&gt; command - a command-line utility that comes packaged with the database server. Here's the command:&lt;/p&gt;
+
+&lt;p&gt;``` sh&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pg_dump --no-owner -U [username] -W [database_name] &amp;gt; [file to dump to].sql.dump
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;Let me explain these options and why I use them:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--no-owner&lt;/code&gt;: By default, Postgres dumps the database with lots of SET OWNER TO statements. I like to take these out of the dump, as I'm not necessarily restoring the dump to exactly the same server with exactly the same users. Using --no-dump means that ownership statements will be excluded.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-U [username]&lt;/code&gt;: This lets you pass in the database user name your web application usually uses to connect - using this is just good practise, as it ensures that what you're dumping is exactly what the web application has.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-W&lt;/code&gt;: This option, used in conjunction with the &lt;code&gt;-U&lt;/code&gt; flag, prompts for the password when you run the command&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[database_name]&lt;/code&gt;: This is the name of the database that you want to dump&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[file to dump to]&lt;/code&gt;: This is the file that the SQL script that pg_dump produces will be piped into. I normally name this file with the &lt;code&gt;.sql.dump&lt;/code&gt; extension, so that I can see it's a SQL dump straight off.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h4&gt;Restoring a database dump&lt;/h4&gt;
+
+&lt;p&gt;Restoring a Postgresql dump is really easy, and involves using the standard &lt;code&gt;psql&lt;/code&gt; client to connect to the database and execute the SQL script in your dump file.&lt;/p&gt;
+
+&lt;p&gt;First of all, make sure that you have created the database you want to load the data into. In this example, let's say I've dumped from the &lt;code&gt;facebook_production&lt;/code&gt; database to the file &lt;code&gt;facebook_production_23092011.sql.dump&lt;/code&gt;, and I want to restore into the &lt;code&gt;facebook_development&lt;/code&gt; database so that I can test out some code against some production data. I want to connect to the database using psql as the web application user, and load the dump in:&lt;/p&gt;
+
+&lt;p&gt;``` sh&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;psql -U facebook -W facebook_development &amp;lt; facebook_production_23092011.sql.dump`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;Note how I am using the opposite of the less-than symbol I used above - this basically denotes the direction of the data - it's coming &lt;em&gt;from&lt;/em&gt; the file, going &lt;em&gt;to&lt;/em&gt; the database.&lt;/p&gt;
+
+&lt;p&gt;Upon running this commmand (with your own database, of course), you will first be prompted for your database user's password, and will then see a bunch of SQL statements being executed. Once it's completed, your database has been loaded successfully - you can jump in using psql if you'd like, and query around a bit.&lt;/p&gt;
+
+&lt;h2&gt;MySQL&lt;/h2&gt;
+
+&lt;p&gt;MySQL databases are backed up with the &lt;code&gt;mysqldump&lt;/code&gt; program - one I'm not as familiar with as Postgres, but I know the basics, and largely that's all you need with this type of thing. The main thing to keep in mind is that the process is the same as for PostgreSQL above - use the dump program to write the database out to a file (in the form of SQL statements), and then use the database client program &lt;code&gt;mysql&lt;/code&gt; in this case, to execute the commands in the file against the database being restored to. Here's the command to dump a MySQL file to disk:&lt;/p&gt;
+
+&lt;p&gt;``` sh&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysqldump -U [username] -P [database_name] &amp;gt; [file to dump to].sql.dump
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;The options are more or less as I've described above, except that &lt;code&gt;-P&lt;/code&gt; is substituted for &lt;code&gt;-W&lt;/code&gt;, and I've still stuck with the &lt;code&gt;.sql.dump&lt;/code&gt; naming scheme.&lt;/p&gt;
+
+&lt;h4&gt;Restoring a database dump&lt;/h4&gt;
+
+&lt;p&gt;This process is almost identical to the PostgreSQL restore process. Let's stick with the same example format we already have - dumping from a database called &lt;code&gt;facebook_production&lt;/code&gt; to file &lt;code&gt;facebook_production_23092011.sql.dump&lt;/code&gt;, restoring into a database called &lt;code&gt;facebook_development&lt;/code&gt; - here's the command we need for that:&lt;/p&gt;
+
+&lt;p&gt;``` sh&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mysql -U facebook -P facebook_development &amp;lt; facebook_production_23092011.sql.dump
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;Once again, you'll be prompted for your password, but for this one you won't see the output of the SQL statements - it will take a couple of seconds, and then the program will exit. This is normal however - if you'd like to see the output of the batch load, you can add &lt;code&gt;-v -v -v&lt;/code&gt; before the &lt;code&gt;&amp;lt;&lt;/code&gt; symbol to turn verbosity to level three, otherwise you can go ahead and jump into your database and make sure everything is there.&lt;/p&gt;
+
+&lt;h2&gt;Tips:&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;If you don't have a database user account yet, on Unix and Linux you can use &lt;code&gt;sudo su postgres&lt;/code&gt; to login as the 'postgres' user - a root-like database user that gets created for you when Postgres is installed. MySQL has a root account, but it's not a system user - you are normally prompted for a root username and password when you install MySQL. If you &lt;em&gt;are&lt;/em&gt; using the Postgres user, you don't need to pass in a username or password in the above commands, but you need to remember that your restored databases will be owned by 'postgres', not you web application database user.&lt;/li&gt;
+&lt;li&gt;A handy place to put database dumps that you are planning to use right away is &lt;code&gt;/tmp&lt;/code&gt; (Only on Unix and Linux). This is a directly that is writeable by everyone, that will get 'garbage collected' periodically. This is especially handy if you are logging in as the 'postgres' user, as typically this user won't have write permissions on many other directories&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  
+  <entry>
+    <title>Introducing Blog Broadcaster</title>
+    <link href="http://joshmcarthur.com/blog/2011/09/14/introducing-blog-broadcaster/"/>
+    <updated>2011-09-14T19:04:00+12:00</updated>
+    <id>http://joshmcarthur.com/blog/2011/09/14/introducing-blog-broadcaster</id>
+    <content type="html">&lt;p&gt;I've just completed a Blog Broadcaster for this blog. It had a couple of interesting technical things, and I needed to test it properly, so here's this post!&lt;/p&gt;
+
+&lt;p&gt;I recently migrated this blog from &lt;a href=&quot;http://tumblr.com&quot;&gt;Tumblr&lt;/a&gt;, and while Tumblr was pretty awesome and easy to use, it didn't have great support for blocks of code and preformatted comment, and, like &lt;a href=&quot;http://www.radiantcms.org&quot;&gt;Radiant CMS&lt;/a&gt;, it stored layouts, stylesheets, and all of that kind of thing in a database somewhere - it wasn't in source control, and making changes to it was dangerous.&lt;/p&gt;
+
+&lt;p&gt;One thing that I immediately missed from Tumblr, however, was it's ability to post to Facebook and Twitter automatically whenever I published a post. As I don't post that often, it's really important to me that I market my blog as much as I can - like my Github profile, the content on my blog is a reflection of my knowledge and skill as a developer, and so I want to get that in front of people as much as possible - broadcasting to social networks is a great way of achieving that.&lt;/p&gt;
+
+&lt;p&gt;With my blog on Github, I needed a way to broadcast new posts to these social networks. Github has a built-in post-receive hook to post to Twitter, but I really needed something more than that. Here's my list of requirements:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It should automatically post without me needing to do any special task&lt;/li&gt;
+&lt;li&gt;It should be conditional - i.e. it shouldn't post &lt;em&gt;everytime&lt;/em&gt; I change something&lt;/li&gt;
+&lt;li&gt;It should support both Facebook and Twitter&lt;/li&gt;
+&lt;li&gt;It should be able to be triggered by a commit&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;What I ended up building was a Sinatra app whose sole purpose was to receive POST'ed commit information, parse it into a Facebook and Twitter post, and broadcast it. It's hosted on Heroku, and gets triggered by a Github &lt;a href=&quot;http://help.github.com/post-receive-hooks/&quot;&gt;Post-Receive Hooks&lt;/a&gt;. I did run into a couple of problems along the way - the main one was sorting out being able to post Facebook updates without being logged in, or even needing to be involved at the process at all. This wasn't too difficult, but I did need to get an access token that was long-lived, and have the ability to update this if necessary. I overcame this problem by adding some methods to my Sinatra app that will allow me to update the access token if it ever expires, or change the Facebook account used if necessary.&lt;/p&gt;
+
+&lt;p&gt;The second problem I ran into wasn't really a problem, but it was a challenge to try and think of a nice way of doing it. Basically I needed to store the Facebook access token somewhere so that I could use it when I needed it - but I didn't have a database, and I didn't particularly want to add one just for storing a single string. Since this is running on Heroku (Bamboo stack, not Cedar), I was also on a read-only filesystem, so couldn't store it in a simple text file either. In this end, I chose to store the value in Memcache using the Heroku add-on. This still isn't necessarily a good solution, as this storage method isn't guaranteed to be persistent, however it should suit my needs - it doesn't particularly matter if I lose the access token, the application will gracefully degrade and just post to Twitter until I log in to Facebook via the app again.&lt;/p&gt;
+
+&lt;p&gt;So, I think I've come up with a good solution. It started off as a simple broadcaster for my blog, but I think it has a lot of potential for use with any open-source project that has social networking presence - I think it's a much more elegant and flexible hook than that which Github provides, and I hope it get's a bit of use.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Select Anything From Everything with Select</title>
@@ -654,58 +777,6 @@ how Spree itself handles payment methods, different types of gateway and
 payment validation and handling, and I'm hoping this extension will help out
 some of the Spree developers out there working on smaller stores that don't
 need such a large (expensive) gateway.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Running Rake tasks with Cron (RVM)</title>
-    <link href="http://joshmcarthur.com/blog/2011/03/09/running-rake-tasks-with-cron-rvm/"/>
-    <updated>2011-03-09T00:00:00+13:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/03/09/running-rake-tasks-with-cron-rvm</id>
-    <content type="html">&lt;p&gt;Recently I've had to deal with a strange problem with rake tasks being run
-using Cron, a UNIX tool for running commands on a scheduled basis. The problem
-was basically the server being slowly strangled of resources across a forty to
-fifty minute time period, as each time the rake task was run it would leave an
-entire bash process sitting there consuming resources.
-I had assumed that this problem was relating to the rake task exiting in a non-
-normal fashion - an exception maybe, or just not returning something that bash
-was requiring to say 'OK, I can close now'. As it turned out, the solution was
-even more basic than that.
-The server is question is a bit of a prototype, as it's using a system-wide
-installation of RVM to mange two very different sets of gems. To help
-integration with Passenger, each project directory has an .rvmrc file that
-automatically sets the correct Ruby version and Gemset when that directory is
-entered. RVM has a neat security feature however, that prompts you to view and
-approve the file before it is executed for the first time - and, you guessed
-it, this is what was tripping up Cron.
-What was happening, is that Cron was changing directory to the release path in
-order to execute the rake task - but not getting as far as actually executing
-the Rake task. Instead, Cron was being presented with a security warning from
-RVM, which was very cleverly sitting there waiting for input to approve the
-file - causing Bash to sit there... for ever.
-Fortunately, I did find a solution - it is possible to turn this security
-mechanism file off, to stop it from prompting for approval of the .rvmrc file,
-by adding a configuration flag to the default rvmrc file in /etc/rvmrc - here's
-the configuration flag:
-export rvm_trust_rvmrcs_flag=1
-(It goes inside what should be an if block).
-From now on, when Cron runs the rake tasks, it won't be presented with this
-prompt - approval will be assumed. No more server resources limits exceeded
-alerts!&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>OK, So I Was Wrong</title>
-    <link href="http://joshmcarthur.com/blog/2011/03/07/ok-so-i-was-wrong/"/>
-    <updated>2011-03-07T00:00:00+13:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/03/07/ok-so-i-was-wrong</id>
-    <content type="html">&lt;p&gt;OK,_So_I_Was_Wrong
-So I was just flipping through my archives of blog posts, when I found this_one
-- my first ever post to Tumblr, where I vowed to stop posting enormously long
-essays on silly ideas I have to change the world.
-Oops.
-Sorry everyone!&lt;/p&gt;
 </content>
   </entry>
   

@@ -36,14 +36,7 @@
   <h1><a href="/">blog.joshmcarthur.com</a></h1>
   
 </hgroup>
-<hgroup class="search">
-    <form action="http://google.com/search" method="get">
-      <fieldset role="site-search">
-        <input type="hidden" name="q" value="site:joshmcarthur.com/blog" />
-        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-      </fieldset>
-    </form>
-</hgroup>
+
 
 
 </header>
@@ -127,8 +120,25 @@
 <aside role=sidebar>
   
     <section>
+  <h1>Search</h1>
+  <form action="http://google.com/search" method="get" class="search">
+    <fieldset role="site-search">
+      <input type="hidden" name="q" value="site:joshmcarthur.com/blog" />
+      <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    </fieldset>
+  </form>
+</section>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/14/introducing-blog-broadcaster/">Introducing Blog Broadcaster</a>
+      </li>
     
       <li class="post">
         <a href="/2011/09/09/select-anything-from-everything/">Select Anything From Everything with Select</a>
@@ -140,14 +150,6 @@
     
       <li class="post">
         <a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no/">Arbitrary Ordering in PostgreSQL when Rails + ENUM = No.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/10/quick-clear-gemset/">Quick: Clear Gemset</a>
       </li>
     
   </ul>
