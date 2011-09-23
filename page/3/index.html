@@ -51,7 +51,78 @@
     
   <header>
     
+<<<<<<< HEAD
       <h1 class="entry-title"><a href="/2011/06/23/-password-or-passphrase/">&#8216;Password&#8217; or &#8216;Passphrase&#8217;</a></h1>
+=======
+      <h1 class="entry-title"><a href="/2011/06/21/rails-habtm-relationships-on-a-non-standard-connection/">Rails HABTM Relationships on a Non-standard Connection</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-06-21T00:00:00+12:00" pubdate  data-updated="true" >Jun 21<span>st</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently, I&#8217;ve been implementing an admin interface for a system that I want to
+make more secure than the main application. The way I&#8217;ve chosen to do this is
+to run some models that relate solely to the admin application (Authentication
+and Authorization in particular), on a different database - let&#8217;s call it
+&#8216;login&#8217;. This seems to be a reasonably common thing to do for security
+purposes, and also for things like moving data from one database to another.
+Once again though, I&#8217;ve been tempted into the potential nest of bugs that is
+has_and_belongs_to_many - let me explain the schema first though: *
+Administrators table - holds email, encrypted passwords and other data about
+administrators * Roles table - holds the name of the role - used to authorizing
+an administrator when performing an action. Each of these tables uses the line
+<code>establish_connection 'login'</code> to connect to a different database than the
+other models - this is the secure database that I want to leave purely for the
+administrative application. So, given that I had an administrator that should
+be given multiple roles, and obviously each role could have many
+administrators, has_and_belongs_to_many seemed the obvious candidate - I didn&#8217;t
+really want a model just for the association, and I would just need to write a
+migration to create the join table. So, off, I went, and here&#8217;s what happened:
+<code>ERROR: relation "administrators_roles" does not exist</code> i.e. - the
+Administrator table exists, and the Role table exists, but the join table just
+isn&#8217;t there. The first call for me was to take a look in the database, and make
+sure that the table was there - which it was - and that migrations had
+definitely run correctly and the schema was correct - which they were. After
+much frustration, I found <a href="http://groups.google.com/group/%0Arubyonrails-talk/browse_thread/thread/7644d9e5f5c6e44a/%0A69c8cce4c39eb571?show_docid=69c8cce4c39eb571">this thread</a> which described the problems I
+had been having - and I was vaguely satisfied to see that the problem wasn&#8217;t
+really my fault. It seems that in some versions of Rails, ActiveRecord&#8217;s
+has_and_belongs_to_many_association class doesn&#8217;t respect the database
+connections that the models are trying to use - instead, it uses the universal
+database connection to try and look up the join table - so, what was going
+wrong was that ActiveRecord was looking in the development environment&#8217;s
+database, when it should have been looking in the login database.
+Unfortunately, short of updating your version of ActiveRecord/Rails or patching
+this class, it seems that there isn&#8217;t really any way of avoiding this problem -
+you have to drop back to using has_many :through with a Model representing your
+join table. I can, though, at least vouch that once you have done this, it does
+work as expected, which, in the end, is what we want. It still feels a bit
+hacky though&#8230;.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/06/21/quick-rvmrc/">Quick: .rvmrc</a></h1>
+>>>>>>> d48a006e84e7f8ceed99a1b2c5c1cbec132a122e
     
     
       <p class="meta">
@@ -201,6 +272,7 @@ using that one as it does so), and will create it if it doesn&#8217;t exist.</p>
 
   </article>
 
+<<<<<<< HEAD
 
   <article>
     
@@ -271,6 +343,8 @@ installed: sudo apt-get install build-essential</p>
 
   </article>
 
+=======
+>>>>>>> d48a006e84e7f8ceed99a1b2c5c1cbec132a122e
 <nav role="pagination">
   <div>
     
@@ -310,7 +384,15 @@ installed: sudo apt-get install build-essential</p>
   <ul id="recent_posts">
     
       <li class="post">
+<<<<<<< HEAD
         <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
+=======
+        <a href="/2011/09/14/introducing-blog-broadcaster/">Introducing Blog Broadcaster</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/09/09/select-anything-from-everything/">Select Anything From Everything with Select</a>
+>>>>>>> d48a006e84e7f8ceed99a1b2c5c1cbec132a122e
       </li>
     
       <li class="post">
@@ -325,10 +407,13 @@ installed: sudo apt-get install build-essential</p>
         <a href="/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano rvm-shell: command not found error</a>
       </li>
     
+<<<<<<< HEAD
       <li class="post">
         <a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
       </li>
     
+=======
+>>>>>>> d48a006e84e7f8ceed99a1b2c5c1cbec132a122e
   </ul>
 </section>
 
