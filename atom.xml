@@ -4,7 +4,7 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://joshmcarthur.com/blog/atom.xml" rel="self"/>
   <link href="http://joshmcarthur.com/blog/"/>
-  <updated>2011-09-30T12:30:33+13:00</updated>
+  <updated>2011-09-30T12:33:41+13:00</updated>
   <id>http://joshmcarthur.com/blog/</id>
   <author>
     <name>@sudojosh</name>
@@ -27,7 +27,7 @@
 
 &lt;p&gt;To fix this problem, we tried out adding some cron tasks that used curl to ping the cached URLs, to try and preload the cache so that less users would be hitting the DB. This only partially fixed the problem though, so we identified a solution that would work a little better for us.&lt;/p&gt;
 
-&lt;p&gt;What we wanted to do was to leave our existing caching in place - aside from the expiry, it was working fine, and we didn't want to rework everything. With this in mind though, we needed a way to force a refresh of the data in the cache external from the controller. What we ended up implementing was a monkeypatch on Rails' caches_action-related methods, that allows us to pass in an &lt;code&gt;:override&lt;/code&gt; option - this can be a Proc, or just a boolean - basically, when the value of &lt;code&gt;:override&lt;/code&gt; is true, Rails will bypass the cached value, grab the &lt;em&gt;new value&lt;/em&gt;, and load this into the cache - effectively refreshing the value without a user having to trigger the process.&lt;/p&gt;
+&lt;p&gt;What we wanted to do was to leave our existing caching in place - aside from the expiry, it was working fine, and we didn't want to rework everything. With this in mind though, we needed a way to force a refresh of the data in the cache external from the controller. What we ended up implementing was a monkeypatch on Rails' caches_action-related methods, that allows us to pass in an &lt;code&gt;:overwrite&lt;/code&gt; option - this can be a Proc, or just a boolean - basically, when the value of &lt;code&gt;:overwrite&lt;/code&gt; is true, Rails will bypass the cached value, grab the &lt;em&gt;new value&lt;/em&gt;, and load this into the cache - effectively refreshing the value without a user having to trigger the process.&lt;/p&gt;
 
 &lt;p&gt;Here's the monkeypatch code - have a scan through it, and I'll explain it below:&lt;/p&gt;
 
