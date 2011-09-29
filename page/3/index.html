@@ -51,6 +51,49 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/06/27/the-dictionary-of-new-zealand-sign-language/">The Dictionary of New Zealand Sign Language</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-06-27T00:00:00+12:00" pubdate  data-updated="true" >Jun 27<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://nzsl.vuw.ac.nz">The Dictionary of New Zealand Sign Language</a> went live
+on Friday - it&#8217;s a project that I have worked on with <a href="http://%0Awww.danielsherson.com">Daniel</a>, Chris and <a href="http://www.linkedin.com/in/%0Ajamesarobertson">James R</a>, at 3Months. I attended a launch event at Victoria University
+on the Friday, and it really was quite a humbling experience - this dictionary
+has been the effort of a team of people for years and years - really, what
+3Months has done has just been the tip of the iceberg. It really does seem like
+this project has been rewarding - we&#8217;ve taken a comprehensive database of sign
+information and images (Built with what seems to be a lot of time and effort by
+<a href="http://dave.moskovitz.co.nz/2011/06/24/the-online-dictionary-%0Aof-new-zealand-sign-language/">Dave Moskozitz</a>), and given it a public presence - hopefully,
+something that everyone can use - whether it&#8217;s to learn New Zealand Sign
+Language, or just to learn how to finger spell names and words. I&#8217;m mostly
+posting this in the hope that everyone who reads this goes to check out the
+site, and to learn something of this language - give it a spin! <a href="http://nzsl.vuw.ac.nz">http://
+nzsl.vuw.ac.nz</a></p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/06/23/-password-or-passphrase/">&#8216;Password&#8217; or &#8216;Passphrase&#8217;</a></h1>
     
     
@@ -201,76 +244,6 @@ using that one as it does so), and will create it if it doesn&#8217;t exist.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/06/16/ubuntu-quick-imagemagick-install/">Ubuntu: Quick ImageMagick Install</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-06-16T00:00:00+12:00" pubdate  data-updated="true" >Jun 16<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>[This is cross-posted from a tweet I posted a while back - I think it&#8217;s a nice
-bit of advice, and I wanted to store it in a more persistent form]
-Installing ImageMagick is one of the things that Rails developers need to do
-reasonably often when provisioning new servers - basically, if you&#8217;re doing any
-sort of image processing in your application (including the popularPaperclip
-gem), ImageMagick is what you&#8217;ll be using.
-The problem is that there is a bit of a magical formula I have needed to use in
-the past - if you just install ImageMagick, it will most likely not work, as it
-needs to have support for different image formats you want to use compiled it
-in right from the get go. Previously, I have just looked up the various
-libraries I have needed (For PNG, JPEG, etc.), and then either found the
-libraries in the Ubuntu package repositories or built them from source.Â 
-A nice quick way of doing it though, is to use an ImageMagick meta-package in
-the Ubuntu repositories named libmagick-9-dev - it is just a collection of
-popular image format libraries, as well as a couple of additional utilities for
-ImageMagick. You can install it on any Ubuntu system by running this command:
-sudo apt-get install libmagick-9-dev
-ImageMagick itself still needs to be installed, of course. The best option here
-is just to build from source - packages in the repositories are horribly out of
-date, and I have found Paperclip, RMagick and Minimagick all require a fairly
-recent version of ImageMagick.
-Building from source sounds really intimidating, but it really isn&#8217;t - just
-follow these steps:
-First of all, download a tarball of the ImageMagick source onto your computer:
-wget ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick.tar.gz
-Next, extract the tarball:
-tar -xvzf ImageMagick.tar.gz
-Now configure the package - note especially the end of the output (There is a
-lot of output) - it tells you which Image libraries you have installed - any
-with &#8216;yes&#8217; next to them it will happily format and convert - because you&#8217;ve
-installed the package above, all the common formats should have a &#8216;yes&#8217; next to
-them, but it&#8217;s worth checking.
-cd ImageMagick-[VERSION] (VERSION will be a series of numbers like &#8216;6.7.0-8&#8217;)
-./configure
-Now all the hard work (By you) is done - you just need to compile the packages:
-make &amp;&amp; sudo make install
-All done! - ImageMagick should be all installed. To check, run the command
-which identify, and check it returns a path to the &#8216;identify&#8217; command.
-Note: If you have trouble compiling, make sure Ubunutu&#8217;s build tools are
-installed: sudo apt-get install build-essential</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -310,6 +283,10 @@ installed: sudo apt-get install build-essential</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
       </li>
     
@@ -323,10 +300,6 @@ installed: sudo apt-get install build-essential</p>
     
       <li class="post">
         <a href="/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano rvm-shell: command not found error</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
       </li>
     
   </ul>

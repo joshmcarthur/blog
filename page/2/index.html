@@ -51,6 +51,49 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano Rvm-shell: Command Not Found Error</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-22T00:00:00+12:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve just come across this problem, and I had to share it here - I can&#8217;t find
+anywhere else on the the Internet where the solution is specifically stated -
+it&#8217;s just alluded towards. If you are using RVM&#8217;s Capistrano integration, you
+may come across a CommandNotFoundError to do with rvm-shell not being under /
+usr/local/rvm/bin (Which is exactly where it should be). Upon searching the
+internet, you will find that you have to upgrade RVM (you don&#8217;t), and that when
+installed for a local user, RVM puts rvm-shell under ~/bin (But, you know, it&#8217;s
+a system-wide install). The solution is really simple - rvm-shell is under /
+usr/local/bin - use <code>set :rvm_bin_path, "/usr/local/bin"</code> in your deploy
+script, and you&#8217;re away. Clearly this is a bug with RVM putting things where it
+shouldn&#8217;t, but that&#8217;s the way of things. And, if I sound a little short, it&#8217;s
+because I had to all but reinstall RVM and break everything before realizing
+this.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a></h1>
     
     
@@ -173,49 +216,6 @@ it&#8217;ll delete all the gems currently in your gemset, giving you a blank sla
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/06/27/the-dictionary-of-new-zealand-sign-language/">The Dictionary of New Zealand Sign Language</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-06-27T00:00:00+12:00" pubdate  data-updated="true" >Jun 27<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://nzsl.vuw.ac.nz">The Dictionary of New Zealand Sign Language</a> went live
-on Friday - it&#8217;s a project that I have worked on with <a href="http://%0Awww.danielsherson.com">Daniel</a>, Chris and <a href="http://www.linkedin.com/in/%0Ajamesarobertson">James R</a>, at 3Months. I attended a launch event at Victoria University
-on the Friday, and it really was quite a humbling experience - this dictionary
-has been the effort of a team of people for years and years - really, what
-3Months has done has just been the tip of the iceberg. It really does seem like
-this project has been rewarding - we&#8217;ve taken a comprehensive database of sign
-information and images (Built with what seems to be a lot of time and effort by
-<a href="http://dave.moskovitz.co.nz/2011/06/24/the-online-dictionary-%0Aof-new-zealand-sign-language/">Dave Moskozitz</a>), and given it a public presence - hopefully,
-something that everyone can use - whether it&#8217;s to learn New Zealand Sign
-Language, or just to learn how to finger spell names and words. I&#8217;m mostly
-posting this in the hope that everyone who reads this goes to check out the
-site, and to learn something of this language - give it a spin! <a href="http://nzsl.vuw.ac.nz">http://
-nzsl.vuw.ac.nz</a></p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -255,6 +255,10 @@ nzsl.vuw.ac.nz</a></p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
       </li>
     
@@ -268,10 +272,6 @@ nzsl.vuw.ac.nz</a></p>
     
       <li class="post">
         <a href="/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano rvm-shell: command not found error</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
       </li>
     
   </ul>

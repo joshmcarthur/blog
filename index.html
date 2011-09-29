@@ -51,6 +51,161 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-09-30T11:48:00+13:00" pubdate  data-updated="true" >Sep 30<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently, I have been working on a web application that is quite media rich, and is expected to run into quite a bit of traffic. I&#8217;ve been working on building an API for a front end system, using JSON to handle passing this data back and forth.</p>
+
+<p>Obviously with this amount of traffic, and the size of some of the JSON collections we were having to marshall and store via Rails, we were going to need some pretty intense caching to reduce the load on Rails, and our database server. We had to balance this need, however, with the requirement that data should be live, or close to live (i.e. around 5-10 minutes) - in particular, statistics, which are calculated on-demand for several responses.</p>
+
+<p>The strategy we chose to manage this balance was to use Rails&#8217; provided <code>caches_action</code> method to cache our JSON responses, building up a cache key from certain parameters, as well as some meta-data, for example, the user&#8217;s logged-in status. Because we were using memcached, we could use the <code>:expires_in</code> option to tell the memcached store to expire the cached value after x minutes.</p>
+
+<p>This approach worked for a while, but we found we had a pretty major problem - while the data was cached, it went alright, but as soon as the cache expired we were having loads of users hitting a response that took way to long to build (before we optimized queries, 30+ seconds). So, we needed another fix.</p>
+
+<p>To fix this problem, we tried out adding some cron tasks that used curl to ping the cached URLs, to try and preload the cache so that less users would be hitting the DB. This only partially fixed the problem though, so we identified a solution that would work a little better for us.</p>
+
+<p>What we wanted to do was to leave our existing caching in place - aside from the expiry, it was working fine, and we didn&#8217;t want to rework everything. With this in mind though, we needed a way to force a refresh of the data in the cache external from the controller. What we ended up implementing was a monkeypatch on Rails&#8217; caches_action-related methods, that allows us to pass in an <code>:override</code> option - this can be a Proc, or just a boolean - basically, when the value of <code>:override</code> is true, Rails will bypass the cached value, grab the <em>new value</em>, and load this into the cache - effectively refreshing the value without a user having to trigger the process.</p>
+
+<p>Here&#8217;s the monkeypatch code - have a scan through it, and I&#8217;ll explain it below:</p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+<span class='line'>30</span>
+<span class='line'>31</span>
+<span class='line'>32</span>
+<span class='line'>33</span>
+<span class='line'>34</span>
+<span class='line'>35</span>
+<span class='line'>36</span>
+<span class='line'>37</span>
+<span class='line'>38</span>
+<span class='line'>39</span>
+<span class='line'>40</span>
+<span class='line'>41</span>
+<span class='line'>42</span>
+<span class='line'>43</span>
+<span class='line'>44</span>
+<span class='line'>45</span>
+<span class='line'>46</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s1">&#39;set&#39;</span>
+</div><div class='line'>
+</div><div class='line'><span class="k">module</span> <span class="nn">ActionController</span> <span class="c1">#:nodoc:</span>
+</div><div class='line'>  <span class="k">module</span> <span class="nn">Caching</span>
+</div><div class='line'>
+</div><div class='line'>    <span class="k">module</span> <span class="nn">Actions</span>
+</div><div class='line'>    <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
+</div><div class='line'>
+</div><div class='line'>      <span class="kp">protected</span>
+</div><div class='line'>      <span class="k">class</span> <span class="nc">ActionCacheFilter</span> <span class="c1">#:nodoc:</span>
+</div><div class='line'>        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</div><div class='line'>          <span class="vi">@cache_path</span><span class="p">,</span> <span class="vi">@store_options</span><span class="p">,</span> <span class="vi">@cache_layout</span> <span class="o">=</span>
+</div><div class='line'>            <span class="n">options</span><span class="o">.</span><span class="n">values_at</span><span class="p">(</span><span class="ss">:cache_path</span><span class="p">,</span> <span class="ss">:store_options</span><span class="p">,</span> <span class="ss">:layout</span><span class="p">)</span>
+</div><div class='line'>        <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>        <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="n">controller</span><span class="p">)</span>
+</div><div class='line'>          <span class="n">path_options</span> <span class="o">=</span> <span class="k">if</span> <span class="vi">@cache_path</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:call</span><span class="p">)</span>
+</div><div class='line'>            <span class="n">controller</span><span class="o">.</span><span class="n">instance_exec</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">&amp;</span><span class="vi">@cache_path</span><span class="p">)</span>
+</div><div class='line'>          <span class="k">else</span>
+</div><div class='line'>            <span class="vi">@cache_path</span>
+</div><div class='line'>          <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>          <span class="n">cache_path</span> <span class="o">=</span> <span class="no">ActionCachePath</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="n">path_options</span> <span class="o">||</span> <span class="p">{})</span>
+</div><div class='line'>          <span class="n">overwrite</span> <span class="o">=</span> <span class="k">if</span> <span class="vi">@overwrite</span> <span class="o">=</span> <span class="vi">@store_options</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:overwrite</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</div><div class='line'>            <span class="vi">@overwrite</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:call</span><span class="p">)</span> <span class="p">?</span> <span class="n">controller</span><span class="o">.</span><span class="n">instance_exec</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">&amp;</span><span class="vi">@overwrite</span><span class="p">)</span> <span class="p">:</span> <span class="vi">@overwrite</span>
+</div><div class='line'>          <span class="k">else</span>
+</div><div class='line'>            <span class="kp">false</span>
+</div><div class='line'>          <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>          <span class="n">body</span> <span class="o">=</span> <span class="n">overwrite</span> <span class="p">?</span> <span class="kp">nil</span> <span class="p">:</span> <span class="n">controller</span><span class="o">.</span><span class="n">read_fragment</span><span class="p">(</span><span class="n">cache_path</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="vi">@store_options</span><span class="p">)</span>
+</div><div class='line'>
+</div><div class='line'>          <span class="k">unless</span> <span class="n">body</span>
+</div><div class='line'>            <span class="n">controller</span><span class="o">.</span><span class="n">action_has_layout</span> <span class="o">=</span> <span class="kp">false</span> <span class="k">unless</span> <span class="vi">@cache_layout</span>
+</div><div class='line'>            <span class="k">yield</span>
+</div><div class='line'>            <span class="n">controller</span><span class="o">.</span><span class="n">action_has_layout</span> <span class="o">=</span> <span class="kp">true</span>
+</div><div class='line'>            <span class="n">body</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">_save_fragment</span><span class="p">(</span><span class="n">cache_path</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="vi">@store_options</span><span class="p">)</span>
+</div><div class='line'>          <span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'>          <span class="n">body</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">render_to_string</span><span class="p">(</span><span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">body</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">unless</span> <span class="vi">@cache_layout</span>
+</div><div class='line'>          <span class="n">controller</span><span class="o">.</span><span class="n">response_body</span> <span class="o">=</span> <span class="n">body</span>
+</div><div class='line'>          <span class="n">controller</span><span class="o">.</span><span class="n">content_type</span> <span class="o">=</span> <span class="no">Mime</span><span class="o">[</span><span class="n">cache_path</span><span class="o">.</span><span class="n">extension</span> <span class="o">||</span> <span class="ss">:html</span><span class="o">]</span>
+</div><div class='line'>        <span class="k">end</span>
+</div><div class='line'>      <span class="k">end</span>
+</div><div class='line'>    <span class="k">end</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div></code></pre></td></tr></table></div></figure>
+
+<p>By dropping this code into <code>config/initializers</code>, this code gets patched into the ActionController::Caching::Actions::ActionCacheFilter class, and overrides the <code>initalize</code> and <code>filter</code> methods to let us a) pass in an override option, and b) choose to refresh the cache if the override option is set.</p>
+
+<p>The filter method performs as normal until it has finished generating the cache path - at this point, it would normally return the cached response if it was there, and if it had not expired. Instead, my colleague <a href="http://telos.co.nz">James Moriaty</a> replaced some code here:</p>
+
+<ul>
+<li>First, it retrieves the value of the <code>:overwrite</code> option passed in to the <code>caches_action</code> method from the <code>@store_options</code> hash - if it&#8217;s a Proc, it executes it here to get the value, otherwise assumes it&#8217;s a boolean variable.</li>
+<li>If the <code>:overwrite</code> option has not been passed in, it returns false - i.e. don&#8217;t overwrite the cache.</li>
+<li>If the overwrite value is true, it sets the body to nil, so that it will be re-built. Otherwise, it does the usual and returns the cached response from Memcache.</li>
+<li>From here, it more or less goes back to the default class, rebuilding the response from the database.</li>
+</ul>
+
+
+<p>In our application&#8217;s case, we use this functionality by tweaking our cron jobs a little to pass in a particular parameter - we then added the <code>:overwrite</code> option to our <code>caches_action</code> methods, with a Proc that returns true if this parameter equals the correct value.</p>
+
+<p>So far, this solution has worked fantastically - now, hardly any of our users hit the database - instead, they are heading to memcache to grab that response, while our background cron jobs rebuild the data that will get returned to them. Using a parameter for refreshing the cache also lets us easily refresh manually for testing or to check for a value.</p>
+
+<p>This solution is clean, simple and easy to implement. I suggest that if you are facing similar problems, that you give it a go - it&#8217;s really adaptable, and requires few changes if you are already using action caching. Full credit to James for thinking up and implementing this solution - I&#8217;m just documenting it.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a></h1>
     
     
@@ -409,49 +564,6 @@ First of all, we need to render a selection box for the &#8216;New Snafu&#8217; 
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano Rvm-shell: Command Not Found Error</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-08-22T00:00:00+12:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve just come across this problem, and I had to share it here - I can&#8217;t find
-anywhere else on the the Internet where the solution is specifically stated -
-it&#8217;s just alluded towards. If you are using RVM&#8217;s Capistrano integration, you
-may come across a CommandNotFoundError to do with rvm-shell not being under /
-usr/local/rvm/bin (Which is exactly where it should be). Upon searching the
-internet, you will find that you have to upgrade RVM (you don&#8217;t), and that when
-installed for a local user, RVM puts rvm-shell under ~/bin (But, you know, it&#8217;s
-a system-wide install). The solution is really simple - rvm-shell is under /
-usr/local/bin - use <code>set :rvm_bin_path, "/usr/local/bin"</code> in your deploy
-script, and you&#8217;re away. Clearly this is a bug with RVM putting things where it
-shouldn&#8217;t, but that&#8217;s the way of things. And, if I sound a little short, it&#8217;s
-because I had to all but reinstall RVM and break everything before realizing
-this.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -489,6 +601,10 @@ this.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
       </li>
     
@@ -502,10 +618,6 @@ this.</p>
     
       <li class="post">
         <a href="/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano rvm-shell: command not found error</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
       </li>
     
   </ul>

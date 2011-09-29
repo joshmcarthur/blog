@@ -51,6 +51,82 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/03/04/creating-a-scalable-academic-signup-system/">Creating a Scalable Academic Signup System</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-03-04T00:00:00+13:00" pubdate  data-updated="true" >Mar 4<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>While working at 3Months as a developer, I am also completing a Bachelor of
+Business Information Systems at Victoria University. One of the things that
+rolls around twice a year and always causes students headaches is the signups
+systemÂ - it&#8217;s one of the bragging points of the School of Information
+Management at Victoria, as it was build as a project by a group of students
+there (Hence the name &#8216;S-Cubed = SSS = SIM Signups System). In itself, it&#8217;s a
+good application - it fulfills it&#8217;s brief of managing signups for tutorials and
+workshops, and lecturers and students alike seem to have no huge issues using
+is. The problem is though, is that its performance under load is crap - it
+simply was not build for the load that it receives when tutorial signups for 2
+courses of 700 people each opens at 9am, and each of those 1400 people trying
+to get the exact tutorial they want are continually refereshing the page and so
+exacerbating the server load even more.</p>
+
+<p>This server load doesn&#8217;t just extend to slow page load speed - since the site
+has not been build with scalability in mind, there have been ongoing issues
+with sessions expiring as people try and signup for a tutorial or workshop,
+people stuck halfway through a transaction, and the server even goes down every
+now and then.
+What I am proposing is an open framework that takes the best aspects of this
+type of system, and builds upon it techniques to optimize page load speed, and
+increase scalability. It seems to me that Universities in general are lacking a
+system that allows them to smoothly run signups (usually they are dependent on
+modified forum software, paper signups, emails or proprietary in-house
+systems), and so this isÂ definitelyÂ something that is marketable around the
+world.
+As I see it, here are the base requirements for such a system:</p>
+
+<pre><code>* LDAP and OAuth Authentication so that students do not need to 'register'
+  to sign up for a tutorial
+* Accurate time-based releases of tutorials and workshops that do not
+  require human intervention
+* Automatic server load monitoring with the ability to increase allocated
+  resources if necessary (i.e. this application is an ideal candidate for
+  Rackspace Cloud or Heroku)
+* Per-course and per-University analytics for better scheduling of tutorial
+  and workshop release times and how students are accessing the system.
+* The ability for lecturers and course administrators to export and print
+  class lists, tutorial lists, and workshops list with all student data or
+  just a subset.
+</code></pre>
+
+<p>This project isÂ definitelyÂ going on theÂ work pileÂ for my personal projects
+- it&#8217;s got a couple of interesting aspects to it which I haven&#8217;t approached
+before (Such as LDAP from Rails), and generally seems to follow along with my
+ethos of community-oriented &#8216;responsible web applications&#8217;.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/02/04/ah-the-rugby-sevens-it-s-a-hot-day-13-sorry-you-ll-ha/">Ah, the Rugby Sevens (It&#8217;s a Hot Day).</a></h1>
     
     
@@ -180,38 +256,6 @@ extension_page.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/11/15/animal-welfare-fail/">Animal Welfare Fail?</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2010-11-15T00:00:00+13:00" pubdate  data-updated="true" >Nov 15<span>th</span>, 2010</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>[/images/posts/2010-11-15-animal-welfare.jpg]
-Animal Welfare Fail?</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -251,6 +295,10 @@ Animal Welfare Fail?</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
       </li>
     
@@ -264,10 +312,6 @@ Animal Welfare Fail?</p>
     
       <li class="post">
         <a href="/2011/08/22/capistrano-rvm-shell-command-not-found-error/">Capistrano rvm-shell: command not found error</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a>
       </li>
     
   </ul>

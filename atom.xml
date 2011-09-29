@@ -4,13 +4,104 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://joshmcarthur.com/blog/atom.xml" rel="self"/>
   <link href="http://joshmcarthur.com/blog/"/>
-  <updated>2011-09-23T14:21:15+12:00</updated>
+  <updated>2011-09-30T12:30:33+13:00</updated>
   <id>http://joshmcarthur.com/blog/</id>
   <author>
     <name>@sudojosh</name>
     
   </author>
 
+  
+  <entry>
+    <title>Overriding Action Caches</title>
+    <link href="http://joshmcarthur.com/blog/2011/09/30/overriding-action-caches/"/>
+    <updated>2011-09-30T11:48:00+13:00</updated>
+    <id>http://joshmcarthur.com/blog/2011/09/30/overriding-action-caches</id>
+    <content type="html">&lt;p&gt;Recently, I have been working on a web application that is quite media rich, and is expected to run into quite a bit of traffic. I've been working on building an API for a front end system, using JSON to handle passing this data back and forth.&lt;/p&gt;
+
+&lt;p&gt;Obviously with this amount of traffic, and the size of some of the JSON collections we were having to marshall and store via Rails, we were going to need some pretty intense caching to reduce the load on Rails, and our database server. We had to balance this need, however, with the requirement that data should be live, or close to live (i.e. around 5-10 minutes) - in particular, statistics, which are calculated on-demand for several responses.&lt;/p&gt;
+
+&lt;p&gt;The strategy we chose to manage this balance was to use Rails' provided &lt;code&gt;caches_action&lt;/code&gt; method to cache our JSON responses, building up a cache key from certain parameters, as well as some meta-data, for example, the user's logged-in status. Because we were using memcached, we could use the &lt;code&gt;:expires_in&lt;/code&gt; option to tell the memcached store to expire the cached value after x minutes.&lt;/p&gt;
+
+&lt;p&gt;This approach worked for a while, but we found we had a pretty major problem - while the data was cached, it went alright, but as soon as the cache expired we were having loads of users hitting a response that took way to long to build (before we optimized queries, 30+ seconds). So, we needed another fix.&lt;/p&gt;
+
+&lt;p&gt;To fix this problem, we tried out adding some cron tasks that used curl to ping the cached URLs, to try and preload the cache so that less users would be hitting the DB. This only partially fixed the problem though, so we identified a solution that would work a little better for us.&lt;/p&gt;
+
+&lt;p&gt;What we wanted to do was to leave our existing caching in place - aside from the expiry, it was working fine, and we didn't want to rework everything. With this in mind though, we needed a way to force a refresh of the data in the cache external from the controller. What we ended up implementing was a monkeypatch on Rails' caches_action-related methods, that allows us to pass in an &lt;code&gt;:override&lt;/code&gt; option - this can be a Proc, or just a boolean - basically, when the value of &lt;code&gt;:override&lt;/code&gt; is true, Rails will bypass the cached value, grab the &lt;em&gt;new value&lt;/em&gt;, and load this into the cache - effectively refreshing the value without a user having to trigger the process.&lt;/p&gt;
+
+&lt;p&gt;Here's the monkeypatch code - have a scan through it, and I'll explain it below:&lt;/p&gt;
+
+&lt;p&gt;``` ruby&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;require 'set'
+
+module ActionController #:nodoc:
+  module Caching
+
+    module Actions
+    extend ActiveSupport::Concern
+
+      protected
+      class ActionCacheFilter #:nodoc:
+        def initialize(options, &amp;amp;block)
+          @cache_path, @store_options, @cache_layout =
+            options.values_at(:cache_path, :store_options, :layout)
+        end
+
+        def filter(controller)
+          path_options = if @cache_path.respond_to?(:call)
+            controller.instance_exec(controller, &amp;amp;@cache_path)
+          else
+            @cache_path
+          end
+
+          cache_path = ActionCachePath.new(controller, path_options || {})
+          overwrite = if @overwrite = @store_options.fetch(:overwrite, nil)
+            @overwrite.respond_to?(:call) ? controller.instance_exec(controller, &amp;amp;@overwrite) : @overwrite
+          else
+            false
+          end
+
+          body = overwrite ? nil : controller.read_fragment(cache_path.path, @store_options)
+
+          unless body
+            controller.action_has_layout = false unless @cache_layout
+            yield
+            controller.action_has_layout = true
+            body = controller._save_fragment(cache_path.path, @store_options)
+          end
+
+          body = controller.render_to_string(:text =&amp;gt; body, :layout =&amp;gt; true) unless @cache_layout
+          controller.response_body = body
+          controller.content_type = Mime[cache_path.extension || :html]
+        end
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;By dropping this code into &lt;code&gt;config/initializers&lt;/code&gt;, this code gets patched into the ActionController::Caching::Actions::ActionCacheFilter class, and overrides the &lt;code&gt;initalize&lt;/code&gt; and &lt;code&gt;filter&lt;/code&gt; methods to let us a) pass in an override option, and b) choose to refresh the cache if the override option is set.&lt;/p&gt;
+
+&lt;p&gt;The filter method performs as normal until it has finished generating the cache path - at this point, it would normally return the cached response if it was there, and if it had not expired. Instead, my colleague &lt;a href=&quot;http://telos.co.nz&quot;&gt;James Moriaty&lt;/a&gt; replaced some code here:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, it retrieves the value of the &lt;code&gt;:overwrite&lt;/code&gt; option passed in to the &lt;code&gt;caches_action&lt;/code&gt; method from the &lt;code&gt;@store_options&lt;/code&gt; hash - if it's a Proc, it executes it here to get the value, otherwise assumes it's a boolean variable.&lt;/li&gt;
+&lt;li&gt;If the &lt;code&gt;:overwrite&lt;/code&gt; option has not been passed in, it returns false - i.e. don't overwrite the cache.&lt;/li&gt;
+&lt;li&gt;If the overwrite value is true, it sets the body to nil, so that it will be re-built. Otherwise, it does the usual and returns the cached response from Memcache.&lt;/li&gt;
+&lt;li&gt;From here, it more or less goes back to the default class, rebuilding the response from the database.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;In our application's case, we use this functionality by tweaking our cron jobs a little to pass in a particular parameter - we then added the &lt;code&gt;:overwrite&lt;/code&gt; option to our &lt;code&gt;caches_action&lt;/code&gt; methods, with a Proc that returns true if this parameter equals the correct value.&lt;/p&gt;
+
+&lt;p&gt;So far, this solution has worked fantastically - now, hardly any of our users hit the database - instead, they are heading to memcache to grab that response, while our background cron jobs rebuild the data that will get returned to them. Using a parameter for refreshing the cache also lets us easily refresh manually for testing or to check for a value.&lt;/p&gt;
+
+&lt;p&gt;This solution is clean, simple and easy to implement. I suggest that if you are facing similar problems, that you give it a go - it's really adaptable, and requires few changes if you are already using action caching. Full credit to James for thinking up and implementing this solution - I'm just documenting it.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Howto: Database Backup and Restore</title>
@@ -718,65 +809,6 @@ It looks like the latest stable version is only 0.50 though, so the fix isn't
 going to filter through to the actual gem just yet. For now, the best option is
 probably to class_eval into that particular section, or just change the file
 yourself.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Spree Hosted Gateway</title>
-    <link href="http://joshmcarthur.com/blog/2011/03/10/spree-hosted-gateway/"/>
-    <updated>2011-03-10T00:00:00+13:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/03/10/spree-hosted-gateway</id>
-    <content type="html">&lt;p&gt;Spree Hosted Gateway is my second 'big' extension - one of the ones that isn't
-just adding one or two bits of nice functionality, but actually and end-to-end
-solution to add something that I think would be useful to a broad range of
-Spree developers (My first was spree-import-products, see my post on it here).
-Spree (for those of you unfamiliar with it), is an open-source eCommerce
-framework written in Ruby on Rails, and has recently been upgraded to Rails 3,
-which has enabled extensions to now be packaged as Rails engines, making them
-far easier to create, implement and share. Out of the box, Spree is able to
-provide much of what a basic online store requires, but something I have felt
-is missing is support for alternative payment methods that are much more
-rudimentary than those catered for by Railsdog's_fork_of_ActiveShipping.Â 
-Inspired by a project I was working on at 3Months, I decided to develop an
-extension that provided a new type of Payment Method (Alongside Cheque and
-Creditcard) - External (Or Hosted) Gateway - this type of payment method was
-characterized in the following ways:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;* Redirection - the customer was required by the gateway to be redirected
-  to an off-site form to make payment.
-* Tracing the payment and order: attributes required for payment (Amount,
-  etc.) were gathered by the payment gateway from POSTed form data.
-* Communications: there was no type of complex back-and-forth between Spree
-  and the gateway provider behind the scenes - information was transmitted
-  to the gateway, and all Spree is able to do from that point is listen for
-  a postback and collect any information from that.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;These type of gateways are (unfortunately) quite prevalent, especially around
-small-to-medium independent companies - they tend to be cheaper than more
-widely-known solutions, at the expense of a more reliable and secure
-transaction for the customer.
-Spree Hosted Gateway, as I have mentioned, hooks into Spree in the form of
-registering itself as a Payment Method that can be configured from the admin
-interface. After seeing all theÂ arbitraryÂ information that I was required to
-POST to the payment gateway I was testing against, I also made it easily
-extendable, and used Spree's preferences system to allow any number of key-
-value pairs to be created (Which could be modified in the Spree Admin UI),
-which are automatically posted to the payment gateway when I customer is
-redirected (Unless the preference key is added to the exclusion list, of
-course!).
-I conjunction to the 'transmit' function of the extension, I have also
-implemented a kind of 'landing pad' for postbacks from the Payment Gateway to
-hit. When this happens, the extension is able to detect whether the transaction
-was successful or not, and continue processing the order. If the customer has
-made an payment that is not sufficient to cover the cost of the order they are
-redirected back to the payment page, and if the transaction was not successful,
-an error message is presented to them.
-All in all, I'm happy with this extension - it was a great way to learn about
-how Spree itself handles payment methods, different types of gateway and
-payment validation and handling, and I'm hoping this extension will help out
-some of the Spree developers out there working on smaller stores that don't
-need such a large (expensive) gateway.&lt;/p&gt;
 </content>
   </entry>
   
