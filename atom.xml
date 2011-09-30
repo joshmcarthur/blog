@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title>blog.joshmcarthur.com</title>
-  <link href="http://joshmcarthur.com/blog/atom.xml" rel="self"/>
-  <link href="http://joshmcarthur.com/blog/"/>
-  <updated>2011-09-30T12:33:41+13:00</updated>
-  <id>http://joshmcarthur.com/blog/</id>
+  <link href="http://blog.joshmcarthur.com/atom.xml" rel="self"/>
+  <link href="http://blog.joshmcarthur.com/"/>
+  <updated>2011-09-30T14:22:31+13:00</updated>
+  <id>http://blog.joshmcarthur.com/</id>
   <author>
     <name>@sudojosh</name>
     
@@ -14,9 +14,9 @@
   
   <entry>
     <title>Overriding Action Caches</title>
-    <link href="http://joshmcarthur.com/blog/2011/09/30/overriding-action-caches/"/>
+    <link href="http://blog.joshmcarthur.com/2011/09/30/overriding-action-caches/"/>
     <updated>2011-09-30T11:48:00+13:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/09/30/overriding-action-caches</id>
+    <id>http://blog.joshmcarthur.com/2011/09/30/overriding-action-caches</id>
     <content type="html">&lt;p&gt;Recently, I have been working on a web application that is quite media rich, and is expected to run into quite a bit of traffic. I've been working on building an API for a front end system, using JSON to handle passing this data back and forth.&lt;/p&gt;
 
 &lt;p&gt;Obviously with this amount of traffic, and the size of some of the JSON collections we were having to marshall and store via Rails, we were going to need some pretty intense caching to reduce the load on Rails, and our database server. We had to balance this need, however, with the requirement that data should be live, or close to live (i.e. around 5-10 minutes) - in particular, statistics, which are calculated on-demand for several responses.&lt;/p&gt;
@@ -105,9 +105,9 @@ end
   
   <entry>
     <title>Howto: Database Backup and Restore</title>
-    <link href="http://joshmcarthur.com/blog/2011/09/23/howto-database-backup-and-restore/"/>
+    <link href="http://blog.joshmcarthur.com/2011/09/23/howto-database-backup-and-restore/"/>
     <updated>2011-09-23T13:26:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/09/23/howto-database-backup-and-restore</id>
+    <id>http://blog.joshmcarthur.com/2011/09/23/howto-database-backup-and-restore</id>
     <content type="html">&lt;p&gt;An inherent part of developing web applications is managing your datastores - typically, a relational database such as MySQL or PostgreSQL. Today, I'm going to quickly cover off how to backup and restore for both of these databases.&lt;/p&gt;
 
 &lt;h2&gt;What you'll need&lt;/h2&gt;
@@ -199,9 +199,9 @@ end
   
   <entry>
     <title>Introducing Blog Broadcaster</title>
-    <link href="http://joshmcarthur.com/blog/2011/09/14/introducing-blog-broadcaster/"/>
+    <link href="http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/"/>
     <updated>2011-09-14T19:04:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/09/14/introducing-blog-broadcaster</id>
+    <id>http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster</id>
     <content type="html">&lt;p&gt;I've just completed a Blog Broadcaster for this blog. It had a couple of interesting technical things, and I needed to test it properly, so here's this post!&lt;/p&gt;
 
 &lt;p&gt;I recently migrated this blog from &lt;a href=&quot;http://tumblr.com&quot;&gt;Tumblr&lt;/a&gt;, and while Tumblr was pretty awesome and easy to use, it didn't have great support for blocks of code and preformatted comment, and, like &lt;a href=&quot;http://www.radiantcms.org&quot;&gt;Radiant CMS&lt;/a&gt;, it stored layouts, stylesheets, and all of that kind of thing in a database somewhere - it wasn't in source control, and making changes to it was dangerous.&lt;/p&gt;
@@ -228,9 +228,9 @@ end
   
   <entry>
     <title>Select Anything From Everything with Select</title>
-    <link href="http://joshmcarthur.com/blog/2011/09/09/select-anything-from-everything/"/>
+    <link href="http://blog.joshmcarthur.com/2011/09/09/select-anything-from-everything/"/>
     <updated>2011-09-09T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/09/09/select-anything-from-everything</id>
+    <id>http://blog.joshmcarthur.com/2011/09/09/select-anything-from-everything</id>
     <content type="html">&lt;p&gt;I was recently called upon to make a horrible select input for a Ruby on Rails project - essentially, there was this model, let's call it a Snafu, and one Snafu could share an attachment to any number of models.&lt;/p&gt;
 
 &lt;p&gt;This select was difficult because I couldn't just have a selection of record ID's - I would have to use both the model type &lt;strong&gt;as well as&lt;/strong&gt; the model ID in order to be able to track down these records when the form was submitted. Here's how I did it:&lt;/p&gt;
@@ -373,9 +373,9 @@ end
   
   <entry>
     <title>Capistrano rvm-shell: command not found error</title>
-    <link href="http://joshmcarthur.com/blog/2011/08/22/capistrano-rvm-shell-command-not-found-error/"/>
+    <link href="http://blog.joshmcarthur.com/2011/08/22/capistrano-rvm-shell-command-not-found-error/"/>
     <updated>2011-08-22T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/08/22/capistrano-rvm-shell-command-not-found-error</id>
+    <id>http://blog.joshmcarthur.com/2011/08/22/capistrano-rvm-shell-command-not-found-error</id>
     <content type="html">&lt;p&gt;I've just come across this problem, and I had to share it here - I can't find
 anywhere else on the the Internet where the solution is specifically stated -
 it's just alluded towards. If you are using RVM's Capistrano integration, you
@@ -394,9 +394,9 @@ this.&lt;/p&gt;
   
   <entry>
     <title>Achievements on Coderwall</title>
-    <link href="http://joshmcarthur.com/blog/2011/07/23/achievements-on-coderwall/"/>
+    <link href="http://blog.joshmcarthur.com/2011/07/23/achievements-on-coderwall/"/>
     <updated>2011-07-23T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/07/23/achievements-on-coderwall</id>
+    <id>http://blog.joshmcarthur.com/2011/07/23/achievements-on-coderwall</id>
     <content type="html">&lt;p&gt;Well, it's taken weeks for &lt;a href=&quot;http://coderwall.com&quot;&gt;Coderwall&lt;/a&gt; to finally get
 it's crawler to hit my &lt;a href=&quot;https://github.com/joshmcarthur&quot;&gt;Github Profile&lt;/a&gt;, but
 I've finally &lt;a href=&quot;http://coderwall.com/joshmcarthur&quot;&gt;got more badges&lt;/a&gt;. I've been
@@ -422,9 +422,9 @@ Github members with interesting projects.&lt;/p&gt;
   
   <entry>
     <title>Arbitrary Ordering in PostgreSQL when Rails + ENUM = No.</title>
-    <link href="http://joshmcarthur.com/blog/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no/"/>
+    <link href="http://blog.joshmcarthur.com/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no/"/>
     <updated>2011-07-14T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no</id>
+    <id>http://blog.joshmcarthur.com/2011/07/14/arbitrary-ordering-in-postgresql-when-rails-enum-no</id>
     <content type="html">&lt;p&gt;I've recently had to do a custom sort for a work project that has required a
 sort on something that is not naturally sortable correctly (For example,
 alphabetical or numerical sorting). While searching for a completely different
@@ -442,9 +442,9 @@ normal sorting capabilities of a ENUM datatype available to you.&lt;/p&gt;
   
   <entry>
     <title>Quick: Clear Gemset</title>
-    <link href="http://joshmcarthur.com/blog/2011/07/10/quick-clear-gemset/"/>
+    <link href="http://blog.joshmcarthur.com/2011/07/10/quick-clear-gemset/"/>
     <updated>2011-07-10T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/07/10/quick-clear-gemset</id>
+    <id>http://blog.joshmcarthur.com/2011/07/10/quick-clear-gemset</id>
     <content type="html">&lt;p&gt;If you're finding that you have to change something fairly significant in your
 bundler dependencies, it's usually a good idea to get rid of what you've got
 loaded in an RVM gemset so that you don't end up with different versions of
@@ -455,9 +455,9 @@ it'll delete all the gems currently in your gemset, giving you a blank slate.&lt
   
   <entry>
     <title>The Dictionary of New Zealand Sign Language</title>
-    <link href="http://joshmcarthur.com/blog/2011/06/27/the-dictionary-of-new-zealand-sign-language/"/>
+    <link href="http://blog.joshmcarthur.com/2011/06/27/the-dictionary-of-new-zealand-sign-language/"/>
     <updated>2011-06-27T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/06/27/the-dictionary-of-new-zealand-sign-language</id>
+    <id>http://blog.joshmcarthur.com/2011/06/27/the-dictionary-of-new-zealand-sign-language</id>
     <content type="html">&lt;p&gt;&lt;a href=&quot;http://nzsl.vuw.ac.nz&quot;&gt;The Dictionary of New Zealand Sign Language&lt;/a&gt; went live
 on Friday - it's a project that I have worked on with &lt;a href=&quot;http://%0Awww.danielsherson.com&quot;&gt;Daniel&lt;/a&gt;, Chris and &lt;a href=&quot;http://www.linkedin.com/in/%0Ajamesarobertson&quot;&gt;James R&lt;/a&gt;, at 3Months. I attended a launch event at Victoria University
 on the Friday, and it really was quite a humbling experience - this dictionary
@@ -476,9 +476,9 @@ nzsl.vuw.ac.nz&lt;/a&gt;&lt;/p&gt;
   
   <entry>
     <title>'Password' or 'Passphrase'</title>
-    <link href="http://joshmcarthur.com/blog/2011/06/23/-password-or-passphrase/"/>
+    <link href="http://blog.joshmcarthur.com/2011/06/23/-password-or-passphrase/"/>
     <updated>2011-06-23T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/06/23/-password-or-passphrase</id>
+    <id>http://blog.joshmcarthur.com/2011/06/23/-password-or-passphrase</id>
     <content type="html">&lt;p&gt;So apparently pass phrases are the new 'secure password' - kinda the step you
 get to when you finally accept that your users are going to use something like
 'password' for their account password. The natural step here is to reinforce a
@@ -504,9 +504,9 @@ nonetheless.&lt;/p&gt;
   
   <entry>
     <title>Rails HABTM relationships on a non-standard connection</title>
-    <link href="http://joshmcarthur.com/blog/2011/06/21/rails-habtm-relationships-on-a-non-standard-connection/"/>
+    <link href="http://blog.joshmcarthur.com/2011/06/21/rails-habtm-relationships-on-a-non-standard-connection/"/>
     <updated>2011-06-21T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/06/21/rails-habtm-relationships-on-a-non-standard-connection</id>
+    <id>http://blog.joshmcarthur.com/2011/06/21/rails-habtm-relationships-on-a-non-standard-connection</id>
     <content type="html">&lt;p&gt;Recently, I've been implementing an admin interface for a system that I want to
 make more secure than the main application. The way I've chosen to do this is
 to run some models that relate solely to the admin application (Authentication
@@ -549,9 +549,9 @@ hacky though....&lt;/p&gt;
   
   <entry>
     <title>Quick: .rvmrc</title>
-    <link href="http://joshmcarthur.com/blog/2011/06/21/quick-rvmrc/"/>
+    <link href="http://blog.joshmcarthur.com/2011/06/21/quick-rvmrc/"/>
     <updated>2011-06-21T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/06/21/quick-rvmrc</id>
+    <id>http://blog.joshmcarthur.com/2011/06/21/quick-rvmrc</id>
     <content type="html">&lt;p&gt;This post is probably something more experienced RVM users will already know,
 but I wanted to post this as it's definitely my discovery of the week. When
 throwing an .rvmrc file into a project, it's a nice thing to do to write the
@@ -565,9 +565,9 @@ using that one as it does so), and will create it if it doesn't exist.&lt;/p&gt;
   
   <entry>
     <title>Ubuntu: Quick ImageMagick Install</title>
-    <link href="http://joshmcarthur.com/blog/2011/06/16/ubuntu-quick-imagemagick-install/"/>
+    <link href="http://blog.joshmcarthur.com/2011/06/16/ubuntu-quick-imagemagick-install/"/>
     <updated>2011-06-16T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/06/16/ubuntu-quick-imagemagick-install</id>
+    <id>http://blog.joshmcarthur.com/2011/06/16/ubuntu-quick-imagemagick-install</id>
     <content type="html">&lt;p&gt;[This is cross-posted from a tweet I posted a while back - I think it's a nice
 bit of advice, and I wanted to store it in a more persistent form]
 Installing ImageMagick is one of the things that Rails developers need to do
@@ -613,9 +613,9 @@ installed: sudo apt-get install build-essential&lt;/p&gt;
   
   <entry>
     <title>Integration tests with Devise and RSpec</title>
-    <link href="http://joshmcarthur.com/blog/2011/06/11/integration-tests-with-devise-and-rspec/"/>
+    <link href="http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec/"/>
     <updated>2011-06-11T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/06/11/integration-tests-with-devise-and-rspec</id>
+    <id>http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec</id>
     <content type="html">&lt;p&gt;RSpec 2 has supported integration tests for a while now, and I've chosen to use
 these for a project I'm working on at the moment instead of Cucumber (I don't
 feel that I need the verbosity andÂ English-like structure Cucumber provides
@@ -653,9 +653,9 @@ Have fun speccing nicely with Devise/Warden and RSpec!&lt;/p&gt;
   
   <entry>
     <title>Quick: Get random record efficiently in Rails</title>
-    <link href="http://joshmcarthur.com/blog/2011/06/07/quick-get-random-record-efficiently-in-rails/"/>
+    <link href="http://blog.joshmcarthur.com/2011/06/07/quick-get-random-record-efficiently-in-rails/"/>
     <updated>2011-06-07T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/06/07/quick-get-random-record-efficiently-in-rails</id>
+    <id>http://blog.joshmcarthur.com/2011/06/07/quick-get-random-record-efficiently-in-rails</id>
     <content type="html">&lt;p&gt;You could use SQL's random function (RAND() or RANDOM() depending on database
 engine) - but this isn't database agnostic, so isn't really very quick.
 Instead you can use @nzkoz's suggested method:
@@ -667,9 +667,9 @@ first result in the SQL as well.&lt;/p&gt;
   
   <entry>
     <title>ImageMagick: Cropping then Resizing a PNG</title>
-    <link href="http://joshmcarthur.com/blog/2011/05/06/imagemagick-cropping-then-resizing-a-png/"/>
+    <link href="http://blog.joshmcarthur.com/2011/05/06/imagemagick-cropping-then-resizing-a-png/"/>
     <updated>2011-05-06T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/05/06/imagemagick-cropping-then-resizing-a-png</id>
+    <id>http://blog.joshmcarthur.com/2011/05/06/imagemagick-cropping-then-resizing-a-png</id>
     <content type="html">&lt;p&gt;I've been working on an image processor class for work, and recently ran into
 this issue. I thought I would post it up here as normally I need to be quite
 desperate before I start trawling through email mirrors - hopefully somebody
@@ -698,9 +698,9 @@ Simple! The image should save correctly.&lt;/p&gt;
   
   <entry>
     <title>Using setInterval to handle scroll() events</title>
-    <link href="http://joshmcarthur.com/blog/2011/04/12/using-setinterval-to-handle-scroll-events/"/>
+    <link href="http://blog.joshmcarthur.com/2011/04/12/using-setinterval-to-handle-scroll-events/"/>
     <updated>2011-04-12T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/04/12/using-setinterval-to-handle-scroll-events</id>
+    <id>http://blog.joshmcarthur.com/2011/04/12/using-setinterval-to-handle-scroll-events</id>
     <content type="html">&lt;p&gt;I've just added a nice unobtrusive scroll to top feature to my blog, and learnt
 an interesting tip in the process I thought I would share, originating from one
 of the many problems Twitter has had with it's jQuery fanciness.
@@ -741,9 +741,9 @@ object in my polling function.&lt;/p&gt;
   
   <entry>
     <title>I just found this - it's a little promotional thing that the...</title>
-    <link href="http://joshmcarthur.com/blog/2011/04/12/i-just-found-this-it-s-a-little-promotional-thing-that-the/"/>
+    <link href="http://blog.joshmcarthur.com/2011/04/12/i-just-found-this-it-s-a-little-promotional-thing-that-the/"/>
     <updated>2011-04-12T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/04/12/i-just-found-this-it-s-a-little-promotional-thing-that-the</id>
+    <id>http://blog.joshmcarthur.com/2011/04/12/i-just-found-this-it-s-a-little-promotional-thing-that-the</id>
     <content type="html">&lt;p&gt;[/images/assets/www.tumblr.com/photo/1280/4533787560/1/
 tumblr_ljiap6hYwQ1qd78lu.jpg]
 I just found this - it's a little promotional thing that the (now non-existent)
@@ -757,9 +757,9 @@ position took some finding, but it was definately a fun experiment to try out.&l
   
   <entry>
     <title>Accessing controller instance variables in model (Urgh?)</title>
-    <link href="http://joshmcarthur.com/blog/2011/04/12/accessing-controller-instance-variables-in-model-urgh/"/>
+    <link href="http://blog.joshmcarthur.com/2011/04/12/accessing-controller-instance-variables-in-model-urgh/"/>
     <updated>2011-04-12T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/04/12/accessing-controller-instance-variables-in-model-urgh</id>
+    <id>http://blog.joshmcarthur.com/2011/04/12/accessing-controller-instance-variables-in-model-urgh</id>
     <content type="html">&lt;p&gt;I can tell that this title alone will irritate a lot of developers out there.
 It irritated me as well, until I figured out that sometimes, doing things the
 'wrong' way is the best/only way. But let me get on with things.
@@ -791,9 +791,9 @@ more elegant solution that anything else I've seen suggested.&lt;/p&gt;
   
   <entry>
     <title>I18n ALWAYS escapes dots in chained backends :-(</title>
-    <link href="http://joshmcarthur.com/blog/2011/04/08/i18n-always-escapes-dots-in-chained-backends/"/>
+    <link href="http://blog.joshmcarthur.com/2011/04/08/i18n-always-escapes-dots-in-chained-backends/"/>
     <updated>2011-04-08T00:00:00+12:00</updated>
-    <id>http://joshmcarthur.com/blog/2011/04/08/i18n-always-escapes-dots-in-chained-backends</id>
+    <id>http://blog.joshmcarthur.com/2011/04/08/i18n-always-escapes-dots-in-chained-backends</id>
     <content type="html">&lt;p&gt;Just a quick tip I've come across while browsing through the comments on a
 Railscast_I've_been_watching. It looks like the I18n gems that get
 automatically installed with Rails 3 have a teensy bug.
