@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Introducing Blog Broadcaster - blog.joshmcarthur.com</title>
+  <title>Action Mailer Interceptors - blog.joshmcarthur.com</title>
   <meta name="author" content="@sudojosh">
   
 
@@ -16,7 +16,7 @@
 
   
 
-  <link rel="canonical" href="http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/"/>
+  <link rel="canonical" href="http://blog.joshmcarthur.com/2011/10/06/action-mailer-interceptors/"/>
   <link href="/favicon.ico" rel="shortcut icon" />
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -48,7 +48,7 @@
   
   <header>
     
-      <h1 class="entry-title">Introducing Blog Broadcaster</h1>
+      <h1 class="entry-title">Action Mailer Interceptors</h1>
     
     
       <p class="meta">
@@ -61,32 +61,48 @@
 
 
 
-<time datetime="2011-09-14T19:04:00+12:00" pubdate  data-updated="true" >Sep 14<span>th</span>, 2011</time></p>
+<time datetime="2011-10-06T16:51:00+13:00" pubdate  data-updated="true" >Oct 6<span>th</span>, 2011</time></p>
     
   </header>
 
 
-<div class="entry-content"><p>I&#8217;ve just completed a Blog Broadcaster for this blog. It had a couple of interesting technical things, and I needed to test it properly, so here&#8217;s this post!</p>
+<div class="entry-content"><p>ActionMailer Interceptors are a great way to test the full stack of your mailing in Rails from the generation from data through to receiving the email in your client. They are similar to ActiveRecord&#8217;s <code>before_x</code>-type callbacks, and let you change something about the message being sent right before it&#8217;s actually dispatched.</p>
 
-<p>I recently migrated this blog from <a href="http://tumblr.com">Tumblr</a>, and while Tumblr was pretty awesome and easy to use, it didn&#8217;t have great support for blocks of code and preformatted comment, and, like <a href="http://www.radiantcms.org">Radiant CMS</a>, it stored layouts, stylesheets, and all of that kind of thing in a database somewhere - it wasn&#8217;t in source control, and making changes to it was dangerous.</p>
+<p>The most common purpose I use these for is to redirect mail being sent from the application to either my Inbox, or some shared account (if it&#8217;s on a project where I&#8217;m not the only developer). This lets me make sure that the HTML in the message is displayed properly, and that the data gets injected into the content the way I expect it to be.</p>
 
-<p>One thing that I immediately missed from Tumblr, however, was it&#8217;s ability to post to Facebook and Twitter automatically whenever I published a post. As I don&#8217;t post that often, it&#8217;s really important to me that I market my blog as much as I can - like my Github profile, the content on my blog is a reflection of my knowledge and skill as a developer, and so I want to get that in front of people as much as possible - broadcasting to social networks is a great way of achieving that.</p>
+<p>Here&#8217;s a quick example of how to use a Mail interceptor for this purpose:</p>
 
-<p>With my blog on Github, I needed a way to broadcast new posts to these social networks. Github has a built-in post-receive hook to post to Twitter, but I really needed something more than that. Here&#8217;s my list of requirements:</p>
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># lib/development_mail_interceptor.rb</span>
+</div><div class='line'><span class="k">class</span> <span class="nc">DevelopmentMailInterceptor</span>
+</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">delivering_email</span><span class="p">(</span><span class="n">mail</span><span class="p">)</span>
+</div><div class='line'>    <span class="n">mail</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;&lt;</span><span class="si">#{</span><span class="n">mail</span><span class="o">.</span><span class="n">to</span><span class="si">}</span><span class="s2">&gt; </span><span class="si">#{</span><span class="n">mail</span><span class="o">.</span><span class="n">subject</span><span class="si">}</span><span class="s2">&quot;</span>
+</div><div class='line'>    <span class="n">mail</span><span class="o">.</span><span class="n">to</span> <span class="o">=</span> <span class="s2">&quot;me@mywork.co.nz&quot;</span>
+</div><div class='line'>  <span class="k">end</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1"># config/initializers/mail_interceptors.rb</span>
+</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;development_mail_interceptor&#39;</span>
+</div><div class='line'><span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">register_interceptor</span><span class="p">(</span><span class="no">DevelopmentMailInterceptor</span><span class="p">)</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">development?</span>
+</div></code></pre></td></tr></table></div></figure>
 
-<ul>
-<li>It should automatically post without me needing to do any special task</li>
-<li>It should be conditional - i.e. it shouldn&#8217;t post <em>everytime</em> I change something</li>
-<li>It should support both Facebook and Twitter</li>
-<li>It should be able to be triggered by a commit</li>
-</ul>
+<p>&#8230;and give one of your mailers a go.</p>
 
+<p>This is a very simple example, of course, but there are a lot of uses for this type of thing - logging &amp; auditing, checking against quotas, analysis, etc. etc.</p>
 
-<p>What I ended up building was a Sinatra app whose sole purpose was to receive POST&#8217;ed commit information, parse it into a Facebook and Twitter post, and broadcast it. It&#8217;s hosted on Heroku, and gets triggered by a Github <a href="http://help.github.com/post-receive-hooks/">Post-Receive Hooks</a>. I did run into a couple of problems along the way - the main one was sorting out being able to post Facebook updates without being logged in, or even needing to be involved at the process at all. This wasn&#8217;t too difficult, but I did need to get an access token that was long-lived, and have the ability to update this if necessary. I overcame this problem by adding some methods to my Sinatra app that will allow me to update the access token if it ever expires, or change the Facebook account used if necessary.</p>
+<p>What really triggered this post though, was a odd problem I came across when trying to get this interceptor to work. An ActionMailer method can be triggered using one of two methods: either <code>deliver</code> or <code>deliver!</code> - the main difference between the two is that the second will throw exceptions if it cannot be sent, which is why I tend to prefer using it. Something to keep in mind though, is that using <code>deliver!</code> will call any registered Mail Observers, but <strong>not Interceptors</strong> - meaning that your mail will be sent unaltered.</p>
 
-<p>The second problem I ran into wasn&#8217;t really a problem, but it was a challenge to try and think of a nice way of doing it. Basically I needed to store the Facebook access token somewhere so that I could use it when I needed it - but I didn&#8217;t have a database, and I didn&#8217;t particularly want to add one just for storing a single string. Since this is running on Heroku (Bamboo stack, not Cedar), I was also on a read-only filesystem, so couldn&#8217;t store it in a simple text file either. In this end, I chose to store the value in Memcache using the Heroku add-on. This still isn&#8217;t necessarily a good solution, as this storage method isn&#8217;t guaranteed to be persistent, however it should suit my needs - it doesn&#8217;t particularly matter if I lose the access token, the application will gracefully degrade and just post to Twitter until I log in to Facebook via the app again.</p>
-
-<p>So, I think I&#8217;ve come up with a good solution. It started off as a simple broadcaster for my blog, but I think it has a lot of potential for use with any open-source project that has social networking presence - I think it&#8217;s a much more elegant and flexible hook than that which Github provides, and I hope it get&#8217;s a bit of use.</p>
+<p>It really was a frustrating process to debug, but after looking at the <a href="https://github.com/mikel/mail">Mail gem</a> source code (ActionMailer back-ends onto this gem for it&#8217;s mail setup and delivery processes), in particular the <a href="https://github.com/mikel/mail/blob/master/lib/mail/message.rb#L227">Message class</a>, I noticed this crucial difference between the two. Resolving the issue is, of course, as simple as using <code>deliver</code> - without the exclamation mark. After that, your Interceptors will be triggered just as they should be.</p>
 </div>
 
 
@@ -107,15 +123,21 @@
 
 
 
-<time datetime="2011-09-14T19:04:00+12:00" pubdate  data-updated="true" >Sep 14<span>th</span>, 2011</time>
+<time datetime="2011-10-06T16:51:00+13:00" pubdate  data-updated="true" >Oct 6<span>th</span>, 2011</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/howto/'>howto</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2011/10/06/action-mailer-interceptors/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2011/10/06/action-mailer-interceptors/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -131,8 +153,8 @@
     <div id="disqus_thread"><div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'blog-joshmcarthur';
-  var disqus_identifier = 'http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/';
-  var disqus_url = 'http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/';
+  var disqus_identifier = 'http://blog.joshmcarthur.com/2011/10/06/action-mailer-interceptors/';
+  var disqus_url = 'http://blog.joshmcarthur.com/2011/10/06/action-mailer-interceptors/';
   //var disqus_developer = 1;
   (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
