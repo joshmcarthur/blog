@@ -4,7 +4,7 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://blog.joshmcarthur.com/atom.xml" rel="self"/>
   <link href="http://blog.joshmcarthur.com/"/>
-  <updated>2011-10-19T17:48:09+13:00</updated>
+  <updated>2011-10-20T08:53:33+13:00</updated>
   <id>http://blog.joshmcarthur.com/</id>
   <author>
     <name>@sudojosh</name>
@@ -49,7 +49,6 @@
 &lt;span class='line'&gt;27&lt;/span&gt;
 &lt;span class='line'&gt;28&lt;/span&gt;
 &lt;span class='line'&gt;29&lt;/span&gt;
-&lt;span class='line'&gt;30&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='bash'&gt;&lt;div class='line'&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 &lt;/div&gt;&lt;div class='line'&gt;
 &lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;c&quot;&gt;# virtual_machines  Start and stop virtual machines when the host changes state&lt;/span&gt;
@@ -68,7 +67,6 @@
 &lt;/div&gt;&lt;div class='line'&gt;        ;;
 &lt;/div&gt;&lt;div class='line'&gt;    stop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &lt;/div&gt;&lt;div class='line'&gt;        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Saving state of VirtualBox VM...&amp;quot;&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;        &lt;span class=&quot;c&quot;&gt;# NOTE: this stops ALL virtual machines running&lt;/span&gt;
 &lt;/div&gt;&lt;div class='line'&gt;        cat /etc/virtualbox/machines_enabled | &lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read &lt;/span&gt;VM; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
 &lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;k&quot;&gt;          &lt;/span&gt;sudo -H -u &lt;span class=&quot;nv&quot;&gt;$VMUSER&lt;/span&gt; /usr/bin/VBoxManage controlvm &lt;span class=&quot;s2&quot;&gt;&amp;quot;$VM&amp;quot;&lt;/span&gt; savestate
 &lt;/div&gt;&lt;div class='line'&gt;        &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;

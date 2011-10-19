@@ -101,7 +101,6 @@
 <span class='line'>27</span>
 <span class='line'>28</span>
 <span class='line'>29</span>
-<span class='line'>30</span>
 </pre></td><td class='code' width='100%'><pre><code class='bash'><div class='line'><span class="c">#!/bin/sh</span>
 </div><div class='line'>
 </div><div class='line'><span class="c"># virtual_machines  Start and stop virtual machines when the host changes state</span>
@@ -120,7 +119,6 @@
 </div><div class='line'>        ;;
 </div><div class='line'>    stop<span class="o">)</span>
 </div><div class='line'>        <span class="nb">echo</span> <span class="s2">&quot;Saving state of VirtualBox VM...&quot;</span>
-</div><div class='line'>        <span class="c"># NOTE: this stops ALL virtual machines running</span>
 </div><div class='line'>        cat /etc/virtualbox/machines_enabled | <span class="k">while </span><span class="nb">read </span>VM; <span class="k">do</span>
 </div><div class='line'><span class="k">          </span>sudo -H -u <span class="nv">$VMUSER</span> /usr/bin/VBoxManage controlvm <span class="s2">&quot;$VM&quot;</span> savestate
 </div><div class='line'>        <span class="k">done</span>
