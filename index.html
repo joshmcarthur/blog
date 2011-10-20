@@ -51,6 +51,93 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-20T13:28:00+13:00" pubdate  data-updated="true" >Oct 20<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m sure this has been done before, but after noticing <a href="http://www.1-day.co.nz">1-day&#8217;s</a>  &#8216;Look Busy&#8217; feature, I just had to write a bookmarklet to load this up on any site!</p>
+
+<p>If you just want to try it out, here&#8217;s the link <a href="javascript:var busy=document.createElement('div');var body=document.getElementsByTagName('body')[0];var max_width_cache=body.getAttribute('max-width');body.style.maxWidth='100%';busy.setAttribute('id','lookbusy');busy.setAttribute('style','position: absolute; z-index: 1000; width: 100%; height: 100%; top: 0px; left: 0px; right: 0px; bottom: 0px; background: #FFF url(http://www.1-day.co.nz/images/2010_mission_critical_development_strategy.png) no-repeat 0 0;');var close=document.createElement('a');close.setAttribute('class','busy close');close.setAttribute('style','position: fixed; z-index: 1001; right: 10px; bottom: 10px; background-color: #FFF; color: #000; font-size:10px');close.setAttribute('href','#');close.innerText='OK, Clear';close.setAttribute('onclick',&quot;javascript:body.removeChild(document.getElementById('lookbusy'));body.style.maxWidth = &quot; + max_width_cache);busy.appendChild(close);body.appendChild(busy)">Look Busy Bookmarklet</a> - either right-click on the link and &#8216;Copy URL&#8217; and paste into a new bookmark, or drag to your bookmarks bar or folder. It should work in Chrome, Safari, Firefox and IE7-9</p>
+
+<p>Here&#8217;s the source code for anyone interested in seeing how this works:</p>
+
+<div><figure role=code><figcaption><span>Look Busy Bookmarklet  </span></figcaption>
+ <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+</pre></td><td class='code' width='100%'><pre><code class='javascript'><div class='line'><span class="c1">// Create a new div tag to contain our image</span>
+</div><div class='line'><span class="kd">var</span> <span class="nx">busy</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+</div><div class='line'><span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+</div><div class='line'><span class="kd">var</span> <span class="nx">max_width_cache</span> <span class="o">=</span> <span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">maxWidth</span><span class="p">;</span>
+</div><div class='line'><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">maxWidth</span> <span class="o">=</span> <span class="s1">&#39;100%&#39;</span><span class="p">;</span>
+</div><div class='line'><span class="nx">busy</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;lookbusy&#39;</span><span class="p">);</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1">// Add a background image, and position the div tag above all other content and make it fill the screen</span>
+</div><div class='line'><span class="nx">busy</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="s1">&#39;position: absolute; z-index: 1000; width: 100%; height: 100%; top: 0px; left: 0px; right: 0px; bottom: 0px; background: #FFF url(http://www.1-day.co.nz/images/2010_mission_critical_development_strategy.png) no-repeat 0 0;&#39;</span><span class="p">);</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1">// Add a inconspicuous link to close the image</span>
+</div><div class='line'><span class="kd">var</span> <span class="nx">close</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="s1">&#39;busy close&#39;</span><span class="p">);</span>
+</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="s1">&#39;position: fixed; z-index: 1001; right: 10px; bottom: 10px; background-color: #FFF; color: #000; font-size:10px&#39;</span><span class="p">);</span>
+</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;#&#39;</span><span class="p">);</span>
+</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;OK, Clear&quot;</span><span class="p">;</span>
+</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;onclick&#39;</span><span class="p">,</span> <span class="s2">&quot;javascript:body.removeChild(document.getElementById(&#39;lookbusy&#39;));body.style.maxWidth = &quot;</span> <span class="o">+</span> <span class="nx">max_width_cache</span><span class="p">);</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1">// Add the close image to the look busy div tag</span>
+</div><div class='line'><span class="nx">busy</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">close</span><span class="p">);</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1">// Add the look busy div tag to the body of the document</span>
+</div><div class='line'><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">busy</span><span class="p">);</span>
+</div></code></pre></td></tr></table></div></figure></div>
+
+
+<p>Give it a go! It&#8217;s super handy for when you&#8217;re checking out <a href="http://www.trademe.co.nz">TradeMe</a>, <a href="http://failblog.org">Failblog</a>, or <a href="http://images.google.com?q=wink">anything similar</a>!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs With init.d</a></h1>
     
     
@@ -378,110 +465,6 @@
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-09-23T13:26:00+12:00" pubdate  data-updated="true" >Sep 23<span>rd</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>An inherent part of developing web applications is managing your datastores - typically, a relational database such as MySQL or PostgreSQL. Today, I&#8217;m going to quickly cover off how to backup and restore for both of these databases.</p>
-
-<h2>What you&#8217;ll need</h2>
-
-<ul>
-<li>Either PostgreSQL or MySQL</li>
-<li>Access to a database (preferably one with data in it)</li>
-</ul>
-
-
-<h2>Why this is useful to know</h2>
-
-<p>Lots of interactions with databases have the potential to destroy or modify data (in a bad way). When using frameworks such as Ruby on Rails, it&#8217;s even easier to, say, accidently delete all of your Users (Horribly easy in DataMapper, unfortunately). It&#8217;s important that before you do anything with data that&#8217;s destructive, you have a backup of your database that you can restore from quickly and easily.</p>
-
-<h2>PostgreSQL</h2>
-
-<p>Postgres databases are backed up using the <code>pg_dump</code> command - a command-line utility that comes packaged with the database server. Here&#8217;s the command:</p>
-
-<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
-</pre></td><td class='code' width='100%'><pre><code class='sh'><div class='line'>pg_dump --no-owner -U <span class="o">[</span>username<span class="o">]</span> -W <span class="o">[</span>database_name<span class="o">]</span> &gt; <span class="o">[</span>file to dump to<span class="o">]</span>.sql.dump
-</div></code></pre></td></tr></table></div></figure>
-
-<p>Let me explain these options and why I use them:</p>
-
-<ul>
-<li><code>--no-owner</code>: By default, Postgres dumps the database with lots of SET OWNER TO statements. I like to take these out of the dump, as I&#8217;m not necessarily restoring the dump to exactly the same server with exactly the same users. Using &#8211;no-owner means that ownership statements will be excluded.</li>
-<li><code>-U [username]</code>: This lets you pass in the database user name your web application usually uses to connect - using this is just good practise, as it ensures that what you&#8217;re dumping is exactly what the web application has.</li>
-<li><code>-W</code>: This option, used in conjunction with the <code>-U</code> flag, prompts for the password when you run the command</li>
-<li><code>[database_name]</code>: This is the name of the database that you want to dump</li>
-<li><code>[file to dump to]</code>: This is the file that the SQL script that pg_dump produces will be piped into. I normally name this file with the <code>.sql.dump</code> extension, so that I can see it&#8217;s a SQL dump straight off.</li>
-</ul>
-
-
-<h4>Restoring a database dump</h4>
-
-<p>Restoring a Postgresql dump is really easy, and involves using the standard <code>psql</code> client to connect to the database and execute the SQL script in your dump file.</p>
-
-<p>First of all, make sure that you have created the database you want to load the data into. In this example, let&#8217;s say I&#8217;ve dumped from the <code>facebook_production</code> database to the file <code>facebook_production_23092011.sql.dump</code>, and I want to restore into the <code>facebook_development</code> database so that I can test out some code against some production data. I want to connect to the database using psql as the web application user, and load the dump in:</p>
-
-<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
-</pre></td><td class='code' width='100%'><pre><code class='sh'><div class='line'>psql -U facebook -W facebook_development &lt; facebook_production_23092011.sql.dump<span class="sb">`</span>
-</div></code></pre></td></tr></table></div></figure>
-
-<p>Note how I am using the opposite of the less-than symbol I used above - this basically denotes the direction of the data - it&#8217;s coming <em>from</em> the file, going <em>to</em> the database.</p>
-
-<p>Upon running this commmand (with your own database, of course), you will first be prompted for your database user&#8217;s password, and will then see a bunch of SQL statements being executed. Once it&#8217;s completed, your database has been loaded successfully - you can jump in using psql if you&#8217;d like, and query around a bit.</p>
-
-<h2>MySQL</h2>
-
-<p>MySQL databases are backed up with the <code>mysqldump</code> program - one I&#8217;m not as familiar with as Postgres, but I know the basics, and largely that&#8217;s all you need with this type of thing. The main thing to keep in mind is that the process is the same as for PostgreSQL above - use the dump program to write the database out to a file (in the form of SQL statements), and then use the database client program <code>mysql</code> in this case, to execute the commands in the file against the database being restored to. Here&#8217;s the command to dump a MySQL file to disk:</p>
-
-<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
-</pre></td><td class='code' width='100%'><pre><code class='sh'><div class='line'>mysqldump -U <span class="o">[</span>username<span class="o">]</span> -P <span class="o">[</span>database_name<span class="o">]</span> &gt; <span class="o">[</span>file to dump to<span class="o">]</span>.sql.dump
-</div></code></pre></td></tr></table></div></figure>
-
-<p>The options are more or less as I&#8217;ve described above, except that <code>-P</code> is substituted for <code>-W</code>, and I&#8217;ve still stuck with the <code>.sql.dump</code> naming scheme.</p>
-
-<h4>Restoring a database dump</h4>
-
-<p>This process is almost identical to the PostgreSQL restore process. Let&#8217;s stick with the same example format we already have - dumping from a database called <code>facebook_production</code> to file <code>facebook_production_23092011.sql.dump</code>, restoring into a database called <code>facebook_development</code> - here&#8217;s the command we need for that:</p>
-
-<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
-</pre></td><td class='code' width='100%'><pre><code class='sh'><div class='line'>mysql -U facebook -P facebook_development &lt; facebook_production_23092011.sql.dump
-</div></code></pre></td></tr></table></div></figure>
-
-<p>Once again, you&#8217;ll be prompted for your password, but for this one you won&#8217;t see the output of the SQL statements - it will take a couple of seconds, and then the program will exit. This is normal however - if you&#8217;d like to see the output of the batch load, you can add <code>-v -v -v</code> before the <code>&lt;</code> symbol to turn verbosity to level three, otherwise you can go ahead and jump into your database and make sure everything is there.</p>
-
-<h2>Tips:</h2>
-
-<ul>
-<li>If you don&#8217;t have a database user account yet, on Unix and Linux you can use <code>sudo su postgres</code> to login as the &#8216;postgres&#8217; user - a root-like database user that gets created for you when Postgres is installed. MySQL has a root account, but it&#8217;s not a system user - you are normally prompted for a root username and password when you install MySQL. If you <em>are</em> using the Postgres user, you don&#8217;t need to pass in a username or password in the above commands, but you need to remember that your restored databases will be owned by &#8216;postgres&#8217;, not you web application database user.</li>
-<li>A handy place to put database dumps that you are planning to use right away is <code>/tmp</code> (Only on Unix and Linux). This is a directly that is writeable by everyone, that will get &#8216;garbage collected&#8217; periodically. This is especially handy if you are logging in as the &#8216;postgres&#8217; user, as typically this user won&#8217;t have write permissions on many other directories</li>
-</ul>
-
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -519,6 +502,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs with init.d</a>
       </li>
     
@@ -532,10 +519,6 @@
     
       <li class="post">
         <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/14/introducing-blog-broadcaster/">Introducing Blog Broadcaster</a>
       </li>
     
   </ul>

@@ -4,13 +4,78 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://blog.joshmcarthur.com/atom.xml" rel="self"/>
   <link href="http://blog.joshmcarthur.com/"/>
-  <updated>2011-10-20T08:53:33+13:00</updated>
+  <updated>2011-10-20T15:02:48+13:00</updated>
   <id>http://blog.joshmcarthur.com/</id>
   <author>
     <name>@sudojosh</name>
     
   </author>
 
+  
+  <entry>
+    <title>A Fun Little Bookmarklet</title>
+    <link href="http://blog.joshmcarthur.com/2011/10/20/a-fun-little-bookmarklet/"/>
+    <updated>2011-10-20T13:28:00+13:00</updated>
+    <id>http://blog.joshmcarthur.com/2011/10/20/a-fun-little-bookmarklet</id>
+    <content type="html">&lt;p&gt;I'm sure this has been done before, but after noticing &lt;a href=&quot;http://www.1-day.co.nz&quot;&gt;1-day's&lt;/a&gt;  'Look Busy' feature, I just had to write a bookmarklet to load this up on any site!&lt;/p&gt;
+
+&lt;p&gt;If you just want to try it out, here's the link &lt;a href=&quot;javascript:var busy=document.createElement('div');var body=document.getElementsByTagName('body')[0];var max_width_cache=body.getAttribute('max-width');body.style.maxWidth='100%';busy.setAttribute('id','lookbusy');busy.setAttribute('style','position: absolute; z-index: 1000; width: 100%; height: 100%; top: 0px; left: 0px; right: 0px; bottom: 0px; background: #FFF url(http://www.1-day.co.nz/images/2010_mission_critical_development_strategy.png) no-repeat 0 0;');var close=document.createElement('a');close.setAttribute('class','busy close');close.setAttribute('style','position: fixed; z-index: 1001; right: 10px; bottom: 10px; background-color: #FFF; color: #000; font-size:10px');close.setAttribute('href','#');close.innerText='OK, Clear';close.setAttribute('onclick',&amp;quot;javascript:body.removeChild(document.getElementById('lookbusy'));body.style.maxWidth = &amp;quot; + max_width_cache);busy.appendChild(close);body.appendChild(busy)&quot;&gt;Look Busy Bookmarklet&lt;/a&gt; - either right-click on the link and 'Copy URL' and paste into a new bookmark, or drag to your bookmarks bar or folder. It should work in Chrome, Safari, Firefox and IE7-9&lt;/p&gt;
+
+&lt;p&gt;Here's the source code for anyone interested in seeing how this works:&lt;/p&gt;
+
+&lt;div&gt;&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;Look Busy Bookmarklet  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class='line'&gt;1&lt;/span&gt;
+&lt;span class='line'&gt;2&lt;/span&gt;
+&lt;span class='line'&gt;3&lt;/span&gt;
+&lt;span class='line'&gt;4&lt;/span&gt;
+&lt;span class='line'&gt;5&lt;/span&gt;
+&lt;span class='line'&gt;6&lt;/span&gt;
+&lt;span class='line'&gt;7&lt;/span&gt;
+&lt;span class='line'&gt;8&lt;/span&gt;
+&lt;span class='line'&gt;9&lt;/span&gt;
+&lt;span class='line'&gt;10&lt;/span&gt;
+&lt;span class='line'&gt;11&lt;/span&gt;
+&lt;span class='line'&gt;12&lt;/span&gt;
+&lt;span class='line'&gt;13&lt;/span&gt;
+&lt;span class='line'&gt;14&lt;/span&gt;
+&lt;span class='line'&gt;15&lt;/span&gt;
+&lt;span class='line'&gt;16&lt;/span&gt;
+&lt;span class='line'&gt;17&lt;/span&gt;
+&lt;span class='line'&gt;18&lt;/span&gt;
+&lt;span class='line'&gt;19&lt;/span&gt;
+&lt;span class='line'&gt;20&lt;/span&gt;
+&lt;span class='line'&gt;21&lt;/span&gt;
+&lt;span class='line'&gt;22&lt;/span&gt;
+&lt;span class='line'&gt;23&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='javascript'&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Create a new div tag to contain our image&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;busy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createElement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;div&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementsByTagName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;max_width_cache&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;style&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;maxWidth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;style&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;maxWidth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;100%&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;busy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;id&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lookbusy&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Add a background image, and position the div tag above all other content and make it fill the screen&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;busy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;style&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;position: absolute; z-index: 1000; width: 100%; height: 100%; top: 0px; left: 0px; right: 0px; bottom: 0px; background: #FFF url(http://www.1-day.co.nz/images/2010_mission_critical_development_strategy.png) no-repeat 0 0;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Add a inconspicuous link to close the image&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createElement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;busy close&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;style&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;position: fixed; z-index: 1001; right: 10px; bottom: 10px; background-color: #FFF; color: #000; font-size:10px&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;href&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;#&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;innerText&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;OK, Clear&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;onclick&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;javascript:body.removeChild(document.getElementById(&amp;#39;lookbusy&amp;#39;));body.style.maxWidth = &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;max_width_cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Add the close image to the look busy div tag&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;busy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appendChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Add the look busy div tag to the body of the document&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appendChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;busy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Give it a go! It's super handy for when you're checking out &lt;a href=&quot;http://www.trademe.co.nz&quot;&gt;TradeMe&lt;/a&gt;, &lt;a href=&quot;http://failblog.org&quot;&gt;Failblog&lt;/a&gt;, or &lt;a href=&quot;http://images.google.com?q=wink&quot;&gt;anything similar&lt;/a&gt;!&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Safely Start and Stop VirtualBox VMs with init.d</title>
@@ -862,22 +927,6 @@ could then use the context it provided in this function. Since then, however, I
 have realized that in my case, this object will alwaysbe the window object - so
 I may as well have a cheaper variable assignment and just directly refer to the
 object in my polling function.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>I just found this - it's a little promotional thing that the...</title>
-    <link href="http://blog.joshmcarthur.com/2011/04/12/i-just-found-this-it-s-a-little-promotional-thing-that-the/"/>
-    <updated>2011-04-12T00:00:00+12:00</updated>
-    <id>http://blog.joshmcarthur.com/2011/04/12/i-just-found-this-it-s-a-little-promotional-thing-that-the</id>
-    <content type="html">&lt;p&gt;[/images/assets/www.tumblr.com/photo/1280/4533787560/1/
-tumblr_ljiap6hYwQ1qd78lu.jpg]
-I just found this - it's a little promotional thing that the (now non-existent)
-VUW (Victoria University of Wellington IT Society) did (Well, me and Eddy) to
-try and get people to join up (It worked.) - basically, I built a little IR
-pen, and using a Wiimote, we managed to make a nice little giant touchscreen.
-Granted, it needed calibrating often, and the correct body posture and hand
-position took some finding, but it was definately a fun experiment to try out.&lt;/p&gt;
 </content>
   </entry>
   
