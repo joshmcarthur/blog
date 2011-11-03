@@ -51,6 +51,76 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/06/16/ubuntu-quick-imagemagick-install/">Ubuntu: Quick ImageMagick Install</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-06-16T00:00:00+12:00" pubdate  data-updated="true" >Jun 16<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>[This is cross-posted from a tweet I posted a while back - I think it&#8217;s a nice
+bit of advice, and I wanted to store it in a more persistent form]
+Installing ImageMagick is one of the things that Rails developers need to do
+reasonably often when provisioning new servers - basically, if you&#8217;re doing any
+sort of image processing in your application (including the popularPaperclip
+gem), ImageMagick is what you&#8217;ll be using.
+The problem is that there is a bit of a magical formula I have needed to use in
+the past - if you just install ImageMagick, it will most likely not work, as it
+needs to have support for different image formats you want to use compiled it
+in right from the get go. Previously, I have just looked up the various
+libraries I have needed (For PNG, JPEG, etc.), and then either found the
+libraries in the Ubuntu package repositories or built them from source.Â 
+A nice quick way of doing it though, is to use an ImageMagick meta-package in
+the Ubuntu repositories named libmagick-9-dev - it is just a collection of
+popular image format libraries, as well as a couple of additional utilities for
+ImageMagick. You can install it on any Ubuntu system by running this command:
+sudo apt-get install libmagick-9-dev
+ImageMagick itself still needs to be installed, of course. The best option here
+is just to build from source - packages in the repositories are horribly out of
+date, and I have found Paperclip, RMagick and Minimagick all require a fairly
+recent version of ImageMagick.
+Building from source sounds really intimidating, but it really isn&#8217;t - just
+follow these steps:
+First of all, download a tarball of the ImageMagick source onto your computer:
+wget ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick.tar.gz
+Next, extract the tarball:
+tar -xvzf ImageMagick.tar.gz
+Now configure the package - note especially the end of the output (There is a
+lot of output) - it tells you which Image libraries you have installed - any
+with &#8216;yes&#8217; next to them it will happily format and convert - because you&#8217;ve
+installed the package above, all the common formats should have a &#8216;yes&#8217; next to
+them, but it&#8217;s worth checking.
+cd ImageMagick-[VERSION] (VERSION will be a series of numbers like &#8216;6.7.0-8&#8217;)
+./configure
+Now all the hard work (By you) is done - you just need to compile the packages:
+make &amp;&amp; sudo make install
+All done! - ImageMagick should be all installed. To check, run the command
+which identify, and check it returns a path to the &#8216;identify&#8217; command.
+Note: If you have trouble compiling, make sure Ubunutu&#8217;s build tools are
+installed: sudo apt-get install build-essential</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/06/11/integration-tests-with-devise-and-rspec/">Integration Tests With Devise and RSpec</a></h1>
     
     
@@ -197,71 +267,6 @@ Simple! The image should save correctly.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/04/12/using-setinterval-to-handle-scroll-events/">Using setInterval to Handle Scroll() Events</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-04-12T00:00:00+12:00" pubdate  data-updated="true" >Apr 12<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve just added a nice unobtrusive scroll to top feature to my blog, and learnt
-an interesting tip in the process I thought I would share, originating from one
-of the many problems Twitter has had with it&#8217;s jQuery fanciness.
-The scroll to top stuff isn&#8217;t overly complicated - just detect when the user
-has scrolled x pixels down the screen, and then show a link to go back to the
-top (Which can be animated if you want) - for a nice tutorial on this, check
-out_this_tutorial.
-The thing is that this technique uses the scroll event (bound to window, but
-can be bound to basically anything with a scrollbar). The scroll event gets
-fired any time the window is scrolled - but any time the scroll amount changes
-at all. What this means is that the scroll event is fired any time scroll
-position changes - so if you grab the scrollbar, and pull, the scroll event is
-fired every time the bar moves, not when you release the mouse.
-John_Resig_reports_that_Twitter_ran_into_some_problems_with_thisÂ - they had a
-function bound directly to the scroll event being fired every time anyone
-scrolled (at all!). Resig has also reported a nice solution though, which I&#8217;ll
-pass on here. It&#8217;s actually quite simple. Instead of binding a complicated
-function to the scroll event, you simply set a flag variable to let something
-else know that the window has been scrolled. The second piece of the solution
-is a function running via setInterval - that is, a function being called on a
-scheduled basis. The first task of this function is to check this flag - if it
-is set, it can perform any task (Such as showing a &#8216;Back to Top&#8217; link, and set
-the flag variable back to false.Â 
-The end result of this solution is that you basically have a polling function,
-rather than an event-driven one. This is actually a good thing though, when it
-comes to this type of event. Instead of having a complex function called every
-time the window is scrolled, a function is called every quarter second or so,
-and only executes if the window has been scrolledÂ - much better!
-I personally used an object variable, rather than just a flag - this object was
-populated with the object that was scrolled on, and I then checked if this
-object was populated in my polling function (rather than just is true), and
-could then use the context it provided in this function. Since then, however, I
-have realized that in my case, this object will alwaysbe the window object - so
-I may as well have a cheaper variable assignment and just directly refer to the
-object in my polling function.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -301,6 +306,10 @@ object in my polling function.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/03/generating-gem-install-commands-from-gem-list/">Generating &#8216;Gem Install&#8217; Commands From &#8216;Gem List&#8217;</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a>
       </li>
     
@@ -314,10 +323,6 @@ object in my polling function.</p>
     
       <li class="post">
         <a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a>
       </li>
     
   </ul>
@@ -378,9 +383,12 @@ object in my polling function.</p>
         </div>
       </div>
       <footer><p>
-  Copyright &copy; 2011 - @sudojosh -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  Copyright &copy; 2011 - <a href="http://twitter.com/sudojosh">@sudojosh</a>
 </p>
+<p class="credits">
+  <span class="octopress"><a href="http://octopress.org/">Octopress</a> powers this blog!</span>
+  <span class="subtlepatterns"><a href="http://twitter.com/dwaseem">Waseem Dahman</a> made this beautiful background!</span>
+<p>
 
 </footer>
   </div>

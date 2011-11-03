@@ -212,14 +212,20 @@
     </url>
     <url>
         <loc>http://blog.joshmcarthur.com/2011/10/20/a-fun-little-bookmarklet/</loc>
-        <lastmod>2011-10-20T15:01:45+13:00</lastmod>
+        <lastmod>2011-10-20T15:05:16+13:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://blog.joshmcarthur.com/2011/11/03/generating-gem-install-commands-from-gem-list/
+        </loc>
+        <lastmod>2011-11-03T16:47:07+13:00</lastmod>
     </url>
     <url>
         <loc>http://blog.joshmcarthur.com/</loc>
-        <lastmod>2011-10-20T15:01:45+13:00</lastmod>
+        <lastmod>2011-11-03T16:47:07+13:00</lastmod>
     </url>
     <url>
         <loc>http://blog.joshmcarthur.com/blog/archives/</loc>
-        <lastmod>2011-10-20T15:01:45+13:00</lastmod>
+        <lastmod>2011-11-03T16:47:07+13:00</lastmod>
     </url>
 </urlset>
