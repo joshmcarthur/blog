@@ -5,8 +5,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Creating a Scalable Academic Signup System - blog.joshmcarthur.com</title>
+  <title>Category: howto, - blog.joshmcarthur.com</title>
   <meta name="author" content="@sudojosh">
+  
+    <meta name="description" content="Category: howto,"/>
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -16,7 +18,7 @@
 
   
 
-  <link rel="canonical" href="http://blog.joshmcarthur.com/2011/03/04/creating-a-scalable-academic-signup-system/"/>
+  <link rel="canonical" href="http://blog.joshmcarthur.comblog/categories/howto-/index.html"/>
   <link href="/favicon.ico" rel="shortcut icon" />
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -47,118 +49,33 @@
 <article>
   
   <header>
-    <h1 class="entry-title">Creating a Scalable Academic Signup System</h1>
-    <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-03-04T00:00:00+13:00" pubdate  data-updated="true" >Mar 4<span>th</span>, 2011</time></p>
+    <h1 class="entry-title">Category: Howto,</h1>
+    
   </header>
   
-  <p>While working at 3Months as a developer, I am also completing a Bachelor of
-Business Information Systems at Victoria University. One of the things that
-rolls around twice a year and always causes students headaches is the signups
-systemÂ - it&#8217;s one of the bragging points of the School of Information
-Management at Victoria, as it was build as a project by a group of students
-there (Hence the name &#8216;S-Cubed = SSS = SIM Signups System). In itself, it&#8217;s a
-good application - it fulfills it&#8217;s brief of managing signups for tutorials and
-workshops, and lecturers and students alike seem to have no huge issues using
-is. The problem is though, is that its performance under load is crap - it
-simply was not build for the load that it receives when tutorial signups for 2
-courses of 700 people each opens at 9am, and each of those 1400 people trying
-to get the exact tutorial they want are continually refereshing the page and so
-exacerbating the server load even more.</p>
-
-<p>This server load doesn&#8217;t just extend to slow page load speed - since the site
-has not been build with scalability in mind, there have been ongoing issues
-with sessions expiring as people try and signup for a tutorial or workshop,
-people stuck halfway through a transaction, and the server even goes down every
-now and then.
-What I am proposing is an open framework that takes the best aspects of this
-type of system, and builds upon it techniques to optimize page load speed, and
-increase scalability. It seems to me that Universities in general are lacking a
-system that allows them to smoothly run signups (usually they are dependent on
-modified forum software, paper signups, emails or proprietary in-house
-systems), and so this isÂ definitelyÂ something that is marketable around the
-world.
-As I see it, here are the base requirements for such a system:</p>
-
-<pre><code>* LDAP and OAuth Authentication so that students do not need to 'register'
-  to sign up for a tutorial
-* Accurate time-based releases of tutorials and workshops that do not
-  require human intervention
-* Automatic server load monitoring with the ability to increase allocated
-  resources if necessary (i.e. this application is an ideal candidate for
-  Rackspace Cloud or Heroku)
-* Per-course and per-University analytics for better scheduling of tutorial
-  and workshop release times and how students are accessing the system.
-* The ability for lecturers and course administrators to export and print
-  class lists, tutorial lists, and workshops list with all student data or
-  just a subset.
-</code></pre>
-
-<p>This project isÂ definitelyÂ going on theÂ work pileÂ for my personal projects
-- it&#8217;s got a couple of interesting aspects to it which I haven&#8217;t approached
-before (Such as LDAP from Rails), and generally seems to follow along with my
-ethos of community-oriented &#8216;responsible web applications&#8217;.</p>
-
-  
-    <footer>
-      <p class="meta">
-        
-        
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2011</h2>
 
-
-
-<time datetime="2011-03-04T00:00:00+13:00" pubdate  data-updated="true" >Mar 4<span>th</span>, 2011</time>
-        
-
-
-      </p>
-      
-        <div class="sharing">
+<article>
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2011/03/04/creating-a-scalable-academic-signup-system/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2011/03/04/creating-a-scalable-academic-signup-system/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-</div>
+<h1><a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a></h1>
+<time datetime="2011-11-12T21:27:00+13:00" pubdate><span class='month'>Nov</span> <span class='day'>12</span> <span class='year'>2011</span></time>
 
-      
-    </footer>
-  
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/howto-/'>howto,</a>, <a class='category' href='/blog/categories/nerdy/'>nerdy</a></span>
+</footer>
+
+
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread"><div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'blog-joshmcarthur';
-  var disqus_identifier = 'http://blog.joshmcarthur.com/2011/03/04/creating-a-scalable-academic-signup-system/';
-  var disqus_url = 'http://blog.joshmcarthur.com/2011/03/04/creating-a-scalable-academic-signup-system/';
-  //var disqus_developer = 1;
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
+
+  
+</article>
 
 </div>
 

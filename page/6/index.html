@@ -51,6 +51,59 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/05/06/imagemagick-cropping-then-resizing-a-png/">ImageMagick: Cropping Then Resizing a PNG</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-06T00:00:00+12:00" pubdate  data-updated="true" >May 6<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve been working on an image processor class for work, and recently ran into
+this issue. I thought I would post it up here as normally I need to be quite
+desperate before I start trawling through email mirrors - hopefully somebody
+comes across this post first.
+If you use ImageMagick (in particular, in conjunction with MiniMagick), then
+you may come across this issue, and there is actually a quick fix to it. The
+issue itself is as follows: my image processor retrieves an image from an
+online source, but the image has a 1 or 2px border, and is thousands of pixels
+wide - too wide for web use. I therefore wrote this class to first crop the
+border off the image, and then resize it.
+If you do actually do this though, there is an important step that needs to go
+in-between the cropping and the resizing. If you won&#8217;t do this, you will
+basically get a PNG layer that is offset from the image itself - i.e. some or
+all of the Â actual image content is not visible. This happens because when the
+image is cropped, the origin of the image changes. It needs to be reset back to
+coordinates 0, 0 in order to not offset the layer itself when the image is
+resized.
+Here&#8217;s how to do it.Â 
+For Ruby/Minimagick:
+image.set(&#8220;page&#8221;, &#8220;#{image[&#8216;width&#8217;]}x#{image[&#8216;height&#8217;]}+0+0&#8221;)
+For ImageMagick directly (i.e. in console):
+convert [image sequence]: -set page [width]x[height]+0+0
+Simple! The image should save correctly.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/04/12/using-setinterval-to-handle-scroll-events/">Using setInterval to Handle Scroll() Events</a></h1>
     
     
@@ -205,51 +258,6 @@ more elegant solution that anything else I&#8217;ve seen suggested.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/04/08/i18n-always-escapes-dots-in-chained-backends/">I18n ALWAYS Escapes Dots in Chained Backends :-(</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-04-08T00:00:00+12:00" pubdate  data-updated="true" >Apr 8<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Just a quick tip I&#8217;ve come across while browsing through the comments on a
-Railscast_I&#8217;ve_been_watching. It looks like the I18n gems that get
-automatically installed with Rails 3 have a teensy bug.
-When storing a translation to the backend (be it YAML, Redis, whatever), there
-is an :escape option that can be passed to enable (or prevent) the key from
-containing the dot character (.) (Among others, I&#8217;m sure). This seems to work
-fine when dealing with a single backend, but unfortunately when you are using
-chained backends (For example I am using Redis preferentially, but falling back
-on YAML when necessary), the options hash that you would pass the :escape
-option in is mistakenly initialized to an empty hash.
-It&#8217;s a simple fix - there is already a closed pull request on the issue here.
-It looks like the latest stable version is only 0.50 though, so the fix isn&#8217;t
-going to filter through to the actual gem just yet. For now, the best option is
-probably to class_eval into that particular section, or just change the file
-yourself.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -289,6 +297,10 @@ yourself.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/03/generating-gem-install-commands-from-gem-list/">Generating &#8216;Gem Install&#8217; Commands From &#8216;Gem List&#8217;</a>
       </li>
     
@@ -302,10 +314,6 @@ yourself.</p>
     
       <li class="post">
         <a href="/2011/10/06/action-mailer-interceptors/">Action Mailer Interceptors</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a>
       </li>
     
   </ul>

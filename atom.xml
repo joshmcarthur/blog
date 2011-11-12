@@ -4,13 +4,56 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://blog.joshmcarthur.com/atom.xml" rel="self"/>
   <link href="http://blog.joshmcarthur.com/"/>
-  <updated>2011-11-03T17:41:32+13:00</updated>
+  <updated>2011-11-12T21:40:05+13:00</updated>
   <id>http://blog.joshmcarthur.com/</id>
   <author>
     <name>@sudojosh</name>
     
   </author>
 
+  
+  <entry>
+    <title>Add jQuery to Any Page Really, Really Easily</title>
+    <link href="http://blog.joshmcarthur.com/2011/11/12/add-jquery-to-any-page/"/>
+    <updated>2011-11-12T21:27:00+13:00</updated>
+    <id>http://blog.joshmcarthur.com/2011/11/12/add-jquery-to-any-page</id>
+    <content type="html">&lt;p&gt;When I'm working on a site, or analysing somebody else's, I often wish that jQuery was loaded into that page - it's an unbeatable tool for really digging into the site's source to debug something or work out how something has been done.&lt;/p&gt;
+
+&lt;p&gt;To help out with this, I've put together a quick bookmarket, &lt;a href=&quot;http://blog.joshmcarthur.com/2011/10/20/a-fun-little-bookmarklet/&quot;&gt;similar to the more fun one I've done a while ago&lt;/a&gt;. It works extremely simply - it just creates a script element, adds jQuery 1.7.0 (served from Google), and appends it to the page body. As soon as the script has loaded, jQuery can be used from within Web Inspector, Firebug, or whatever other Javascript console you use.&lt;/p&gt;
+
+&lt;p&gt;Here's the bookmarklet:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;javascript:var s=document.createElement('script);s.type='text/javascript';s.src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';document.findElementsByTagName('body')[0].appendChild(s);&quot;&gt;Add jQuery&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;To add this to your browser, you can either: right-click on this link, select 'Copy Link URL', and paste into a new bookmark, or just drag-and-drop onto your Bookmarks toolbar. Once it's added, you can simply click on this bookmark on any page, and jQuery will be loaded into the page for you to use.&lt;/p&gt;
+
+&lt;p&gt;Here's the source:&lt;/p&gt;
+
+&lt;div&gt;&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;Add jQuery Bookmarklet  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class='line'&gt;1&lt;/span&gt;
+&lt;span class='line'&gt;2&lt;/span&gt;
+&lt;span class='line'&gt;3&lt;/span&gt;
+&lt;span class='line'&gt;4&lt;/span&gt;
+&lt;span class='line'&gt;5&lt;/span&gt;
+&lt;span class='line'&gt;6&lt;/span&gt;
+&lt;span class='line'&gt;7&lt;/span&gt;
+&lt;span class='line'&gt;8&lt;/span&gt;
+&lt;span class='line'&gt;9&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='javascript'&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Create the script tag&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createElement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;script&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Set the necessary attributes on the tag&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;src&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Add to the body tag (assume here we&amp;#39;re dealing with HTML, and there IS a body tag)&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;findElementsByTagName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appendChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
+
+
+
+</content>
+  </entry>
   
   <entry>
     <title>Generating 'Gem Install' Commands From 'Gem List'</title>
@@ -933,37 +976,6 @@ Instead you can use @nzkoz's suggested method:
 Widget.first(:offset =&gt; Widget.count)
 .... the count() method is fast, and the first() method will limit it to the
 first result in the SQL as well.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>ImageMagick: Cropping then Resizing a PNG</title>
-    <link href="http://blog.joshmcarthur.com/2011/05/06/imagemagick-cropping-then-resizing-a-png/"/>
-    <updated>2011-05-06T00:00:00+12:00</updated>
-    <id>http://blog.joshmcarthur.com/2011/05/06/imagemagick-cropping-then-resizing-a-png</id>
-    <content type="html">&lt;p&gt;I've been working on an image processor class for work, and recently ran into
-this issue. I thought I would post it up here as normally I need to be quite
-desperate before I start trawling through email mirrors - hopefully somebody
-comes across this post first.
-If you use ImageMagick (in particular, in conjunction with MiniMagick), then
-you may come across this issue, and there is actually a quick fix to it. The
-issue itself is as follows: my image processor retrieves an image from an
-online source, but the image has a 1 or 2px border, and is thousands of pixels
-wide - too wide for web use. I therefore wrote this class to first crop the
-border off the image, and then resize it.
-If you do actually do this though, there is an important step that needs to go
-in-between the cropping and the resizing. If you won't do this, you will
-basically get a PNG layer that is offset from the image itself - i.e. some or
-all of the Â actual image content is not visible. This happens because when the
-image is cropped, the origin of the image changes. It needs to be reset back to
-coordinates 0, 0 in order to not offset the layer itself when the image is
-resized.
-Here's how to do it.Â 
-For Ruby/Minimagick:
-image.set(&quot;page&quot;, &quot;#{image['width']}x#{image['height']}+0+0&quot;)
-For ImageMagick directly (i.e. in console):
-convert [image sequence]: -set page [width]x[height]+0+0
-Simple! The image should save correctly.&lt;/p&gt;
 </content>
   </entry>
   

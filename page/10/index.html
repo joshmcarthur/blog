@@ -51,6 +51,59 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2010/09/14/rvm-ruby-debug-and-hours-of-frustration/">RVM, Ruby-Debug, and Hours of Frustration</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-09-14T00:00:00+12:00" pubdate  data-updated="true" >Sep 14<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Every now and then, you run into one of THOSE problems - inexplicable, and
+something it seems no one else has solved before you. This afternoon, I hit one
+of these. Basically, I had just installed RVM, Ruby_1.8.7 and Rails_2.3.8 -
+everything was working great - I could run a server just fine, and use the
+running site.
+Eventually though, I found something broken. Easy enough to diagnose, I thought
+- I&#8217;ll just start up a debugging server, and work out whats going on.
+Wrong. Wrong, wrong, wrong.
+What followed was a continuation of this error:
+You need to install ruby-debug to run the server in debugging mode.
+So I had a Google - lots of people have run into this problem before (here and
+here specifically) - the problem is, most of these problems came down to a
+missing library called libreadline - for them, installing the library corrected
+all of their problems.
+In the end, I stumbled across this_post, from a guy having issues with Ruby
+after upgrading his Mac OS X - finally - he suggested something I hadn&#8217;t
+already tried.
+And, as it turns out - it worked! I have no idea why - but there we go.
+If you are having a problem getting Ruby 1.8.7 to acknowledge ruby-debug is
+there when running a debugging server, try this:
+gem uninstall ruby-debug gem install ruby-debug linecache &#8211;no-ri &#8211;no-rdoc
+script/server &#8211;debugger
+&#8230; It might just work for you!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2010/09/14/no-reason-for-this-i-just-thought-the-beehive-looked-ma/">No Reason for This. I Just Thought the Beehive Looked&#8230;. Ma&#8230;</a></h1>
     
     
@@ -155,42 +208,6 @@ moment.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/08/18/time-problems/">Time Problems</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2010-08-18T00:00:00+12:00" pubdate  data-updated="true" >Aug 18<span>th</span>, 2010</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Fixing time problems is probably one of the most satisfying things to fix
-programmatically for me. It is one of those things where you may spend ages
-stabbing in the dark with different time zones, formats, etc etc. - but there
-it really is satisfying when you do get it right and what you see in your code
-is what you see on your clock.
-Weird, but true.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -230,6 +247,10 @@ Weird, but true.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/03/generating-gem-install-commands-from-gem-list/">Generating &#8216;Gem Install&#8217; Commands From &#8216;Gem List&#8217;</a>
       </li>
     
@@ -243,10 +264,6 @@ Weird, but true.</p>
     
       <li class="post">
         <a href="/2011/10/06/action-mailer-interceptors/">Action Mailer Interceptors</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a>
       </li>
     
   </ul>

@@ -51,6 +51,41 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/07/10/quick-clear-gemset/">Quick: Clear Gemset</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-07-10T00:00:00+12:00" pubdate  data-updated="true" >Jul 10<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you&#8217;re finding that you have to change something fairly significant in your
+bundler dependencies, it&#8217;s usually a good idea to get rid of what you&#8217;ve got
+loaded in an RVM gemset so that you don&#8217;t end up with different versions of
+gems fighting with each other. To do this, simply run <strong><code>rvm gemset empty</code></strong> -
+it&#8217;ll delete all the gems currently in your gemset, giving you a blank slate.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/06/27/the-dictionary-of-new-zealand-sign-language/">The Dictionary of New Zealand Sign Language</a></h1>
     
     
@@ -206,44 +241,6 @@ hacky though&#8230;.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/06/21/quick-rvmrc/">Quick: .rvmrc</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-06-21T00:00:00+12:00" pubdate  data-updated="true" >Jun 21<span>st</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This post is probably something more experienced RVM users will already know,
-but I wanted to post this as it&#8217;s definitely my discovery of the week. When
-throwing an .rvmrc file into a project, it&#8217;s a nice thing to do to write the
-script correctly so that it will just work for other developers (As well as
-telling you what gemset you&#8217;re using when you jump into the directory). In your
-.rvmrc file, put something like this: <code>rvm use 1.9.2@gemset --create</code> &#8230;this
-will attempt to use that gemset (Printing out a nice message telling you it&#8217;s
-using that one as it does so), and will create it if it doesn&#8217;t exist.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -283,6 +280,10 @@ using that one as it does so), and will create it if it doesn&#8217;t exist.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/03/generating-gem-install-commands-from-gem-list/">Generating &#8216;Gem Install&#8217; Commands From &#8216;Gem List&#8217;</a>
       </li>
     
@@ -296,10 +297,6 @@ using that one as it does so), and will create it if it doesn&#8217;t exist.</p>
     
       <li class="post">
         <a href="/2011/10/06/action-mailer-interceptors/">Action Mailer Interceptors</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a>
       </li>
     
   </ul>
