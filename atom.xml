@@ -4,7 +4,7 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://blog.joshmcarthur.com/atom.xml" rel="self"/>
   <link href="http://blog.joshmcarthur.com/"/>
-  <updated>2011-11-12T21:40:05+13:00</updated>
+  <updated>2011-11-13T14:14:32+13:00</updated>
   <id>http://blog.joshmcarthur.com/</id>
   <author>
     <name>@sudojosh</name>
@@ -23,9 +23,9 @@
 
 &lt;p&gt;Here's the bookmarklet:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;javascript:var s=document.createElement('script);s.type='text/javascript';s.src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';document.findElementsByTagName('body')[0].appendChild(s);&quot;&gt;Add jQuery&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;javascript:var s=document.createElement('script');s.type='text/javascript';s.src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';document.getElementsByTagName('body')[0].appendChild(s);&quot;&gt;Add jQuery&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;To add this to your browser, you can either: right-click on this link, select 'Copy Link URL', and paste into a new bookmark, or just drag-and-drop onto your Bookmarks toolbar. Once it's added, you can simply click on this bookmark on any page, and jQuery will be loaded into the page for you to use.&lt;/p&gt;
+&lt;p&gt;To add this to your browser, you can either: right-click on this link, select 'Bookmark Link', or just drag-and-drop onto your Bookmarks toolbar. Once it's added, you can simply click on the bookmark on any page, and jQuery will be loaded into the page for you to use.&lt;/p&gt;
 
 &lt;p&gt;Here's the source:&lt;/p&gt;
 
@@ -47,7 +47,7 @@
 &lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;src&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/div&gt;&lt;div class='line'&gt;
 &lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;c1&quot;&gt;// Add to the body tag (assume here we&amp;#39;re dealing with HTML, and there IS a body tag)&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;findElementsByTagName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appendChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementsByTagName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appendChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
 
 

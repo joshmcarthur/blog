@@ -72,9 +72,9 @@
 
 <p>Here&#8217;s the bookmarklet:</p>
 
-<p><a href="javascript:var s=document.createElement('script);s.type='text/javascript';s.src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';document.findElementsByTagName('body')[0].appendChild(s);">Add jQuery</a></p>
+<p><a href="javascript:var s=document.createElement('script');s.type='text/javascript';s.src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';document.getElementsByTagName('body')[0].appendChild(s);">Add jQuery</a></p>
 
-<p>To add this to your browser, you can either: right-click on this link, select &#8216;Copy Link URL&#8217;, and paste into a new bookmark, or just drag-and-drop onto your Bookmarks toolbar. Once it&#8217;s added, you can simply click on this bookmark on any page, and jQuery will be loaded into the page for you to use.</p>
+<p>To add this to your browser, you can either: right-click on this link, select &#8216;Bookmark Link&#8217;, or just drag-and-drop onto your Bookmarks toolbar. Once it&#8217;s added, you can simply click on the bookmark on any page, and jQuery will be loaded into the page for you to use.</p>
 
 <p>Here&#8217;s the source:</p>
 
@@ -96,7 +96,7 @@
 </div><div class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js&quot;</span><span class="p">;</span>
 </div><div class='line'>
 </div><div class='line'><span class="c1">// Add to the body tag (assume here we&#39;re dealing with HTML, and there IS a body tag)</span>
-</div><div class='line'><span class="nb">document</span><span class="p">.</span><span class="nx">findElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+</div><div class='line'><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
 </div></code></pre></td></tr></table></div></figure></div>
 
 
