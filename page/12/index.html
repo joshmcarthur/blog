@@ -51,6 +51,54 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2010/08/10/a-handy-tip/">A Handy Tip</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-08-10T00:00:00+12:00" pubdate  data-updated="true" >Aug 10<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Just FYI&#8230;
+See 2 posts ago - I am modifying this theme to make it work a bit nicer. Part
+of this included wanting to change some images. I was trying to just link to
+the images in CSS, but I found a much nicer way of doing it.
+If you want to change your theme currently, you can often change a range of
+colors. There is a technique that allows you to prompt the user to upload an
+image file, rather than choosing a file:
+First, set up the parameter that the settings drop down will look for by making
+a meta tag in the document head that has it&#8217;s name set as &#8220;image:
+YourTemplateImage&#8221;, and the content set as the link to the image that should be
+used as default.
+You can then use this image by referring to it in your CSS or HTML - for
+example:</p>
+
+<h1>content { background: #FFF url({image:YourTemplateImage}) no-repeat top left;</h1>
+
+<p>}
+Very nice! Cheers to this_blog_post for the link.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2010/08/09/my-new-look/">My New Look&#8230;</a></h1>
     
     
@@ -188,6 +236,10 @@ me!</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
       </li>
     
@@ -201,10 +253,6 @@ me!</p>
     
       <li class="post">
         <a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs with init.d</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/06/action-mailer-interceptors/">Action Mailer Interceptors</a>
       </li>
     
   </ul>

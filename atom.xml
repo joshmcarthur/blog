@@ -4,13 +4,43 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://blog.joshmcarthur.com/atom.xml" rel="self"/>
   <link href="http://blog.joshmcarthur.com/"/>
-  <updated>2011-11-13T14:14:32+13:00</updated>
+  <updated>2011-11-14T20:38:40+13:00</updated>
   <id>http://blog.joshmcarthur.com/</id>
   <author>
     <name>@sudojosh</name>
     
   </author>
 
+  
+  <entry>
+    <title>Upcoming: RateMyCourses</title>
+    <link href="http://blog.joshmcarthur.com/2011/11/14/upcoming-ratemycourses/"/>
+    <updated>2011-11-14T20:16:00+13:00</updated>
+    <id>http://blog.joshmcarthur.com/2011/11/14/upcoming-ratemycourses</id>
+    <content type="html">&lt;p&gt;Tonight I'd like to talk about a project I've been working on in my spare time for the
+last few months. I'm super excited to see it coming together, and it's &lt;em&gt;nearly&lt;/em&gt; ready to
+go live.&lt;/p&gt;
+
+&lt;p&gt;The application is called &lt;strong&gt;RateMyCourses&lt;/strong&gt; - put simply, it's a way for University students
+to explore, rate, and comment on courses they've done to help out others. Inspired by
+such projects as &lt;a href=&quot;http://www.fixmystreet.com&quot;&gt;Fix my Street&lt;/a&gt; and &lt;a href=&quot;http://www.fixmytransport.com&quot;&gt;Fix my Transport&lt;/a&gt;, &lt;strong&gt;RateMyCourses&lt;/strong&gt; aims to increase the transparency of quality courses, lecturers, and tertiary education institutes within New Zealand. Over the last few months I've been not only building up this application, but also generating the dataset of courses thats at the heart of the application from scratch, pulling course details from all major Universities within New Zealand, including:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Auckland University&lt;/li&gt;
+&lt;li&gt;Massey University&lt;/li&gt;
+&lt;li&gt;Waikato University&lt;/li&gt;
+&lt;li&gt;Victoria University of Wellington&lt;/li&gt;
+&lt;li&gt;University of Canterbury&lt;/li&gt;
+&lt;li&gt;Lincoln University&lt;/li&gt;
+&lt;li&gt;Otago University&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;All up, I've got nearly 20,000 courses indexed, from these seven institutions. This is a huge opportunity for students to really engage with each other, with their Universities, and with new entrants. Over time, I'm hoping &lt;strong&gt;RateMyCourses&lt;/strong&gt; will become a valuable tool for course planning, as it uncovers the best courses, institutions, and educators in New Zealand (and, eventually, other countries).&lt;/p&gt;
+
+&lt;p&gt;This is just a preliminary post while I polish up some areas, and make sure I'm really happy with things, but I welcome feedback and comments as I move into the launch and adoption phases. I'm planning to launch in the upcoming weeks, and spend the summer with a core group of users ironing out the major issues, before really pushing it at Victoria next year.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Add jQuery to Any Page Really, Really Easily</title>
@@ -962,20 +992,6 @@ be confirmed and active in order to log in.
 Last of all, we use a helper method Warden's test helpers has provided us to
 log in the user, which sets us up for any more requests we need to make.
 Have fun speccing nicely with Devise/Warden and RSpec!&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Quick: Get random record efficiently in Rails</title>
-    <link href="http://blog.joshmcarthur.com/2011/06/07/quick-get-random-record-efficiently-in-rails/"/>
-    <updated>2011-06-07T00:00:00+12:00</updated>
-    <id>http://blog.joshmcarthur.com/2011/06/07/quick-get-random-record-efficiently-in-rails</id>
-    <content type="html">&lt;p&gt;You could use SQL's random function (RAND() or RANDOM() depending on database
-engine) - but this isn't database agnostic, so isn't really very quick.
-Instead you can use @nzkoz's suggested method:
-Widget.first(:offset =&gt; Widget.count)
-.... the count() method is fast, and the first() method will limit it to the
-first result in the SQL as well.&lt;/p&gt;
 </content>
   </entry>
   

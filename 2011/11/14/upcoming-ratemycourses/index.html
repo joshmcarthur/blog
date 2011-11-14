@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Integration tests with Devise and RSpec - blog.joshmcarthur.com</title>
+  <title>Upcoming: RateMyCourses - blog.joshmcarthur.com</title>
   <meta name="author" content="@sudojosh">
   
 
@@ -16,7 +16,7 @@
 
   
 
-  <link rel="canonical" href="http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec/"/>
+  <link rel="canonical" href="http://blog.joshmcarthur.com/2011/11/14/upcoming-ratemycourses/"/>
   <link href="/favicon.ico" rel="shortcut icon" />
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -44,61 +44,14 @@
       <div id="main" role="main">
         <div id="content">
           <div>
-<article>
+<article class="hentry">
   
   <header>
-    <h1 class="entry-title">Integration Tests With Devise and RSpec</h1>
-    <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-06-11T00:00:00+12:00" pubdate  data-updated="true" >Jun 11<span>th</span>, 2011</time></p>
-  </header>
-  
-  <p>RSpec 2 has supported integration tests for a while now, and I&#8217;ve chosen to use
-these for a project I&#8217;m working on at the moment instead of Cucumber (I don&#8217;t
-feel that I need the verbosity andÂ English-like structure Cucumber provides
-given that it a more complex process to write tests).
-A bit of a problem I&#8217;ve come across recently is how to get a Devise user signed
-in to your application in your tests, given that integration tests don&#8217;t really
-give you any access to either the session or the controller (This rules out
-manually setting ID&#8217;s in the session, or stubbing out current_user. As it turns
-out, the implementation of it is pretty simple, but I did have to do a bit of
-browsing and piece a few bits together to work out a nice way of doing it.
-Here is the code you can use (You would normally place this within a before(:
-each) filter in your routes spec (Which is what an integration test in RSpec is
-called):
-[At top of spec file, after require &#8216;spec_helper&#8217;
-include Warden::Test::Helpers
-[In a before(:each) block]
-@user = Factory.create(:user)
-@user.confirm!
-login_as @user, :scope => :user
-Now, what is this doing? Well, first of all, you include some test helpers that
-Warden (Which devise back-ends onto), provides. I tried out using Devise&#8217;s
-Devise::TestHelpers here, but it looks like Devise haven&#8217;t really designed
-their helpers with integration tests in mind - they didn&#8217;t really work.Â 
-Within our before(:each) block, it now gets pretty simple. We create a User,
-using Factory Girl (This part of the implementation doesn&#8217;t really matter, you
-can use fixtures if you prefer, or even a plain old User.create.
-Next, we confirm the user. This isn&#8217;t necessary if your users haven&#8217;t been
-marked as :confirmable in your User model, but obviously our new user needs to
-be confirmed and active in order to log in.
-Last of all, we use a helper method Warden&#8217;s test helpers has provided us to
-log in the user, which sets us up for any more requests we need to make.
-Have fun speccing nicely with Devise/Warden and RSpec!</p>
-
-  
-    <footer>
+    
+      <h1 class="entry-title">Upcoming: RateMyCourses</h1>
+    
+    
       <p class="meta">
-        
-        
 
 
 
@@ -108,24 +61,70 @@ Have fun speccing nicely with Devise/Warden and RSpec!</p>
 
 
 
-<time datetime="2011-06-11T00:00:00+12:00" pubdate  data-updated="true" >Jun 11<span>th</span>, 2011</time>
-        
+<time datetime="2011-11-14T20:16:00+13:00" pubdate  data-updated="true" >Nov 14<span>th</span>, 2011</time></p>
+    
+  </header>
 
 
-      </p>
+<div class="entry-content"><p>Tonight I&#8217;d like to talk about a project I&#8217;ve been working on in my spare time for the
+last few months. I&#8217;m super excited to see it coming together, and it&#8217;s <em>nearly</em> ready to
+go live.</p>
+
+<p>The application is called <strong>RateMyCourses</strong> - put simply, it&#8217;s a way for University students
+to explore, rate, and comment on courses they&#8217;ve done to help out others. Inspired by
+such projects as <a href="http://www.fixmystreet.com">Fix my Street</a> and <a href="http://www.fixmytransport.com">Fix my Transport</a>, <strong>RateMyCourses</strong> aims to increase the transparency of quality courses, lecturers, and tertiary education institutes within New Zealand. Over the last few months I&#8217;ve been not only building up this application, but also generating the dataset of courses thats at the heart of the application from scratch, pulling course details from all major Universities within New Zealand, including:</p>
+
+<ul>
+<li>Auckland University</li>
+<li>Massey University</li>
+<li>Waikato University</li>
+<li>Victoria University of Wellington</li>
+<li>University of Canterbury</li>
+<li>Lincoln University</li>
+<li>Otago University</li>
+</ul>
+
+
+<p>All up, I&#8217;ve got nearly 20,000 courses indexed, from these seven institutions. This is a huge opportunity for students to really engage with each other, with their Universities, and with new entrants. Over time, I&#8217;m hoping <strong>RateMyCourses</strong> will become a valuable tool for course planning, as it uncovers the best courses, institutions, and educators in New Zealand (and, eventually, other countries).</p>
+
+<p>This is just a preliminary post while I polish up some areas, and make sure I&#8217;m really happy with things, but I welcome feedback and comments as I move into the launch and adoption phases. I&#8217;m planning to launch in the upcoming weeks, and spend the summer with a core group of users ironing out the major issues, before really pushing it at Victoria next year.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-        <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec/" >Tweet</a>
+
+<span class="byline author vcard">Posted by <span class="fn">@sudojosh</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-11-14T20:16:00+13:00" pubdate  data-updated="true" >Nov 14<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2011/11/14/upcoming-ratemycourses/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2011/11/14/upcoming-ratemycourses/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
   
 </div>
 
-      
-    </footer>
-  
+    
+  </footer>
 </article>
 
   <section>
@@ -133,8 +132,8 @@ Have fun speccing nicely with Devise/Warden and RSpec!</p>
     <div id="disqus_thread"><div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'blog-joshmcarthur';
-  var disqus_identifier = 'http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec/';
-  var disqus_url = 'http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec/';
+  var disqus_identifier = 'http://blog.joshmcarthur.com/2011/11/14/upcoming-ratemycourses/';
+  var disqus_url = 'http://blog.joshmcarthur.com/2011/11/14/upcoming-ratemycourses/';
   //var disqus_developer = 1;
   (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

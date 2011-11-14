@@ -51,6 +51,116 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs With init.d</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-19T17:05:00+13:00" pubdate  data-updated="true" >Oct 19<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently I&#8217;ve rolled out a virtual machine host box to run headless VMs (headless means that there is no display, keyboard etc plugged into it), as these make great test and experiment machines for trying new things out. As part of this rollout, I mashed a couple of blogs and some documentation together and came up with this script:</p>
+
+<div><figure role=code><figcaption><span>/etc/init.d/virtual_machines  </span></figcaption>
+ <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+<span class='line'>27</span>
+<span class='line'>28</span>
+<span class='line'>29</span>
+</pre></td><td class='code' width='100%'><pre><code class='bash'><div class='line'><span class="c">#!/bin/sh</span>
+</div><div class='line'>
+</div><div class='line'><span class="c"># virtual_machines  Start and stop virtual machines when the host changes state</span>
+</div><div class='line'><span class="c">#</span>
+</div><div class='line'><span class="c">#</span>
+</div><div class='line'><span class="nv">VMUSER</span><span class="o">=</span>administrator
+</div><div class='line'>
+</div><div class='line'><span class="k">case</span> <span class="s2">&quot;$1&quot;</span> in
+</div><div class='line'>    start<span class="o">)</span>
+</div><div class='line'>        <span class="nb">echo</span> <span class="s2">&quot;Starting VirtualBox VMs&quot;</span>
+</div><div class='line'>        <span class="k">if</span> <span class="o">[</span> -f /etc/virtualbox/machines_enabled <span class="o">]</span>; <span class="k">then</span>
+</div><div class='line'><span class="k">            </span>cat /etc/virtualbox/machines_enabled | <span class="k">while </span><span class="nb">read </span>VM; <span class="k">do</span>
+</div><div class='line'><span class="k">              </span>sudo -H -b -u <span class="nv">$VMUSER</span> /usr/bin/VBoxHeadless -startvm <span class="s2">&quot;$VM&quot;</span>
+</div><div class='line'>            <span class="k">done</span>
+</div><div class='line'><span class="k">        fi</span>
+</div><div class='line'>        ;;
+</div><div class='line'>    stop<span class="o">)</span>
+</div><div class='line'>        <span class="nb">echo</span> <span class="s2">&quot;Saving state of VirtualBox VM...&quot;</span>
+</div><div class='line'>        cat /etc/virtualbox/machines_enabled | <span class="k">while </span><span class="nb">read </span>VM; <span class="k">do</span>
+</div><div class='line'><span class="k">          </span>sudo -H -u <span class="nv">$VMUSER</span> /usr/bin/VBoxManage controlvm <span class="s2">&quot;$VM&quot;</span> savestate
+</div><div class='line'>        <span class="k">done</span>
+</div><div class='line'>        ;;
+</div><div class='line'>    *<span class="o">)</span>
+</div><div class='line'>        <span class="nb">echo</span> <span class="s2">&quot;Usage: /etc/init.d/virtual_machines {start|stop}&quot;</span>
+</div><div class='line'>        <span class="nb">exit </span>1
+</div><div class='line'>        ;;
+</div><div class='line'><span class="k">esac</span>
+</div><div class='line'>
+</div><div class='line'><span class="nb">exit </span>0
+</div></code></pre></td></tr></table></div></figure></div>
+
+
+<p>I wrote this because this isn&#8217;t something that is supported directly by VirtualBox, and it&#8217;s essential that on a headless server that these virtual machines be able to go up and down happily without harm and reliably. It supports start and stop explanations and uses savestate, rather than poweroff - essentially, as the host server goes down, it will &#8216;hibernate&#8217; each VM, and then restore when the server starts back up again.</p>
+
+<p>Another feature that I built into this was the use of a file in which a list of VMs can be specified to start and stop - for example, if you only want this script to deal with a subset of the virtual machines you have set up on the host server.</p>
+
+<p>An example of this file might look like this:</p>
+
+<div><figure role=code><figcaption><span>/etc/virtualbox/virtual_machines </span></figcaption>
+<div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+</pre></td><td class='code' width='100%'><pre><code class=''><div class='line'>winxp_development
+</div><div class='line'>win7_development
+</div><div class='line'>ubuntu_11_10_development</div></code></pre></td></tr></table></div></figure></div>
+
+
+<p>It works really well for me, and since it&#8217;s something I had trouble tracking down, hopefully I can make someone&#8217;s life a little easier with this solution.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/10/06/action-mailer-interceptors/">Action Mailer Interceptors</a></h1>
     
     
@@ -372,57 +482,6 @@
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/09/14/introducing-blog-broadcaster/">Introducing Blog Broadcaster</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-09-14T19:04:00+12:00" pubdate  data-updated="true" >Sep 14<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve just completed a Blog Broadcaster for this blog. It had a couple of interesting technical things, and I needed to test it properly, so here&#8217;s this post!</p>
-
-<p>I recently migrated this blog from <a href="http://tumblr.com">Tumblr</a>, and while Tumblr was pretty awesome and easy to use, it didn&#8217;t have great support for blocks of code and preformatted comment, and, like <a href="http://www.radiantcms.org">Radiant CMS</a>, it stored layouts, stylesheets, and all of that kind of thing in a database somewhere - it wasn&#8217;t in source control, and making changes to it was dangerous.</p>
-
-<p>One thing that I immediately missed from Tumblr, however, was it&#8217;s ability to post to Facebook and Twitter automatically whenever I published a post. As I don&#8217;t post that often, it&#8217;s really important to me that I market my blog as much as I can - like my Github profile, the content on my blog is a reflection of my knowledge and skill as a developer, and so I want to get that in front of people as much as possible - broadcasting to social networks is a great way of achieving that.</p>
-
-<p>With my blog on Github, I needed a way to broadcast new posts to these social networks. Github has a built-in post-receive hook to post to Twitter, but I really needed something more than that. Here&#8217;s my list of requirements:</p>
-
-<ul>
-<li>It should automatically post without me needing to do any special task</li>
-<li>It should be conditional - i.e. it shouldn&#8217;t post <em>everytime</em> I change something</li>
-<li>It should support both Facebook and Twitter</li>
-<li>It should be able to be triggered by a commit</li>
-</ul>
-
-
-<p>What I ended up building was a Sinatra app whose sole purpose was to receive POST&#8217;ed commit information, parse it into a Facebook and Twitter post, and broadcast it. It&#8217;s hosted on Heroku, and gets triggered by a Github <a href="http://help.github.com/post-receive-hooks/">Post-Receive Hooks</a>. I did run into a couple of problems along the way - the main one was sorting out being able to post Facebook updates without being logged in, or even needing to be involved at the process at all. This wasn&#8217;t too difficult, but I did need to get an access token that was long-lived, and have the ability to update this if necessary. I overcame this problem by adding some methods to my Sinatra app that will allow me to update the access token if it ever expires, or change the Facebook account used if necessary.</p>
-
-<p>The second problem I ran into wasn&#8217;t really a problem, but it was a challenge to try and think of a nice way of doing it. Basically I needed to store the Facebook access token somewhere so that I could use it when I needed it - but I didn&#8217;t have a database, and I didn&#8217;t particularly want to add one just for storing a single string. Since this is running on Heroku (Bamboo stack, not Cedar), I was also on a read-only filesystem, so couldn&#8217;t store it in a simple text file either. In this end, I chose to store the value in Memcache using the Heroku add-on. This still isn&#8217;t necessarily a good solution, as this storage method isn&#8217;t guaranteed to be persistent, however it should suit my needs - it doesn&#8217;t particularly matter if I lose the access token, the application will gracefully degrade and just post to Twitter until I log in to Facebook via the app again.</p>
-
-<p>So, I think I&#8217;ve come up with a good solution. It started off as a simple broadcaster for my blog, but I think it has a lot of potential for use with any open-source project that has social networking presence - I think it&#8217;s a much more elegant and flexible hook than that which Github provides, and I hope it get&#8217;s a bit of use.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -462,6 +521,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
       </li>
     
@@ -475,10 +538,6 @@
     
       <li class="post">
         <a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs with init.d</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/06/action-mailer-interceptors/">Action Mailer Interceptors</a>
       </li>
     
   </ul>

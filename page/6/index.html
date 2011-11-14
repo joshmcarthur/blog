@@ -51,6 +51,42 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/06/07/quick-get-random-record-efficiently-in-rails/">Quick: Get Random Record Efficiently in Rails</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-06-07T00:00:00+12:00" pubdate  data-updated="true" >Jun 7<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>You could use SQL&#8217;s random function (RAND() or RANDOM() depending on database
+engine) - but this isn&#8217;t database agnostic, so isn&#8217;t really very quick.
+Instead you can use @nzkoz&#8217;s suggested method:
+Widget.first(:offset => Widget.count)
+&#8230;. the count() method is fast, and the first() method will limit it to the
+first result in the SQL as well.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/05/06/imagemagick-cropping-then-resizing-a-png/">ImageMagick: Cropping Then Resizing a PNG</a></h1>
     
     
@@ -202,62 +238,6 @@ position took some finding, but it was definately a fun experiment to try out.</
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/04/12/accessing-controller-instance-variables-in-model-urgh/">Accessing Controller Instance Variables in Model (Urgh?)</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-04-12T00:00:00+12:00" pubdate  data-updated="true" >Apr 12<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I can tell that this title alone will irritate a lot of developers out there.
-It irritated me as well, until I figured out that sometimes, doing things the
-&#8216;wrong&#8217; way is the best/only way. But let me get on with things.
-Every now and then, you will come across a scenario where you need to access
-something in the controller, from the model. This is so obviously non-MVC that
-many will (should) immediately shy away from it, but let me suggest a scenario.
-Let&#8217;s say you have users, who should be scoped to a particular subdomain. You
-would place a default_scope on the User model (with a Proc, once an issue with
-default_scope is resolved), that would automatically add conditions to any
-database lookup calls to restrict the found users to those belonging to the
-current subdomain. The tricky bit is, of course to get this subdomain. Because
-it is a default scope, you don&#8217;t actually &#8216;call&#8217; it - so that rules out passing
-parameters. I&#8217;ve come across other suggestions as well, such as using
-cattr_accessor (NO! It&#8217;s shared across requests), and storing a value in
-Thread.current (Relying on the application using threads in the way you expect
-them to = not safe). So far though, the best hint I have seen here, although
-extremely anti-doing what I am suggesting, would seem to work.Â 
-Basically, the jist of this post was that you could dynamically add methods to
-ActiveRecord::Base using an around_filter to access sessions, cookies, params
-and the request. Now, I agree that this might be a bit too extreme - if you
-really need to access the entire session or cookie hash, for example, you
-probably aredoing something wrong. Something that I think isÂ suitable though,
-given an appropriate situation, is to use this technique to add an &#8216;accessor&#8217;
-to ActiveRecord::Base that returns the value you need in your model - the
-current subdomain for instance. This is still non-MVC, but is, I think, a far
-more elegant solution that anything else I&#8217;ve seen suggested.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -297,6 +277,10 @@ more elegant solution that anything else I&#8217;ve seen suggested.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
       </li>
     
@@ -310,10 +294,6 @@ more elegant solution that anything else I&#8217;ve seen suggested.</p>
     
       <li class="post">
         <a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs with init.d</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/06/action-mailer-interceptors/">Action Mailer Interceptors</a>
       </li>
     
   </ul>
