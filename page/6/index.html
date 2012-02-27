@@ -51,6 +51,68 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/06/11/integration-tests-with-devise-and-rspec/">Integration Tests With Devise and RSpec</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-06-11T00:00:00+12:00" pubdate  data-updated="true" >Jun 11<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>RSpec 2 has supported integration tests for a while now, and I&#8217;ve chosen to use
+these for a project I&#8217;m working on at the moment instead of Cucumber (I don&#8217;t
+feel that I need the verbosity andÂ English-like structure Cucumber provides
+given that it a more complex process to write tests).
+A bit of a problem I&#8217;ve come across recently is how to get a Devise user signed
+in to your application in your tests, given that integration tests don&#8217;t really
+give you any access to either the session or the controller (This rules out
+manually setting ID&#8217;s in the session, or stubbing out current_user. As it turns
+out, the implementation of it is pretty simple, but I did have to do a bit of
+browsing and piece a few bits together to work out a nice way of doing it.
+Here is the code you can use (You would normally place this within a before(:
+each) filter in your routes spec (Which is what an integration test in RSpec is
+called):
+[At top of spec file, after require &#8216;spec_helper&#8217;
+include Warden::Test::Helpers
+[In a before(:each) block]
+@user = Factory.create(:user)
+@user.confirm!
+login_as @user, :scope => :user
+Now, what is this doing? Well, first of all, you include some test helpers that
+Warden (Which devise back-ends onto), provides. I tried out using Devise&#8217;s
+Devise::TestHelpers here, but it looks like Devise haven&#8217;t really designed
+their helpers with integration tests in mind - they didn&#8217;t really work.Â 
+Within our before(:each) block, it now gets pretty simple. We create a User,
+using Factory Girl (This part of the implementation doesn&#8217;t really matter, you
+can use fixtures if you prefer, or even a plain old User.create.
+Next, we confirm the user. This isn&#8217;t necessary if your users haven&#8217;t been
+marked as :confirmable in your User model, but obviously our new user needs to
+be confirmed and active in order to log in.
+Last of all, we use a helper method Warden&#8217;s test helpers has provided us to
+log in the user, which sets us up for any more requests we need to make.
+Have fun speccing nicely with Devise/Warden and RSpec!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/06/07/quick-get-random-record-efficiently-in-rails/">Quick: Get Random Record Efficiently in Rails</a></h1>
     
     
@@ -200,44 +262,6 @@ object in my polling function.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/04/12/i-just-found-this-it-s-a-little-promotional-thing-that-the/">I Just Found This - It&#8217;s a Little Promotional Thing That The&#8230;</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-04-12T00:00:00+12:00" pubdate  data-updated="true" >Apr 12<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>[/images/assets/www.tumblr.com/photo/1280/4533787560/1/
-tumblr_ljiap6hYwQ1qd78lu.jpg]
-I just found this - it&#8217;s a little promotional thing that the (now non-existent)
-VUW (Victoria University of Wellington IT Society) did (Well, me and Eddy) to
-try and get people to join up (It worked.) - basically, I built a little IR
-pen, and using a Wiimote, we managed to make a nice little giant touchscreen.
-Granted, it needed calibrating often, and the correct body posture and hand
-position took some finding, but it was definately a fun experiment to try out.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -277,6 +301,10 @@ position took some finding, but it was definately a fun experiment to try out.</
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2012/02/28/git-browse-for-quick-repo-viewing/">Git-browse for Quick Repo Viewing</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
       </li>
     
@@ -290,10 +318,6 @@ position took some finding, but it was definately a fun experiment to try out.</
     
       <li class="post">
         <a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs with init.d</a>
       </li>
     
   </ul>
@@ -354,7 +378,7 @@ position took some finding, but it was definately a fun experiment to try out.</
         </div>
       </div>
       <footer><p>
-  Copyright &copy; 2011 - <a href="http://twitter.com/sudojosh">@sudojosh</a>
+  Copyright &copy; 2012 - <a href="http://twitter.com/sudojosh">@sudojosh</a>
 </p>
 <p class="credits">
   <span class="octopress"><a href="http://octopress.org/">Octopress</a> powers this blog!</span>

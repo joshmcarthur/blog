@@ -51,6 +51,82 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2012/02/28/git-browse-for-quick-repo-viewing/">Git-browse for Quick Repo Viewing</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-02-28T08:50:00+13:00" pubdate  data-updated="true" >Feb 28<span>th</span>, 2012</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last night I quickly patched together a command called <code>git-browse</code> - it&#8217;s a small but handy extension to <a href="http://git-scm.com/">git</a> that looks at the remotes you have set up inside a repository, and opens up the first Github repository it finds - to give an example:</p>
+
+<pre>
+-> git remote -v
+origin git@github.com:joshmcarthur/WriteIdeally.git (fetch)
+origin git@github.com:joshmcarthur/WriteIdeally.git (push)
+heroku git@heroku.com:writeideally.git (fetch)
+heroku git@heroku.com:writeideally.git (push)
+-> git browse
+(Opens https://github.com/joshmcarthur/WriteIdeally in default browser)
+</pre>
+
+
+<p>The source is just below - at the moment, though it&#8217;s only compatible with OS X and Linux - Ubuntu that I know of, but I believe that RedHat won&#8217;t work without installing packages - see <a href="http://stackoverflow.com/questions/5116473/linux-command-to-open-url-in-default-browser">this StackOverflow thread</a></p>
+
+<div><script src='https://gist.github.com/1926673.js?file=git-browse'></script>
+<noscript><pre><code>#!/usr/bin/env ruby
+
+#### git-browse
+### Open a github repository in the default browser
+### Author: @sudojosh
+### Usage: Run `git browse` inside a repo with at least one github remote
+### Installation: Download, run `chmod +x git-browse`, and then copy somewhere on your path
+###   for example, /usr/local/bin/
+
+remotes = `git remote -v`
+remotes = remotes.split(&quot;\n&quot;).map { |remote|
+  remote = remote.split(/\s+/)[1]
+  remote =~ /github.com/ ? remote : nil
+}.compact
+
+if remotes.empty?
+  puts &quot;No Github remotes&quot;
+  exit
+else
+  command = RUBY_PLATFORM.downcase.include?(&quot;darwin&quot;) ? &quot;open&quot; : &quot;xdg-open&quot;
+  remote_url = remotes.first.gsub(&quot;git@github.com:&quot;, &quot;https://github.com/&quot;).gsub(&quot;git://github.com:&quot;, &quot;https://github.com/&quot;).gsub(&quot;.git&quot;, &quot;&quot;)
+  system(&quot;#{command} #{remote_url}&quot;)
+end</code></pre></noscript></div>
+
+
+<p>Installation is pretty basic - just download, make it executable by running <code>chmod +x git-browse</code>, and then copy it somewhere that is referenced by your <code>$PATH</code> variable (you can see what&#8217;s in this variable by running <code>echo $PATH</code> in a Terminal). Once you&#8217;ve done this, you should be able to enter any repository with Github remotes, and run <code>git browse</code> to have the repository open in your default browser.</p>
+
+<p>Extensions to this idea should be pretty easy - something I would be keen to see in a pull request, for example, would be to support opening arbitrary files - i.e. <code>git browse lib/writeideally/api.rb</code> would open <a href="https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb">https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb</a>. Having said that, my gsubbing is pretty gross, so that needs refactoring as well.</p>
+
+<p>In any case, enjoy!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a></h1>
     
     
@@ -265,93 +341,6 @@ such projects as <a href="http://www.fixmystreet.com">Fix my Street</a> and <a h
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-10-20T13:28:00+13:00" pubdate  data-updated="true" >Oct 20<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;m sure this has been done before, but after noticing <a href="http://www.1-day.co.nz">1-day&#8217;s</a>  &#8216;Look Busy&#8217; feature, I just had to write a bookmarklet to load this up on any site!</p>
-
-<p>If you just want to try it out, here&#8217;s the link <a href="javascript:var busy=document.createElement('div');var body=document.getElementsByTagName('body')[0];var max_width_cache=body.getAttribute('max-width');body.style.maxWidth='100%';busy.setAttribute('id','lookbusy');busy.setAttribute('style','position: absolute; z-index: 1000; width: 100%; height: 100%; top: 0px; left: 0px; right: 0px; bottom: 0px; background: #FFF url(http://www.1-day.co.nz/images/2010_mission_critical_development_strategy.png) no-repeat 0 0;');var close=document.createElement('a');close.setAttribute('class','busy close');close.setAttribute('style','position: fixed; z-index: 1001; right: 10px; bottom: 10px; background-color: #FFF; color: #000; font-size:10px');close.setAttribute('href','#');close.innerText='OK, Clear';close.setAttribute('onclick',&quot;javascript:body.removeChild(document.getElementById('lookbusy'));body.style.maxWidth = &quot; + max_width_cache);busy.appendChild(close);body.appendChild(busy)">Look Busy Bookmarklet</a> - either right-click on the link and &#8216;Copy URL&#8217; and paste into a new bookmark, or drag to your bookmarks bar or folder. It should work in Chrome, Safari, Firefox and IE7-9</p>
-
-<p>Here&#8217;s the source code for anyone interested in seeing how this works:</p>
-
-<div><figure role=code><figcaption><span>Look Busy Bookmarklet  </span></figcaption>
- <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
-<span class='line'>2</span>
-<span class='line'>3</span>
-<span class='line'>4</span>
-<span class='line'>5</span>
-<span class='line'>6</span>
-<span class='line'>7</span>
-<span class='line'>8</span>
-<span class='line'>9</span>
-<span class='line'>10</span>
-<span class='line'>11</span>
-<span class='line'>12</span>
-<span class='line'>13</span>
-<span class='line'>14</span>
-<span class='line'>15</span>
-<span class='line'>16</span>
-<span class='line'>17</span>
-<span class='line'>18</span>
-<span class='line'>19</span>
-<span class='line'>20</span>
-<span class='line'>21</span>
-<span class='line'>22</span>
-<span class='line'>23</span>
-</pre></td><td class='code' width='100%'><pre><code class='javascript'><div class='line'><span class="c1">// Create a new div tag to contain our image</span>
-</div><div class='line'><span class="kd">var</span> <span class="nx">busy</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-</div><div class='line'><span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
-</div><div class='line'><span class="kd">var</span> <span class="nx">max_width_cache</span> <span class="o">=</span> <span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">maxWidth</span><span class="p">;</span>
-</div><div class='line'><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">maxWidth</span> <span class="o">=</span> <span class="s1">&#39;100%&#39;</span><span class="p">;</span>
-</div><div class='line'><span class="nx">busy</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;lookbusy&#39;</span><span class="p">);</span>
-</div><div class='line'>
-</div><div class='line'><span class="c1">// Add a background image, and position the div tag above all other content and make it fill the screen</span>
-</div><div class='line'><span class="nx">busy</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="s1">&#39;position: absolute; z-index: 1000; width: 100%; height: 100%; top: 0px; left: 0px; right: 0px; bottom: 0px; background: #FFF url(http://www.1-day.co.nz/images/2010_mission_critical_development_strategy.png) no-repeat 0 0;&#39;</span><span class="p">);</span>
-</div><div class='line'>
-</div><div class='line'><span class="c1">// Add a inconspicuous link to close the image</span>
-</div><div class='line'><span class="kd">var</span> <span class="nx">close</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
-</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="s1">&#39;busy close&#39;</span><span class="p">);</span>
-</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="s1">&#39;position: fixed; z-index: 1001; right: 10px; bottom: 10px; background-color: #FFF; color: #000; font-size:10px&#39;</span><span class="p">);</span>
-</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;#&#39;</span><span class="p">);</span>
-</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;OK, Clear&quot;</span><span class="p">;</span>
-</div><div class='line'><span class="nx">close</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;onclick&#39;</span><span class="p">,</span> <span class="s2">&quot;javascript:body.removeChild(document.getElementById(&#39;lookbusy&#39;));body.style.maxWidth = &quot;</span> <span class="o">+</span> <span class="nx">max_width_cache</span><span class="p">);</span>
-</div><div class='line'>
-</div><div class='line'><span class="c1">// Add the close image to the look busy div tag</span>
-</div><div class='line'><span class="nx">busy</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">close</span><span class="p">);</span>
-</div><div class='line'>
-</div><div class='line'><span class="c1">// Add the look busy div tag to the body of the document</span>
-</div><div class='line'><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">busy</span><span class="p">);</span>
-</div></code></pre></td></tr></table></div></figure></div>
-
-
-<p>Give it a go! It&#8217;s super handy for when you&#8217;re checking out <a href="http://www.trademe.co.nz">TradeMe</a>, <a href="http://failblog.org">Failblog</a>, or <a href="http://images.google.com?q=wink">anything similar</a>!</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -389,6 +378,10 @@ such projects as <a href="http://www.fixmystreet.com">Fix my Street</a> and <a h
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2012/02/28/git-browse-for-quick-repo-viewing/">Git-browse for Quick Repo Viewing</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
       </li>
     
@@ -402,10 +395,6 @@ such projects as <a href="http://www.fixmystreet.com">Fix my Street</a> and <a h
     
       <li class="post">
         <a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs with init.d</a>
       </li>
     
   </ul>
@@ -466,7 +455,7 @@ such projects as <a href="http://www.fixmystreet.com">Fix my Street</a> and <a h
         </div>
       </div>
       <footer><p>
-  Copyright &copy; 2011 - <a href="http://twitter.com/sudojosh">@sudojosh</a>
+  Copyright &copy; 2012 - <a href="http://twitter.com/sudojosh">@sudojosh</a>
 </p>
 <p class="credits">
   <span class="octopress"><a href="http://octopress.org/">Octopress</a> powers this blog!</span>

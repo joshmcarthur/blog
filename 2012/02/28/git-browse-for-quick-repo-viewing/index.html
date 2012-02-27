@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Introducing Blog Broadcaster - blog.joshmcarthur.com</title>
+  <title>Git-browse for Quick Repo Viewing - blog.joshmcarthur.com</title>
   <meta name="author" content="@sudojosh">
   
 
@@ -16,7 +16,7 @@
 
   
 
-  <link rel="canonical" href="http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/"/>
+  <link rel="canonical" href="http://blog.joshmcarthur.com/2012/02/28/git-browse-for-quick-repo-viewing/"/>
   <link href="/favicon.ico" rel="shortcut icon" />
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -48,7 +48,7 @@
   
   <header>
     
-      <h1 class="entry-title">Introducing Blog Broadcaster</h1>
+      <h1 class="entry-title">Git-browse for Quick Repo Viewing</h1>
     
     
       <p class="meta">
@@ -61,32 +61,57 @@
 
 
 
-<time datetime="2011-09-14T19:04:00+12:00" pubdate  data-updated="true" >Sep 14<span>th</span>, 2011</time></p>
+<time datetime="2012-02-28T08:50:00+13:00" pubdate  data-updated="true" >Feb 28<span>th</span>, 2012</time></p>
     
   </header>
 
 
-<div class="entry-content"><p>I&#8217;ve just completed a Blog Broadcaster for this blog. It had a couple of interesting technical things, and I needed to test it properly, so here&#8217;s this post!</p>
+<div class="entry-content"><p>Last night I quickly patched together a command called <code>git-browse</code> - it&#8217;s a small but handy extension to <a href="http://git-scm.com/">git</a> that looks at the remotes you have set up inside a repository, and opens up the first Github repository it finds - to give an example:</p>
 
-<p>I recently migrated this blog from <a href="http://tumblr.com">Tumblr</a>, and while Tumblr was pretty awesome and easy to use, it didn&#8217;t have great support for blocks of code and preformatted comment, and, like <a href="http://www.radiantcms.org">Radiant CMS</a>, it stored layouts, stylesheets, and all of that kind of thing in a database somewhere - it wasn&#8217;t in source control, and making changes to it was dangerous.</p>
-
-<p>One thing that I immediately missed from Tumblr, however, was it&#8217;s ability to post to Facebook and Twitter automatically whenever I published a post. As I don&#8217;t post that often, it&#8217;s really important to me that I market my blog as much as I can - like my Github profile, the content on my blog is a reflection of my knowledge and skill as a developer, and so I want to get that in front of people as much as possible - broadcasting to social networks is a great way of achieving that.</p>
-
-<p>With my blog on Github, I needed a way to broadcast new posts to these social networks. Github has a built-in post-receive hook to post to Twitter, but I really needed something more than that. Here&#8217;s my list of requirements:</p>
-
-<ul>
-<li>It should automatically post without me needing to do any special task</li>
-<li>It should be conditional - i.e. it shouldn&#8217;t post <em>everytime</em> I change something</li>
-<li>It should support both Facebook and Twitter</li>
-<li>It should be able to be triggered by a commit</li>
-</ul>
+<pre>
+-> git remote -v
+origin git@github.com:joshmcarthur/WriteIdeally.git (fetch)
+origin git@github.com:joshmcarthur/WriteIdeally.git (push)
+heroku git@heroku.com:writeideally.git (fetch)
+heroku git@heroku.com:writeideally.git (push)
+-> git browse
+(Opens https://github.com/joshmcarthur/WriteIdeally in default browser)
+</pre>
 
 
-<p>What I ended up building was a Sinatra app whose sole purpose was to receive POST&#8217;ed commit information, parse it into a Facebook and Twitter post, and broadcast it. It&#8217;s hosted on Heroku, and gets triggered by a Github <a href="http://help.github.com/post-receive-hooks/">Post-Receive Hooks</a>. I did run into a couple of problems along the way - the main one was sorting out being able to post Facebook updates without being logged in, or even needing to be involved at the process at all. This wasn&#8217;t too difficult, but I did need to get an access token that was long-lived, and have the ability to update this if necessary. I overcame this problem by adding some methods to my Sinatra app that will allow me to update the access token if it ever expires, or change the Facebook account used if necessary.</p>
+<p>The source is just below - at the moment, though it&#8217;s only compatible with OS X and Linux - Ubuntu that I know of, but I believe that RedHat won&#8217;t work without installing packages - see <a href="http://stackoverflow.com/questions/5116473/linux-command-to-open-url-in-default-browser">this StackOverflow thread</a></p>
 
-<p>The second problem I ran into wasn&#8217;t really a problem, but it was a challenge to try and think of a nice way of doing it. Basically I needed to store the Facebook access token somewhere so that I could use it when I needed it - but I didn&#8217;t have a database, and I didn&#8217;t particularly want to add one just for storing a single string. Since this is running on Heroku (Bamboo stack, not Cedar), I was also on a read-only filesystem, so couldn&#8217;t store it in a simple text file either. In this end, I chose to store the value in Memcache using the Heroku add-on. This still isn&#8217;t necessarily a good solution, as this storage method isn&#8217;t guaranteed to be persistent, however it should suit my needs - it doesn&#8217;t particularly matter if I lose the access token, the application will gracefully degrade and just post to Twitter until I log in to Facebook via the app again.</p>
+<div><script src='https://gist.github.com/1926673.js?file=git-browse'></script>
+<noscript><pre><code>#!/usr/bin/env ruby
 
-<p>So, I think I&#8217;ve come up with a good solution. It started off as a simple broadcaster for my blog, but I think it has a lot of potential for use with any open-source project that has social networking presence - I think it&#8217;s a much more elegant and flexible hook than that which Github provides, and I hope it get&#8217;s a bit of use.</p>
+#### git-browse
+### Open a github repository in the default browser
+### Author: @sudojosh
+### Usage: Run `git browse` inside a repo with at least one github remote
+### Installation: Download, run `chmod +x git-browse`, and then copy somewhere on your path
+###   for example, /usr/local/bin/
+
+remotes = `git remote -v`
+remotes = remotes.split(&quot;\n&quot;).map { |remote|
+  remote = remote.split(/\s+/)[1]
+  remote =~ /github.com/ ? remote : nil
+}.compact
+
+if remotes.empty?
+  puts &quot;No Github remotes&quot;
+  exit
+else
+  command = RUBY_PLATFORM.downcase.include?(&quot;darwin&quot;) ? &quot;open&quot; : &quot;xdg-open&quot;
+  remote_url = remotes.first.gsub(&quot;git@github.com:&quot;, &quot;https://github.com/&quot;).gsub(&quot;git://github.com:&quot;, &quot;https://github.com/&quot;).gsub(&quot;.git&quot;, &quot;&quot;)
+  system(&quot;#{command} #{remote_url}&quot;)
+end</code></pre></noscript></div>
+
+
+<p>Installation is pretty basic - just download, make it executable by running <code>chmod +x git-browse</code>, and then copy it somewhere that is referenced by your <code>$PATH</code> variable (you can see what&#8217;s in this variable by running <code>echo $PATH</code> in a Terminal). Once you&#8217;ve done this, you should be able to enter any repository with Github remotes, and run <code>git browse</code> to have the repository open in your default browser.</p>
+
+<p>Extensions to this idea should be pretty easy - something I would be keen to see in a pull request, for example, would be to support opening arbitrary files - i.e. <code>git browse lib/writeideally/api.rb</code> would open <a href="https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb">https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb</a>. Having said that, my gsubbing is pretty gross, so that needs refactoring as well.</p>
+
+<p>In any case, enjoy!</p>
 </div>
 
 
@@ -107,7 +132,7 @@
 
 
 
-<time datetime="2011-09-14T19:04:00+12:00" pubdate  data-updated="true" >Sep 14<span>th</span>, 2011</time>
+<time datetime="2012-02-28T08:50:00+13:00" pubdate  data-updated="true" >Feb 28<span>th</span>, 2012</time>
       
 
 
@@ -115,7 +140,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2012/02/28/git-browse-for-quick-repo-viewing/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2012/02/28/git-browse-for-quick-repo-viewing/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -131,8 +156,8 @@
     <div id="disqus_thread"><div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'blog-joshmcarthur';
-  var disqus_identifier = 'http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/';
-  var disqus_url = 'http://blog.joshmcarthur.com/2011/09/14/introducing-blog-broadcaster/';
+  var disqus_identifier = 'http://blog.joshmcarthur.com/2012/02/28/git-browse-for-quick-repo-viewing/';
+  var disqus_url = 'http://blog.joshmcarthur.com/2012/02/28/git-browse-for-quick-repo-viewing/';
   //var disqus_developer = 1;
   (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

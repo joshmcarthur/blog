@@ -51,6 +51,110 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/09/23/howto-database-backup-and-restore/">Howto: Database Backup and Restore</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-09-23T13:26:00+12:00" pubdate  data-updated="true" >Sep 23<span>rd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>An inherent part of developing web applications is managing your datastores - typically, a relational database such as MySQL or PostgreSQL. Today, I&#8217;m going to quickly cover off how to backup and restore for both of these databases.</p>
+
+<h2>What you&#8217;ll need</h2>
+
+<ul>
+<li>Either PostgreSQL or MySQL</li>
+<li>Access to a database (preferably one with data in it)</li>
+</ul>
+
+
+<h2>Why this is useful to know</h2>
+
+<p>Lots of interactions with databases have the potential to destroy or modify data (in a bad way). When using frameworks such as Ruby on Rails, it&#8217;s even easier to, say, accidently delete all of your Users (Horribly easy in DataMapper, unfortunately). It&#8217;s important that before you do anything with data that&#8217;s destructive, you have a backup of your database that you can restore from quickly and easily.</p>
+
+<h2>PostgreSQL</h2>
+
+<p>Postgres databases are backed up using the <code>pg_dump</code> command - a command-line utility that comes packaged with the database server. Here&#8217;s the command:</p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='sh'><div class='line'>pg_dump --no-owner -U <span class="o">[</span>username<span class="o">]</span> -W <span class="o">[</span>database_name<span class="o">]</span> &gt; <span class="o">[</span>file to dump to<span class="o">]</span>.sql.dump
+</div></code></pre></td></tr></table></div></figure>
+
+<p>Let me explain these options and why I use them:</p>
+
+<ul>
+<li><code>--no-owner</code>: By default, Postgres dumps the database with lots of SET OWNER TO statements. I like to take these out of the dump, as I&#8217;m not necessarily restoring the dump to exactly the same server with exactly the same users. Using &#8211;no-owner means that ownership statements will be excluded.</li>
+<li><code>-U [username]</code>: This lets you pass in the database user name your web application usually uses to connect - using this is just good practise, as it ensures that what you&#8217;re dumping is exactly what the web application has.</li>
+<li><code>-W</code>: This option, used in conjunction with the <code>-U</code> flag, prompts for the password when you run the command</li>
+<li><code>[database_name]</code>: This is the name of the database that you want to dump</li>
+<li><code>[file to dump to]</code>: This is the file that the SQL script that pg_dump produces will be piped into. I normally name this file with the <code>.sql.dump</code> extension, so that I can see it&#8217;s a SQL dump straight off.</li>
+</ul>
+
+
+<h4>Restoring a database dump</h4>
+
+<p>Restoring a Postgresql dump is really easy, and involves using the standard <code>psql</code> client to connect to the database and execute the SQL script in your dump file.</p>
+
+<p>First of all, make sure that you have created the database you want to load the data into. In this example, let&#8217;s say I&#8217;ve dumped from the <code>facebook_production</code> database to the file <code>facebook_production_23092011.sql.dump</code>, and I want to restore into the <code>facebook_development</code> database so that I can test out some code against some production data. I want to connect to the database using psql as the web application user, and load the dump in:</p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='sh'><div class='line'>psql -U facebook -W facebook_development &lt; facebook_production_23092011.sql.dump<span class="sb">`</span>
+</div></code></pre></td></tr></table></div></figure>
+
+<p>Note how I am using the opposite of the less-than symbol I used above - this basically denotes the direction of the data - it&#8217;s coming <em>from</em> the file, going <em>to</em> the database.</p>
+
+<p>Upon running this commmand (with your own database, of course), you will first be prompted for your database user&#8217;s password, and will then see a bunch of SQL statements being executed. Once it&#8217;s completed, your database has been loaded successfully - you can jump in using psql if you&#8217;d like, and query around a bit.</p>
+
+<h2>MySQL</h2>
+
+<p>MySQL databases are backed up with the <code>mysqldump</code> program - one I&#8217;m not as familiar with as Postgres, but I know the basics, and largely that&#8217;s all you need with this type of thing. The main thing to keep in mind is that the process is the same as for PostgreSQL above - use the dump program to write the database out to a file (in the form of SQL statements), and then use the database client program <code>mysql</code> in this case, to execute the commands in the file against the database being restored to. Here&#8217;s the command to dump a MySQL file to disk:</p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='sh'><div class='line'>mysqldump -U <span class="o">[</span>username<span class="o">]</span> -P <span class="o">[</span>database_name<span class="o">]</span> &gt; <span class="o">[</span>file to dump to<span class="o">]</span>.sql.dump
+</div></code></pre></td></tr></table></div></figure>
+
+<p>The options are more or less as I&#8217;ve described above, except that <code>-P</code> is substituted for <code>-W</code>, and I&#8217;ve still stuck with the <code>.sql.dump</code> naming scheme.</p>
+
+<h4>Restoring a database dump</h4>
+
+<p>This process is almost identical to the PostgreSQL restore process. Let&#8217;s stick with the same example format we already have - dumping from a database called <code>facebook_production</code> to file <code>facebook_production_23092011.sql.dump</code>, restoring into a database called <code>facebook_development</code> - here&#8217;s the command we need for that:</p>
+
+<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+</pre></td><td class='code' width='100%'><pre><code class='sh'><div class='line'>mysql -U facebook -P facebook_development &lt; facebook_production_23092011.sql.dump
+</div></code></pre></td></tr></table></div></figure>
+
+<p>Once again, you&#8217;ll be prompted for your password, but for this one you won&#8217;t see the output of the SQL statements - it will take a couple of seconds, and then the program will exit. This is normal however - if you&#8217;d like to see the output of the batch load, you can add <code>-v -v -v</code> before the <code>&lt;</code> symbol to turn verbosity to level three, otherwise you can go ahead and jump into your database and make sure everything is there.</p>
+
+<h2>Tips:</h2>
+
+<ul>
+<li>If you don&#8217;t have a database user account yet, on Unix and Linux you can use <code>sudo su postgres</code> to login as the &#8216;postgres&#8217; user - a root-like database user that gets created for you when Postgres is installed. MySQL has a root account, but it&#8217;s not a system user - you are normally prompted for a root username and password when you install MySQL. If you <em>are</em> using the Postgres user, you don&#8217;t need to pass in a username or password in the above commands, but you need to remember that your restored databases will be owned by &#8216;postgres&#8217;, not you web application database user.</li>
+<li>A handy place to put database dumps that you are planning to use right away is <code>/tmp</code> (Only on Unix and Linux). This is a directly that is writeable by everyone, that will get &#8216;garbage collected&#8217; periodically. This is especially handy if you are logging in as the &#8216;postgres&#8217; user, as typically this user won&#8217;t have write permissions on many other directories</li>
+</ul>
+
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/09/14/introducing-blog-broadcaster/">Introducing Blog Broadcaster</a></h1>
     
     
@@ -348,56 +452,6 @@ this.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/07/23/achievements-on-coderwall/">Achievements on Coderwall</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-07-23T00:00:00+12:00" pubdate  data-updated="true" >Jul 23<span>rd</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Well, it&#8217;s taken weeks for <a href="http://coderwall.com">Coderwall</a> to finally get
-it&#8217;s crawler to hit my <a href="https://github.com/joshmcarthur">Github Profile</a>, but
-I&#8217;ve finally <a href="http://coderwall.com/joshmcarthur">got more badges</a>. I&#8217;ve been
-moving some old PHP stuff of mine onto Github for people to use, so that&#8217;s
-where I&#8217;ve gotten the PHP badge from. As part of my personal campaign to master
-at least one other language apart from Ruby, I&#8217;ve also been working on some
-Django tutorials (Django is a Python web framework), so have earned another
-badge there. A happy accident was the walrus badge - I didn&#8217;t realize I had
-projects up in so many different languages. Probably next on this list might be
-the &#8216;Forked 20&#8217; achievement for my Spree extension, [spree-import-products]
-(https://github.com/joshmcarthur/spree-import-products) - I&#8217;m not so sure this
-is a good thing, though - the forks-to-pull-requests ratio is too low on this
-project - most likely indicating that I need to work more on making the
-extension easier to use for my general audience - forks without pull requests
-mean that people are taking their own copies to change them for their needs,
-rather than to work on bugfixes and general improvements. We&#8217;ll have to see.
-But&#8230; yay, more achievements! If you&#8217;ve got a Github account, I highly
-recommend you check out Coderwall - the achievements are largely irrelevant to
-any sort of reputation, but it&#8217;s a really nice way of finding interesting
-Github members with interesting projects.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -437,6 +491,10 @@ Github members with interesting projects.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2012/02/28/git-browse-for-quick-repo-viewing/">Git-browse for Quick Repo Viewing</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
       </li>
     
@@ -450,10 +508,6 @@ Github members with interesting projects.</p>
     
       <li class="post">
         <a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/19/init-dot-d-script-for-virtualbox-vms/">Safely Start and Stop VirtualBox VMs with init.d</a>
       </li>
     
   </ul>
@@ -514,7 +568,7 @@ Github members with interesting projects.</p>
         </div>
       </div>
       <footer><p>
-  Copyright &copy; 2011 - <a href="http://twitter.com/sudojosh">@sudojosh</a>
+  Copyright &copy; 2012 - <a href="http://twitter.com/sudojosh">@sudojosh</a>
 </p>
 <p class="credits">
   <span class="octopress"><a href="http://octopress.org/">Octopress</a> powers this blog!</span>

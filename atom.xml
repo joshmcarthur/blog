@@ -4,13 +4,67 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://blog.joshmcarthur.com/atom.xml" rel="self"/>
   <link href="http://blog.joshmcarthur.com/"/>
-  <updated>2011-11-14T20:38:40+13:00</updated>
+  <updated>2012-02-28T09:46:42+13:00</updated>
   <id>http://blog.joshmcarthur.com/</id>
   <author>
     <name>@sudojosh</name>
     
   </author>
 
+  
+  <entry>
+    <title>Git-browse for Quick Repo Viewing</title>
+    <link href="http://blog.joshmcarthur.com/2012/02/28/git-browse-for-quick-repo-viewing/"/>
+    <updated>2012-02-28T08:50:00+13:00</updated>
+    <id>http://blog.joshmcarthur.com/2012/02/28/git-browse-for-quick-repo-viewing</id>
+    <content type="html">&lt;p&gt;Last night I quickly patched together a command called &lt;code&gt;git-browse&lt;/code&gt; - it's a small but handy extension to &lt;a href=&quot;http://git-scm.com/&quot;&gt;git&lt;/a&gt; that looks at the remotes you have set up inside a repository, and opens up the first Github repository it finds - to give an example:&lt;/p&gt;
+
+&lt;pre&gt;
+-&gt; git remote -v
+origin git@github.com:joshmcarthur/WriteIdeally.git (fetch)
+origin git@github.com:joshmcarthur/WriteIdeally.git (push)
+heroku git@heroku.com:writeideally.git (fetch)
+heroku git@heroku.com:writeideally.git (push)
+-&gt; git browse
+(Opens https://github.com/joshmcarthur/WriteIdeally in default browser)
+&lt;/pre&gt;
+
+
+&lt;p&gt;The source is just below - at the moment, though it's only compatible with OS X and Linux - Ubuntu that I know of, but I believe that RedHat won't work without installing packages - see &lt;a href=&quot;http://stackoverflow.com/questions/5116473/linux-command-to-open-url-in-default-browser&quot;&gt;this StackOverflow thread&lt;/a&gt;&lt;/p&gt;
+
+&lt;div&gt;&lt;script src='https://gist.github.com/1926673.js?file=git-browse'&gt;&lt;/script&gt;
+&lt;noscript&gt;&lt;pre&gt;&lt;code&gt;#!/usr/bin/env ruby
+
+#### git-browse
+### Open a github repository in the default browser
+### Author: @sudojosh
+### Usage: Run `git browse` inside a repo with at least one github remote
+### Installation: Download, run `chmod +x git-browse`, and then copy somewhere on your path
+###   for example, /usr/local/bin/
+
+remotes = `git remote -v`
+remotes = remotes.split(&amp;quot;\n&amp;quot;).map { |remote|
+  remote = remote.split(/\s+/)[1]
+  remote =~ /github.com/ ? remote : nil
+}.compact
+
+if remotes.empty?
+  puts &amp;quot;No Github remotes&amp;quot;
+  exit
+else
+  command = RUBY_PLATFORM.downcase.include?(&amp;quot;darwin&amp;quot;) ? &amp;quot;open&amp;quot; : &amp;quot;xdg-open&amp;quot;
+  remote_url = remotes.first.gsub(&amp;quot;git@github.com:&amp;quot;, &amp;quot;https://github.com/&amp;quot;).gsub(&amp;quot;git://github.com:&amp;quot;, &amp;quot;https://github.com/&amp;quot;).gsub(&amp;quot;.git&amp;quot;, &amp;quot;&amp;quot;)
+  system(&amp;quot;#{command} #{remote_url}&amp;quot;)
+end&lt;/code&gt;&lt;/pre&gt;&lt;/noscript&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Installation is pretty basic - just download, make it executable by running &lt;code&gt;chmod +x git-browse&lt;/code&gt;, and then copy it somewhere that is referenced by your &lt;code&gt;$PATH&lt;/code&gt; variable (you can see what's in this variable by running &lt;code&gt;echo $PATH&lt;/code&gt; in a Terminal). Once you've done this, you should be able to enter any repository with Github remotes, and run &lt;code&gt;git browse&lt;/code&gt; to have the repository open in your default browser.&lt;/p&gt;
+
+&lt;p&gt;Extensions to this idea should be pretty easy - something I would be keen to see in a pull request, for example, would be to support opening arbitrary files - i.e. &lt;code&gt;git browse lib/writeideally/api.rb&lt;/code&gt; would open &lt;a href=&quot;https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb&quot;&gt;https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb&lt;/a&gt;. Having said that, my gsubbing is pretty gross, so that needs refactoring as well.&lt;/p&gt;
+
+&lt;p&gt;In any case, enjoy!&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>Upcoming: RateMyCourses</title>
@@ -952,46 +1006,6 @@ All done! - ImageMagick should be all installed. To check, run the command
 which identify, and check it returns a path to the 'identify' command.
 Note: If you have trouble compiling, make sure Ubunutu's build tools are
 installed: sudo apt-get install build-essential&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Integration tests with Devise and RSpec</title>
-    <link href="http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec/"/>
-    <updated>2011-06-11T00:00:00+12:00</updated>
-    <id>http://blog.joshmcarthur.com/2011/06/11/integration-tests-with-devise-and-rspec</id>
-    <content type="html">&lt;p&gt;RSpec 2 has supported integration tests for a while now, and I've chosen to use
-these for a project I'm working on at the moment instead of Cucumber (I don't
-feel that I need the verbosity andÂ English-like structure Cucumber provides
-given that it a more complex process to write tests).
-A bit of a problem I've come across recently is how to get a Devise user signed
-in to your application in your tests, given that integration tests don't really
-give you any access to either the session or the controller (This rules out
-manually setting ID's in the session, or stubbing out current_user. As it turns
-out, the implementation of it is pretty simple, but I did have to do a bit of
-browsing and piece a few bits together to work out a nice way of doing it.
-Here is the code you can use (You would normally place this within a before(:
-each) filter in your routes spec (Which is what an integration test in RSpec is
-called):
-[At top of spec file, after require 'spec_helper'
-include Warden::Test::Helpers
-[In a before(:each) block]
-@user = Factory.create(:user)
-@user.confirm!
-login_as @user, :scope =&gt; :user
-Now, what is this doing? Well, first of all, you include some test helpers that
-Warden (Which devise back-ends onto), provides. I tried out using Devise's
-Devise::TestHelpers here, but it looks like Devise haven't really designed
-their helpers with integration tests in mind - they didn't really work.Â 
-Within our before(:each) block, it now gets pretty simple. We create a User,
-using Factory Girl (This part of the implementation doesn't really matter, you
-can use fixtures if you prefer, or even a plain old User.create.
-Next, we confirm the user. This isn't necessary if your users haven't been
-marked as :confirmable in your User model, but obviously our new user needs to
-be confirmed and active in order to log in.
-Last of all, we use a helper method Warden's test helpers has provided us to
-log in the user, which sets us up for any more requests we need to make.
-Have fun speccing nicely with Devise/Warden and RSpec!&lt;/p&gt;
 </content>
   </entry>
   
