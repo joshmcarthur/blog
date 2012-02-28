@@ -51,6 +51,173 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-11-12T21:27:00+13:00" pubdate  data-updated="true" >Nov 12<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I&#8217;m working on a site, or analysing somebody else&#8217;s, I often wish that jQuery was loaded into that page - it&#8217;s an unbeatable tool for really digging into the site&#8217;s source to debug something or work out how something has been done.</p>
+
+<p>To help out with this, I&#8217;ve put together a quick bookmarket, <a href="http://blog.joshmcarthur.com/2011/10/20/a-fun-little-bookmarklet/">similar to the more fun one I&#8217;ve done a while ago</a>. It works extremely simply - it just creates a script element, adds jQuery 1.7.0 (served from Google), and appends it to the page body. As soon as the script has loaded, jQuery can be used from within Web Inspector, Firebug, or whatever other Javascript console you use.</p>
+
+<p>Here&#8217;s the bookmarklet:</p>
+
+<p><a href="javascript:var s=document.createElement('script');s.type='text/javascript';s.src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';document.getElementsByTagName('body')[0].appendChild(s);">Add jQuery</a></p>
+
+<p>To add this to your browser, you can either: right-click on this link, select &#8216;Bookmark Link&#8217;, or just drag-and-drop onto your Bookmarks toolbar. Once it&#8217;s added, you can simply click on the bookmark on any page, and jQuery will be loaded into the page for you to use.</p>
+
+<p>Here&#8217;s the source:</p>
+
+<div><figure role=code><figcaption><span>Add jQuery Bookmarklet  </span></figcaption>
+ <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+</pre></td><td class='code' width='100%'><pre><code class='javascript'><div class='line'><span class="c1">// Create the script tag</span>
+</div><div class='line'><span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1">// Set the necessary attributes on the tag</span>
+</div><div class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;text/javascript&quot;</span><span class="p">;</span>
+</div><div class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js&quot;</span><span class="p">;</span>
+</div><div class='line'>
+</div><div class='line'><span class="c1">// Add to the body tag (assume here we&#39;re dealing with HTML, and there IS a body tag)</span>
+</div><div class='line'><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+</div></code></pre></td></tr></table></div></figure></div>
+
+
+
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/11/03/generating-gem-install-commands-from-gem-list/">Generating &#8216;Gem Install&#8217; Commands From &#8216;Gem List&#8217;</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-11-03T16:34:00+13:00" pubdate  data-updated="true" >Nov 3<span>rd</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here at <a href="http://3months.com">3Months</a>, we have a couple of monolithic projects that have been around for yonks - because of this, they don&#8217;t have bundler set up, and many of them have incomplete or out-of-date gem requirements. Yesterday I needed to get one of these projects set up locally for the first time, so I was kindly lent the output of <code>gem list</code> with which to install the gems at the correct versions required.</p>
+
+<p>To make this problem a little easier in the future, I wrote a quick script to generate a massive shell command to install all the gems recorded in <code>gem list</code>. Next time I, or someone else, needs to set up one of these types of project, I can run this script, and hand them the generated shell script. They can run this in their gemset of choice, and install all gems required - much easier!</p>
+
+<p>Here&#8217;s the script - alternatively, you can check it out the <a href="https://gist.github.com/1335721">Gist</a>:</p>
+
+<div><figure role=code> <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+<span class='line'>12</span>
+<span class='line'>13</span>
+<span class='line'>14</span>
+<span class='line'>15</span>
+<span class='line'>16</span>
+<span class='line'>17</span>
+<span class='line'>18</span>
+<span class='line'>19</span>
+<span class='line'>20</span>
+<span class='line'>21</span>
+<span class='line'>22</span>
+<span class='line'>23</span>
+<span class='line'>24</span>
+<span class='line'>25</span>
+<span class='line'>26</span>
+</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1">#!/usr/bin/env ruby</span>
+</div><div class='line'>
+</div><div class='line'>
+</div><div class='line'><span class="c1">### gem_to_command.rb ###############################################################</span>
+</div><div class='line'><span class="c1"># Produce a command to install the gems you currently have installed (using gem list)</span>
+</div><div class='line'><span class="c1"># Makes a simple Shell script that can be run on Linux or Mac OS X</span>
+</div><div class='line'><span class="c1"># </span>
+</div><div class='line'><span class="c1"># Author: @sudojosh</span>
+</div><div class='line'><span class="c1">######################################################################################</span>
+</div><div class='line'>
+</div><div class='line'><span class="n">gems</span> <span class="o">=</span> <span class="sb">`gem list`</span>
+</div><div class='line'><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;install_gems.sh&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">script</span><span class="o">|</span>
+</div><div class='line'>  <span class="n">script</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;#!/usr/bin/env ruby</span><span class="se">\n</span><span class="s2">&quot;</span>
+</div><div class='line'>  <span class="n">gems</span> <span class="o">=</span> <span class="n">gems</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">gem</span><span class="o">|</span>
+</div><div class='line'>    <span class="n">gem</span> <span class="o">=</span> <span class="n">gem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">part</span><span class="o">|</span>
+</div><div class='line'>      <span class="n">part</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/[^\w\.\-]/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</div><div class='line'>    <span class="p">};</span>
+</div><div class='line'>    <span class="o">[</span><span class="n">gem</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">,</span> <span class="n">gem</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">min</span><span class="o">]</span>
+</div><div class='line'>
+</div><div class='line'>  <span class="p">}</span>
+</div><div class='line'>  <span class="n">gems</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">gem</span><span class="o">|</span>
+</div><div class='line'>    <span class="n">script</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;gem install </span><span class="si">#{</span><span class="n">gem</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="si">}</span><span class="s2"> -v=</span><span class="si">#{</span><span class="n">gem</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="si">}</span><span class="s2">&quot;</span>
+</div><div class='line'>    <span class="n">script</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot; &amp;&amp; &quot;</span> <span class="k">unless</span> <span class="n">gem</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="n">gems</span><span class="o">.</span><span class="n">last</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</div><div class='line'>  <span class="p">}</span>
+</div><div class='line'><span class="k">end</span>
+</div><div class='line'><span class="nb">puts</span> <span class="s2">&quot;Wrote install_gems.sh&quot;</span>
+</div></code></pre></td></tr></table></div></figure></div>
+
+
+<p>Here&#8217;s what it does:</p>
+
+<ul>
+<li>Get the output of <code>gem list</code></li>
+<li>Open a .sh file for writing</li>
+<li>Iterate through the <code>gem list</code> output, and parse from the file the name of the gem and the lowest version number (lowest is safer than highest, even though there <em>should</em> only ever be one)</li>
+<li>Assemble a <code>gem install</code> command with the <code>--no-rdoc --no-ri</code> arguments, and write this to the file.</li>
+</ul>
+
+
+<p>Enjoy!</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a></h1>
     
     
@@ -243,228 +410,6 @@
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/10/06/action-mailer-interceptors/">Action Mailer Interceptors</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-10-06T16:51:00+13:00" pubdate  data-updated="true" >Oct 6<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>ActionMailer Interceptors are a great way to test the full stack of your mailing in Rails from the generation from data through to receiving the email in your client. They are similar to ActiveRecord&#8217;s <code>before_x</code>-type callbacks, and let you change something about the message being sent right before it&#8217;s actually dispatched.</p>
-
-<p>The most common purpose I use these for is to redirect mail being sent from the application to either my Inbox, or some shared account (if it&#8217;s on a project where I&#8217;m not the only developer). This lets me make sure that the HTML in the message is displayed properly, and that the data gets injected into the content the way I expect it to be.</p>
-
-<p>Here&#8217;s a quick example of how to use a Mail interceptor for this purpose:</p>
-
-<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
-<span class='line'>2</span>
-<span class='line'>3</span>
-<span class='line'>4</span>
-<span class='line'>5</span>
-<span class='line'>6</span>
-<span class='line'>7</span>
-<span class='line'>8</span>
-<span class='line'>9</span>
-<span class='line'>10</span>
-<span class='line'>11</span>
-</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="c1"># lib/development_mail_interceptor.rb</span>
-</div><div class='line'><span class="k">class</span> <span class="nc">DevelopmentMailInterceptor</span>
-</div><div class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">delivering_email</span><span class="p">(</span><span class="n">mail</span><span class="p">)</span>
-</div><div class='line'>    <span class="n">mail</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;&lt;</span><span class="si">#{</span><span class="n">mail</span><span class="o">.</span><span class="n">to</span><span class="si">}</span><span class="s2">&gt; </span><span class="si">#{</span><span class="n">mail</span><span class="o">.</span><span class="n">subject</span><span class="si">}</span><span class="s2">&quot;</span>
-</div><div class='line'>    <span class="n">mail</span><span class="o">.</span><span class="n">to</span> <span class="o">=</span> <span class="s2">&quot;me@mywork.co.nz&quot;</span>
-</div><div class='line'>  <span class="k">end</span>
-</div><div class='line'><span class="k">end</span>
-</div><div class='line'>
-</div><div class='line'><span class="c1"># config/initializers/mail_interceptors.rb</span>
-</div><div class='line'><span class="nb">require</span> <span class="s1">&#39;development_mail_interceptor&#39;</span>
-</div><div class='line'><span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">register_interceptor</span><span class="p">(</span><span class="no">DevelopmentMailInterceptor</span><span class="p">)</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">development?</span>
-</div></code></pre></td></tr></table></div></figure>
-
-<p>&#8230;and give one of your mailers a go.</p>
-
-<p>This is a very simple example, of course, but there are a lot of uses for this type of thing - logging &amp; auditing, checking against quotas, analysis, etc. etc.</p>
-
-<p>What really triggered this post though, was a odd problem I came across when trying to get this interceptor to work. An ActionMailer method can be triggered using one of two methods: either <code>deliver</code> or <code>deliver!</code> - the main difference between the two is that the second will throw exceptions if it cannot be sent, which is why I tend to prefer using it. Something to keep in mind though, is that using <code>deliver!</code> will call any registered Mail Observers, but <strong>not Interceptors</strong> - meaning that your mail will be sent unaltered.</p>
-
-<p>It really was a frustrating process to debug, but after looking at the <a href="https://github.com/mikel/mail">Mail gem</a> source code (ActionMailer back-ends onto this gem for it&#8217;s mail setup and delivery processes), in particular the <a href="https://github.com/mikel/mail/blob/master/lib/mail/message.rb#L227">Message class</a>, I noticed this crucial difference between the two. Resolving the issue is, of course, as simple as using <code>deliver</code> - without the exclamation mark. After that, your Interceptors will be triggered just as they should be.</p>
-</div>
-  
-  
-
-
-  </article>
-
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/09/30/overriding-action-caches/">Overriding Action Caches</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-09-30T11:48:00+13:00" pubdate  data-updated="true" >Sep 30<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently, I have been working on a web application that is quite media rich, and is expected to run into quite a bit of traffic. I&#8217;ve been working on building an API for a front end system, using JSON to handle passing this data back and forth.</p>
-
-<p>Obviously with this amount of traffic, and the size of some of the JSON collections we were having to marshall and store via Rails, we were going to need some pretty intense caching to reduce the load on Rails, and our database server. We had to balance this need, however, with the requirement that data should be live, or close to live (i.e. around 5-10 minutes) - in particular, statistics, which are calculated on-demand for several responses.</p>
-
-<p>The strategy we chose to manage this balance was to use Rails&#8217; provided <code>caches_action</code> method to cache our JSON responses, building up a cache key from certain parameters, as well as some meta-data, for example, the user&#8217;s logged-in status. Because we were using memcached, we could use the <code>:expires_in</code> option to tell the memcached store to expire the cached value after x minutes.</p>
-
-<p>This approach worked for a while, but we found we had a pretty major problem - while the data was cached, it went alright, but as soon as the cache expired we were having loads of users hitting a response that took way to long to build (before we optimized queries, 30+ seconds). So, we needed another fix.</p>
-
-<p>To fix this problem, we tried out adding some cron tasks that used curl to ping the cached URLs, to try and preload the cache so that less users would be hitting the DB. This only partially fixed the problem though, so we identified a solution that would work a little better for us.</p>
-
-<p>What we wanted to do was to leave our existing caching in place - aside from the expiry, it was working fine, and we didn&#8217;t want to rework everything. With this in mind though, we needed a way to force a refresh of the data in the cache external from the controller. What we ended up implementing was a monkeypatch on Rails&#8217; caches_action-related methods, that allows us to pass in an <code>:overwrite</code> option - this can be a Proc, or just a boolean - basically, when the value of <code>:overwrite</code> is true, Rails will bypass the cached value, grab the <em>new value</em>, and load this into the cache - effectively refreshing the value without a user having to trigger the process.</p>
-
-<p>Here&#8217;s the monkeypatch code - have a scan through it, and I&#8217;ll explain it below:</p>
-
-<figure role=code><div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
-<span class='line'>2</span>
-<span class='line'>3</span>
-<span class='line'>4</span>
-<span class='line'>5</span>
-<span class='line'>6</span>
-<span class='line'>7</span>
-<span class='line'>8</span>
-<span class='line'>9</span>
-<span class='line'>10</span>
-<span class='line'>11</span>
-<span class='line'>12</span>
-<span class='line'>13</span>
-<span class='line'>14</span>
-<span class='line'>15</span>
-<span class='line'>16</span>
-<span class='line'>17</span>
-<span class='line'>18</span>
-<span class='line'>19</span>
-<span class='line'>20</span>
-<span class='line'>21</span>
-<span class='line'>22</span>
-<span class='line'>23</span>
-<span class='line'>24</span>
-<span class='line'>25</span>
-<span class='line'>26</span>
-<span class='line'>27</span>
-<span class='line'>28</span>
-<span class='line'>29</span>
-<span class='line'>30</span>
-<span class='line'>31</span>
-<span class='line'>32</span>
-<span class='line'>33</span>
-<span class='line'>34</span>
-<span class='line'>35</span>
-<span class='line'>36</span>
-<span class='line'>37</span>
-<span class='line'>38</span>
-<span class='line'>39</span>
-<span class='line'>40</span>
-<span class='line'>41</span>
-<span class='line'>42</span>
-<span class='line'>43</span>
-<span class='line'>44</span>
-<span class='line'>45</span>
-<span class='line'>46</span>
-</pre></td><td class='code' width='100%'><pre><code class='ruby'><div class='line'><span class="nb">require</span> <span class="s1">&#39;set&#39;</span>
-</div><div class='line'>
-</div><div class='line'><span class="k">module</span> <span class="nn">ActionController</span> <span class="c1">#:nodoc:</span>
-</div><div class='line'>  <span class="k">module</span> <span class="nn">Caching</span>
-</div><div class='line'>
-</div><div class='line'>    <span class="k">module</span> <span class="nn">Actions</span>
-</div><div class='line'>    <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
-</div><div class='line'>
-</div><div class='line'>      <span class="kp">protected</span>
-</div><div class='line'>      <span class="k">class</span> <span class="nc">ActionCacheFilter</span> <span class="c1">#:nodoc:</span>
-</div><div class='line'>        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-</div><div class='line'>          <span class="vi">@cache_path</span><span class="p">,</span> <span class="vi">@store_options</span><span class="p">,</span> <span class="vi">@cache_layout</span> <span class="o">=</span>
-</div><div class='line'>            <span class="n">options</span><span class="o">.</span><span class="n">values_at</span><span class="p">(</span><span class="ss">:cache_path</span><span class="p">,</span> <span class="ss">:store_options</span><span class="p">,</span> <span class="ss">:layout</span><span class="p">)</span>
-</div><div class='line'>        <span class="k">end</span>
-</div><div class='line'>
-</div><div class='line'>        <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="n">controller</span><span class="p">)</span>
-</div><div class='line'>          <span class="n">path_options</span> <span class="o">=</span> <span class="k">if</span> <span class="vi">@cache_path</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:call</span><span class="p">)</span>
-</div><div class='line'>            <span class="n">controller</span><span class="o">.</span><span class="n">instance_exec</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">&amp;</span><span class="vi">@cache_path</span><span class="p">)</span>
-</div><div class='line'>          <span class="k">else</span>
-</div><div class='line'>            <span class="vi">@cache_path</span>
-</div><div class='line'>          <span class="k">end</span>
-</div><div class='line'>
-</div><div class='line'>          <span class="n">cache_path</span> <span class="o">=</span> <span class="no">ActionCachePath</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="n">path_options</span> <span class="o">||</span> <span class="p">{})</span>
-</div><div class='line'>          <span class="n">overwrite</span> <span class="o">=</span> <span class="k">if</span> <span class="vi">@overwrite</span> <span class="o">=</span> <span class="vi">@store_options</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:overwrite</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
-</div><div class='line'>            <span class="vi">@overwrite</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:call</span><span class="p">)</span> <span class="p">?</span> <span class="n">controller</span><span class="o">.</span><span class="n">instance_exec</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">&amp;</span><span class="vi">@overwrite</span><span class="p">)</span> <span class="p">:</span> <span class="vi">@overwrite</span>
-</div><div class='line'>          <span class="k">else</span>
-</div><div class='line'>            <span class="kp">false</span>
-</div><div class='line'>          <span class="k">end</span>
-</div><div class='line'>
-</div><div class='line'>          <span class="n">body</span> <span class="o">=</span> <span class="n">overwrite</span> <span class="p">?</span> <span class="kp">nil</span> <span class="p">:</span> <span class="n">controller</span><span class="o">.</span><span class="n">read_fragment</span><span class="p">(</span><span class="n">cache_path</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="vi">@store_options</span><span class="p">)</span>
-</div><div class='line'>
-</div><div class='line'>          <span class="k">unless</span> <span class="n">body</span>
-</div><div class='line'>            <span class="n">controller</span><span class="o">.</span><span class="n">action_has_layout</span> <span class="o">=</span> <span class="kp">false</span> <span class="k">unless</span> <span class="vi">@cache_layout</span>
-</div><div class='line'>            <span class="k">yield</span>
-</div><div class='line'>            <span class="n">controller</span><span class="o">.</span><span class="n">action_has_layout</span> <span class="o">=</span> <span class="kp">true</span>
-</div><div class='line'>            <span class="n">body</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">_save_fragment</span><span class="p">(</span><span class="n">cache_path</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="vi">@store_options</span><span class="p">)</span>
-</div><div class='line'>          <span class="k">end</span>
-</div><div class='line'>
-</div><div class='line'>          <span class="n">body</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">render_to_string</span><span class="p">(</span><span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">body</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">unless</span> <span class="vi">@cache_layout</span>
-</div><div class='line'>          <span class="n">controller</span><span class="o">.</span><span class="n">response_body</span> <span class="o">=</span> <span class="n">body</span>
-</div><div class='line'>          <span class="n">controller</span><span class="o">.</span><span class="n">content_type</span> <span class="o">=</span> <span class="no">Mime</span><span class="o">[</span><span class="n">cache_path</span><span class="o">.</span><span class="n">extension</span> <span class="o">||</span> <span class="ss">:html</span><span class="o">]</span>
-</div><div class='line'>        <span class="k">end</span>
-</div><div class='line'>      <span class="k">end</span>
-</div><div class='line'>    <span class="k">end</span>
-</div><div class='line'>  <span class="k">end</span>
-</div><div class='line'><span class="k">end</span>
-</div></code></pre></td></tr></table></div></figure>
-
-<p>By dropping this code into <code>config/initializers</code>, this code gets patched into the ActionController::Caching::Actions::ActionCacheFilter class, and overrides the <code>initalize</code> and <code>filter</code> methods to let us a) pass in an override option, and b) choose to refresh the cache if the override option is set.</p>
-
-<p>The filter method performs as normal until it has finished generating the cache path - at this point, it would normally return the cached response if it was there, and if it had not expired. Instead, my colleague <a href="http://telos.co.nz">James Moriaty</a> replaced some code here:</p>
-
-<ul>
-<li>First, it retrieves the value of the <code>:overwrite</code> option passed in to the <code>caches_action</code> method from the <code>@store_options</code> hash - if it&#8217;s a Proc, it executes it here to get the value, otherwise assumes it&#8217;s a boolean variable.</li>
-<li>If the <code>:overwrite</code> option has not been passed in, it returns false - i.e. don&#8217;t overwrite the cache.</li>
-<li>If the overwrite value is true, it sets the body to nil, so that it will be re-built. Otherwise, it does the usual and returns the cached response from Memcache.</li>
-<li>From here, it more or less goes back to the default class, rebuilding the response from the database.</li>
-</ul>
-
-
-<p>In our application&#8217;s case, we use this functionality by tweaking our cron jobs a little to pass in a particular parameter - we then added the <code>:overwrite</code> option to our <code>caches_action</code> methods, with a Proc that returns true if this parameter equals the correct value.</p>
-
-<p>So far, this solution has worked fantastically - now, hardly any of our users hit the database - instead, they are heading to memcache to grab that response, while our background cron jobs rebuild the data that will get returned to them. Using a parameter for refreshing the cache also lets us easily refresh manually for testing or to check for a value.</p>
-
-<p>This solution is clean, simple and easy to implement. I suggest that if you are facing similar problems, that you give it a go - it&#8217;s really adaptable, and requires few changes if you are already using action caching. Full credit to James for thinking up and implementing this solution - I&#8217;m just documenting it.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -508,19 +453,19 @@
       </li>
     
       <li class="post">
+        <a href="/2012/02/08/treatme-lite-part-one-the-backend/">Treatme Lite: Part One - the Backend</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/06/treatme-lite-adventures-in-javascript/">Treatme Lite: Adventures in Javascript</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
       </li>
     
       <li class="post">
         <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/11/03/generating-gem-install-commands-from-gem-list/">Generating &#8216;Gem Install&#8217; Commands From &#8216;Gem List&#8217;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a>
       </li>
     
   </ul>

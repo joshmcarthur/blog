@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>OK, So I Was Wrong - blog.joshmcarthur.com</title>
+  <title>Treatme Lite: Adventures in Javascript - blog.joshmcarthur.com</title>
   <meta name="author" content="@sudojosh">
   
 
@@ -16,7 +16,7 @@
 
   
 
-  <link rel="canonical" href="http://blog.joshmcarthur.com/2011/03/07/ok-so-i-was-wrong/"/>
+  <link rel="canonical" href="http://blog.joshmcarthur.com/2012/02/06/treatme-lite-adventures-in-javascript/"/>
   <link href="/favicon.ico" rel="shortcut icon" />
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -44,35 +44,14 @@
       <div id="main" role="main">
         <div id="content">
           <div>
-<article>
+<article class="hentry">
   
   <header>
-    <h1 class="entry-title">OK, So I Was Wrong</h1>
-    <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-03-07T00:00:00+13:00" pubdate  data-updated="true" >Mar 7<span>th</span>, 2011</time></p>
-  </header>
-  
-  <p>OK,_So_I_Was_Wrong
-So I was just flipping through my archives of blog posts, when I found this_one
-- my first ever post to Tumblr, where I vowed to stop posting enormously long
-essays on silly ideas I have to change the world.
-Oops.
-Sorry everyone!</p>
-
-  
-    <footer>
+    
+      <h1 class="entry-title">Treatme Lite: Adventures in Javascript</h1>
+    
+    
       <p class="meta">
-        
-        
 
 
 
@@ -82,24 +61,64 @@ Sorry everyone!</p>
 
 
 
-<time datetime="2011-03-07T00:00:00+13:00" pubdate  data-updated="true" >Mar 7<span>th</span>, 2011</time>
-        
+<time datetime="2012-02-06T21:01:00+13:00" pubdate  data-updated="true" >Feb 6<span>th</span>, 2012</time></p>
+    
+  </header>
 
 
-      </p>
+<div class="entry-content"><p>For a long time, I&#8217;ve been looking to move into the <a href="http://nodejs.org">NodeJS</a> trend that&#8217;s been taking the development community by storm. The problem is that coming from a Rails development background, and my inability to follow callbacks through more than 2 levels, has lead to my previous efforts to end in broken code and frustration.</p>
+
+<p>Happily, however, I took another look at <a href="http://expressjs.com">express</a>, a Sinatra-like framework for NodeJS, and it clicked with me on a level that vanilla Node had not in the past. It supported middleware, was reasonably well-documented, and I was able to find <a href="https://github.com/twilson63/express-coffee">a handy project on Github</a> which allowed me to start from a solid base of proven middleware and NodeJS modules to help me out (I typically now develop in <a href="http://coffeescript.org">Coffeescript</a> for my personal projects - I enjoy the ability to code in something that takes my missing knowledge of how to write beautiful Javascript into account).</p>
+
+<p>Next, I needed something to build - ideally something I could become reasonably passionate about finishing, but that also would not consume more than a week or so of working in the evenings. Something I&#8217;ve been using recently is <a href="http://treatme.co.nz/now">TreatMe Now</a> - a sort of customers-on-demand voucher system for retailers that is updated throughout the day with some really good deals - typically, these last only a couple of hours though, so it&#8217;s important to check quite often. Something else I had lamented is that, while there is an iPhone app available, there was no mobile web support, no support for other devices, and the normal web interface is chock full of data-heavy maps and unfriendly panels that are, frankly, downright annoying to use on a smartphone.</p>
+
+<p>Using Chrome&#8217;s web inspector, I was able to find a JSON feed of deals, and work out how to filter the results to a particular region. Given this datasource, I was ready to begin building out this experiment, using a number of resources I&#8217;ve wanted to try out in more detail - NodeJS, Express, more in-depth HTML5 things, responsive design, and an adaptive grid system (Normally I use <a href="https://twitter.github.com/bootstrap">Twitter Bootstrap</a>, but I made a conscious effort to keep things light, using Skeleton&#8217;s adaptive grid system, and Zepto.js in place of jQuery). This blog post is going to detail how I went about building backend and fronted of the application, to the point where I&#8217;ve got <a href="http://treatmelite.herokuapp.com">The Final Product</a>, an express-backed single-page application supporting offline access, local storage and a fully responsive design.</p>
+
+<p>Over the next three posts, I&#8217;m going to be documenting how I went about building a responsive and HTML5-based web application to serve TreatMe Deals, using NodeJS, Express, ZeptoJS,  Coffeescript and the Skeleton CSS framework, including difficulties I ran into, and how I solved them:</p>
+
+<ul>
+<li>Part One: The Backend - an examination of my basic web service written in <a href="http://expressjs.org">Express</a> which serves a JSON datasource of deals, and makes calls to Google&#8217;s Geocoding service</li>
+<li>Part Two: The Frontend - a look at the Javascript and CSS tools I used to develop the frontend of the application</li>
+<li>Part Three: Responsiveness and Extras - some detail about how I added support for offline asset caching and local storage of deals, and made additional tweaks to make the application work fully offline.</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-        <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2011/03/07/ok-so-i-was-wrong/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2011/03/07/ok-so-i-was-wrong/" >Tweet</a>
+
+<span class="byline author vcard">Posted by <span class="fn">@sudojosh</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-02-06T21:01:00+13:00" pubdate  data-updated="true" >Feb 6<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2012/02/06/treatme-lite-adventures-in-javascript/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2012/02/06/treatme-lite-adventures-in-javascript/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
   
 </div>
 
-      
-    </footer>
-  
+    
+  </footer>
 </article>
 
   <section>
@@ -107,8 +126,8 @@ Sorry everyone!</p>
     <div id="disqus_thread"><div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'blog-joshmcarthur';
-  var disqus_identifier = 'http://blog.joshmcarthur.com/2011/03/07/ok-so-i-was-wrong/';
-  var disqus_url = 'http://blog.joshmcarthur.com/2011/03/07/ok-so-i-was-wrong/';
+  var disqus_identifier = 'http://blog.joshmcarthur.com/2012/02/06/treatme-lite-adventures-in-javascript/';
+  var disqus_url = 'http://blog.joshmcarthur.com/2012/02/06/treatme-lite-adventures-in-javascript/';
   //var disqus_developer = 1;
   (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

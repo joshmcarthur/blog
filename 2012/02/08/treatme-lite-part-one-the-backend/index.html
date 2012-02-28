@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>blog.joshmcarthur.com</title>
+  <title>Treatme Lite: Part One - the Backend - blog.joshmcarthur.com</title>
   <meta name="author" content="@sudojosh">
   
 
@@ -16,7 +16,7 @@
 
   
 
-  <link rel="canonical" href="http://blog.joshmcarthur.com/index.html"/>
+  <link rel="canonical" href="http://blog.joshmcarthur.com/2012/02/08/treatme-lite-part-one-the-backend/"/>
   <link href="/favicon.ico" rel="shortcut icon" />
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -43,92 +43,12 @@
 
       <div id="main" role="main">
         <div id="content">
-          <div class="blog-index">
-
-
-
-  <article>
-    
+          <div>
+<article class="hentry">
+  
   <header>
     
-      <h1 class="entry-title"><a href="/2012/02/28/git-browse-for-quick-repo-viewing/">Git-browse for Quick Repo Viewing</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2012-02-28T08:50:00+13:00" pubdate  data-updated="true" >Feb 28<span>th</span>, 2012</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Last night I quickly patched together a command called <code>git-browse</code> - it&#8217;s a small but handy extension to <a href="http://git-scm.com/">git</a> that looks at the remotes you have set up inside a repository, and opens up the first Github repository it finds - to give an example:</p>
-
-<pre>
--> git remote -v
-origin git@github.com:joshmcarthur/WriteIdeally.git (fetch)
-origin git@github.com:joshmcarthur/WriteIdeally.git (push)
-heroku git@heroku.com:writeideally.git (fetch)
-heroku git@heroku.com:writeideally.git (push)
--> git browse
-(Opens https://github.com/joshmcarthur/WriteIdeally in default browser)
-</pre>
-
-
-<p>l
-The source is just below - at the moment, though it&#8217;s only compatible with OS X and Linux - Ubuntu that I know of, but I believe that RedHat won&#8217;t work without installing packages - see <a href="http://stackoverflow.com/questions/5116473/linux-command-to-open-url-in-default-browser">this StackOverflow thread</a></p>
-
-<div><script src='https://gist.github.com/1926673.js?file=git-browse'></script>
-<noscript><pre><code>#!/usr/bin/env ruby
-
-#### git-browse
-### Open a github repository in the default browser
-### Author: @sudojosh
-### Usage: Run `git browse` inside a repo with at least one github remote
-### Installation: Download, run `chmod +x git-browse`, and then copy somewhere on your path
-###   for example, /usr/local/bin/
-
-remotes = `git remote -v`
-remotes = remotes.split(&quot;\n&quot;).map { |remote|
-  remote = remote.split(/\s+/)[1]
-  remote =~ /github.com/ ? remote : nil
-}.compact
-
-if remotes.empty?
-  puts &quot;No Github remotes&quot;
-  exit
-else
-  command = RUBY_PLATFORM.downcase.include?(&quot;darwin&quot;) ? &quot;open&quot; : &quot;xdg-open&quot;
-  remote_url = remotes.first.gsub(&quot;git@github.com:&quot;, &quot;https://github.com/&quot;).gsub(&quot;git://github.com:&quot;, &quot;https://github.com/&quot;).gsub(&quot;.git&quot;, &quot;&quot;)
-  system(&quot;#{command} #{remote_url}&quot;)
-end</code></pre></noscript></div>
-
-
-<p>Installation is pretty basic - just download, make it executable by running <code>chmod +x git-browse</code>, and then copy it somewhere that is referenced by your <code>$PATH</code> variable (you can see what&#8217;s in this variable by running <code>echo $PATH</code> in a Terminal). Once you&#8217;ve done this, you should be able to enter any repository with Github remotes, and run <code>git browse</code> to have the repository open in your default browser.</p>
-
-<p>Extensions to this idea should be pretty easy - something I would be keen to see in a pull request, for example, would be to support opening arbitrary files - i.e. <code>git browse lib/writeideally/api.rb</code> would open <a href="https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb">https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb</a>. Having said that, my gsubbing is pretty gross, so that needs refactoring as well.</p>
-
-<p>In any case, enjoy!</p>
-</div>
-  
-  
-
-
-  </article>
-
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2012/02/08/treatme-lite-part-one-the-backend/">Treatme Lite: Part One - the Backend</a></h1>
+      <h1 class="entry-title">Treatme Lite: Part One - the Backend</h1>
     
     
       <p class="meta">
@@ -146,7 +66,7 @@ end</code></pre></noscript></div>
   </header>
 
 
-  <div class="entry-content"><h2>The Backend</h2>
+<div class="entry-content"><h2>The Backend</h2>
 
 <blockquote><p>This article first is in a series of three blog posts documenting how I created <a href="http://treatmelite.herokuapp.com">TreatMe Lite</a>, an HTMl5 web app using Zepto.js, Coffeescript, and a range of other frameworks and tools, all backed by an <a href="http://expressjs.org">Express JS</a> web service. See my <a href="/2012/02/06/treatme-lite-adventures-in-javascript/">previous post</a> for more information about the application.</p></blockquote>
 
@@ -277,21 +197,16 @@ app.get '/deals/:latitude/:longitude', (req, resp) -&gt;
 
 <blockquote><p>A note on Geocoding: We use <a href="http://%20code.google.com/apis/maps/documentation/geocoding/">Google&#8217;s Geocoding service</a> to retrieve the information we need from either the name of a location, or the latitude and longitude (either way, it fills in the information we need). Once again, this is something we ideally would do from the front-end, however, I ran into some cross domain issues, and so simplified matters by performing the request on the server</p></blockquote>
 </div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  
 
+<span class="byline author vcard">Posted by <span class="fn">@sudojosh</span></span>
 
-  </article>
-
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2012/02/06/treatme-lite-adventures-in-javascript/">Treatme Lite: Adventures in Javascript</a></h1>
-    
-    
-      <p class="meta">
+      
 
 
 
@@ -301,107 +216,51 @@ app.get '/deals/:latitude/:longitude', (req, resp) -&gt;
 
 
 
-<time datetime="2012-02-06T21:01:00+13:00" pubdate  data-updated="true" >Feb 6<span>th</span>, 2012</time></p>
+<time datetime="2012-02-08T21:07:00+13:00" pubdate  data-updated="true" >Feb 8<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/backend/'>backend</a>, <a class='category' href='/blog/categories/coffeescript/'>coffeescript</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/nodejs/'>nodejs</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>For a long time, I&#8217;ve been looking to move into the <a href="http://nodejs.org">NodeJS</a> trend that&#8217;s been taking the development community by storm. The problem is that coming from a Rails development background, and my inability to follow callbacks through more than 2 levels, has lead to my previous efforts to end in broken code and frustration.</p>
-
-<p>Happily, however, I took another look at <a href="http://expressjs.com">express</a>, a Sinatra-like framework for NodeJS, and it clicked with me on a level that vanilla Node had not in the past. It supported middleware, was reasonably well-documented, and I was able to find <a href="https://github.com/twilson63/express-coffee">a handy project on Github</a> which allowed me to start from a solid base of proven middleware and NodeJS modules to help me out (I typically now develop in <a href="http://coffeescript.org">Coffeescript</a> for my personal projects - I enjoy the ability to code in something that takes my missing knowledge of how to write beautiful Javascript into account).</p>
-
-<p>Next, I needed something to build - ideally something I could become reasonably passionate about finishing, but that also would not consume more than a week or so of working in the evenings. Something I&#8217;ve been using recently is <a href="http://treatme.co.nz/now">TreatMe Now</a> - a sort of customers-on-demand voucher system for retailers that is updated throughout the day with some really good deals - typically, these last only a couple of hours though, so it&#8217;s important to check quite often. Something else I had lamented is that, while there is an iPhone app available, there was no mobile web support, no support for other devices, and the normal web interface is chock full of data-heavy maps and unfriendly panels that are, frankly, downright annoying to use on a smartphone.</p>
-
-<p>Using Chrome&#8217;s web inspector, I was able to find a JSON feed of deals, and work out how to filter the results to a particular region. Given this datasource, I was ready to begin building out this experiment, using a number of resources I&#8217;ve wanted to try out in more detail - NodeJS, Express, more in-depth HTML5 things, responsive design, and an adaptive grid system (Normally I use <a href="https://twitter.github.com/bootstrap">Twitter Bootstrap</a>, but I made a conscious effort to keep things light, using Skeleton&#8217;s adaptive grid system, and Zepto.js in place of jQuery). This blog post is going to detail how I went about building backend and fronted of the application, to the point where I&#8217;ve got <a href="http://treatmelite.herokuapp.com">The Final Product</a>, an express-backed single-page application supporting offline access, local storage and a fully responsive design.</p>
-
-<p>Over the next three posts, I&#8217;m going to be documenting how I went about building a responsive and HTML5-based web application to serve TreatMe Deals, using NodeJS, Express, ZeptoJS,  Coffeescript and the Skeleton CSS framework, including difficulties I ran into, and how I solved them:</p>
-
-<ul>
-<li>Part One: The Backend - an examination of my basic web service written in <a href="http://expressjs.org">Express</a> which serves a JSON datasource of deals, and makes calls to Google&#8217;s Geocoding service</li>
-<li>Part Two: The Frontend - a look at the Javascript and CSS tools I used to develop the frontend of the application</li>
-<li>Part Three: Responsiveness and Extras - some detail about how I added support for offline asset caching and local storage of deals, and made additional tweaks to make the application work fully offline.</li>
-</ul>
-
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.joshmcarthur.com/2012/02/08/treatme-lite-part-one-the-backend/" data-via="sudojosh" data-counturl="http://blog.joshmcarthur.com/2012/02/08/treatme-lite-part-one-the-backend/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
 </div>
-  
-  
 
-
-  </article>
-
-
-  <article>
     
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a></h1>
-    
-    
-      <p class="meta">
+  </footer>
+</article>
 
-
-
-
-
-  
-
-
-
-<time datetime="2011-11-14T20:16:00+13:00" pubdate  data-updated="true" >Nov 14<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Tonight I&#8217;d like to talk about a project I&#8217;ve been working on in my spare time for the
-last few months. I&#8217;m super excited to see it coming together, and it&#8217;s <em>nearly</em> ready to
-go live.</p>
-
-<p>The application is called <strong>RateMyCourses</strong> - put simply, it&#8217;s a way for University students
-to explore, rate, and comment on courses they&#8217;ve done to help out others. Inspired by
-such projects as <a href="http://www.fixmystreet.com">Fix my Street</a> and <a href="http://www.fixmytransport.com">Fix my Transport</a>, <strong>RateMyCourses</strong> aims to increase the transparency of quality courses, lecturers, and tertiary education institutes within New Zealand. Over the last few months I&#8217;ve been not only building up this application, but also generating the dataset of courses thats at the heart of the application from scratch, pulling course details from all major Universities within New Zealand, including:</p>
-
-<ul>
-<li>Auckland University</li>
-<li>Massey University</li>
-<li>Waikato University</li>
-<li>Victoria University of Wellington</li>
-<li>University of Canterbury</li>
-<li>Lincoln University</li>
-<li>Otago University</li>
-</ul>
-
-
-<p>All up, I&#8217;ve got nearly 20,000 courses indexed, from these seven institutions. This is a huge opportunity for students to really engage with each other, with their Universities, and with new entrants. Over time, I&#8217;m hoping <strong>RateMyCourses</strong> will become a valuable tool for course planning, as it uncovers the best courses, institutions, and educators in New Zealand (and, eventually, other countries).</p>
-
-<p>This is just a preliminary post while I polish up some areas, and make sure I&#8217;m really happy with things, but I welcome feedback and comments as I move into the launch and adoption phases. I&#8217;m planning to launch in the upcoming weeks, and spend the summer with a core group of users ironing out the major issues, before really pushing it at Victoria next year.</p>
-</div>
-  
-  
-
-
-  </article>
-
-<nav role="pagination">
-  <div>
-    
-      <a class="prev" href="/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</nav>
-
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread"><div id="disqus_thread"></div>
 <script type="text/javascript">
-    var disqus_shortname = 'blog-joshmcarthur';
-    (function () {
-      var s = document.createElement('script'); s.async = true;
-      s.type = 'text/javascript';
-      s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
-      (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
+  var disqus_shortname = 'blog-joshmcarthur';
+  var disqus_identifier = 'http://blog.joshmcarthur.com/2012/02/08/treatme-lite-part-one-the-backend/';
+  var disqus_url = 'http://blog.joshmcarthur.com/2012/02/08/treatme-lite-part-one-the-backend/';
+  //var disqus_developer = 1;
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
 </script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
+
 <aside role=sidebar>
   
     <section>
@@ -491,6 +350,7 @@ such projects as <a href="http://www.fixmystreet.com">Fix my Street</a> and <a h
 
   
 </aside>
+
 
         </div>
       </div>

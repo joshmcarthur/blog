@@ -51,6 +51,82 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2010/12/13/so-i-decided-this-evening-to-devote-a-couple-of-hours-to-giv/">So I Decided This Evening to Devote a Couple of Hours to Giv&#8230;</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-12-13T00:00:00+13:00" pubdate  data-updated="true" >Dec 13<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>[/images/assets/www.tumblr.com/photo/1280/2196843804/1/
+tumblr_ldcttt1WLE1qd78lu.png]
+So I decided this evening to devote a couple of hours to giving back to Spree,
+after using the framework for a couple of work projects, and appreciating it
+for it&#8217;s flexibility and extensibility.Â 
+I&#8217;ve developed an extension for Spree called Import Products. The source is
+based on a few bits of code that I have used for 2 projects now to import
+products into a Spree store from a comma-seperated values file (.CSV).
+It&#8217;s not perfect, but I&#8217;m happy with it as my first ever full contribution back
+to the Ruby on Rails community - I hope I have done a good enough job that it
+is useful to a couple of people.
+If you want to check out the source code, it&#8217;s on github.
+If you want to check out a description of the extension, check out the Spree
+extension_page.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/11/15/animal-welfare-fail/">Animal Welfare Fail?</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2010-11-15T00:00:00+13:00" pubdate  data-updated="true" >Nov 15<span>th</span>, 2010</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>[/images/posts/2010-11-15-animal-welfare.jpg]
+Animal Welfare Fail?</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2010/11/10/the-view-from-our-new-apartment/">The View From Our New Apartment</a></h1>
     
     
@@ -109,92 +185,6 @@ with Gemma outside Parliament</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/09/14/rvm-ruby-debug-and-hours-of-frustration/">RVM, Ruby-Debug, and Hours of Frustration</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2010-09-14T00:00:00+12:00" pubdate  data-updated="true" >Sep 14<span>th</span>, 2010</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Every now and then, you run into one of THOSE problems - inexplicable, and
-something it seems no one else has solved before you. This afternoon, I hit one
-of these. Basically, I had just installed RVM, Ruby_1.8.7 and Rails_2.3.8 -
-everything was working great - I could run a server just fine, and use the
-running site.
-Eventually though, I found something broken. Easy enough to diagnose, I thought
-- I&#8217;ll just start up a debugging server, and work out whats going on.
-Wrong. Wrong, wrong, wrong.
-What followed was a continuation of this error:
-You need to install ruby-debug to run the server in debugging mode.
-So I had a Google - lots of people have run into this problem before (here and
-here specifically) - the problem is, most of these problems came down to a
-missing library called libreadline - for them, installing the library corrected
-all of their problems.
-In the end, I stumbled across this_post, from a guy having issues with Ruby
-after upgrading his Mac OS X - finally - he suggested something I hadn&#8217;t
-already tried.
-And, as it turns out - it worked! I have no idea why - but there we go.
-If you are having a problem getting Ruby 1.8.7 to acknowledge ruby-debug is
-there when running a debugging server, try this:
-gem uninstall ruby-debug gem install ruby-debug linecache &#8211;no-ri &#8211;no-rdoc
-script/server &#8211;debugger
-&#8230; It might just work for you!</p>
-</div>
-  
-  
-
-
-  </article>
-
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/09/14/no-reason-for-this-i-just-thought-the-beehive-looked-ma/">No Reason for This. I Just Thought the Beehive Looked&#8230;. Ma&#8230;</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2010-09-14T00:00:00+12:00" pubdate  data-updated="true" >Sep 14<span>th</span>, 2010</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>[/images/posts/2010-09-14-beehive-1.jpg] No
-reason for this. I just thought the Beehive looked&#8230;. majestic this morning :
-)</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -238,19 +228,19 @@ reason for this. I just thought the Beehive looked&#8230;. majestic this morning
       </li>
     
       <li class="post">
+        <a href="/2012/02/08/treatme-lite-part-one-the-backend/">Treatme Lite: Part One - the Backend</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/06/treatme-lite-adventures-in-javascript/">Treatme Lite: Adventures in Javascript</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
       </li>
     
       <li class="post">
         <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/11/03/generating-gem-install-commands-from-gem-list/">Generating &#8216;Gem Install&#8217; Commands From &#8216;Gem List&#8217;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a>
       </li>
     
   </ul>

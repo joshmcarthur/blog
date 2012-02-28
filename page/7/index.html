@@ -51,6 +51,124 @@
     
   <header>
     
+      <h1 class="entry-title"><a href="/2011/05/06/imagemagick-cropping-then-resizing-a-png/">ImageMagick: Cropping Then Resizing a PNG</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-06T00:00:00+12:00" pubdate  data-updated="true" >May 6<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve been working on an image processor class for work, and recently ran into
+this issue. I thought I would post it up here as normally I need to be quite
+desperate before I start trawling through email mirrors - hopefully somebody
+comes across this post first.
+If you use ImageMagick (in particular, in conjunction with MiniMagick), then
+you may come across this issue, and there is actually a quick fix to it. The
+issue itself is as follows: my image processor retrieves an image from an
+online source, but the image has a 1 or 2px border, and is thousands of pixels
+wide - too wide for web use. I therefore wrote this class to first crop the
+border off the image, and then resize it.
+If you do actually do this though, there is an important step that needs to go
+in-between the cropping and the resizing. If you won&#8217;t do this, you will
+basically get a PNG layer that is offset from the image itself - i.e. some or
+all of the Â actual image content is not visible. This happens because when the
+image is cropped, the origin of the image changes. It needs to be reset back to
+coordinates 0, 0 in order to not offset the layer itself when the image is
+resized.
+Here&#8217;s how to do it.Â 
+For Ruby/Minimagick:
+image.set(&#8220;page&#8221;, &#8220;#{image[&#8216;width&#8217;]}x#{image[&#8216;height&#8217;]}+0+0&#8221;)
+For ImageMagick directly (i.e. in console):
+convert [image sequence]: -set page [width]x[height]+0+0
+Simple! The image should save correctly.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/04/12/using-setinterval-to-handle-scroll-events/">Using setInterval to Handle Scroll() Events</a></h1>
+    
+    
+      <p class="meta">
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-04-12T00:00:00+12:00" pubdate  data-updated="true" >Apr 12<span>th</span>, 2011</time></p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve just added a nice unobtrusive scroll to top feature to my blog, and learnt
+an interesting tip in the process I thought I would share, originating from one
+of the many problems Twitter has had with it&#8217;s jQuery fanciness.
+The scroll to top stuff isn&#8217;t overly complicated - just detect when the user
+has scrolled x pixels down the screen, and then show a link to go back to the
+top (Which can be animated if you want) - for a nice tutorial on this, check
+out_this_tutorial.
+The thing is that this technique uses the scroll event (bound to window, but
+can be bound to basically anything with a scrollbar). The scroll event gets
+fired any time the window is scrolled - but any time the scroll amount changes
+at all. What this means is that the scroll event is fired any time scroll
+position changes - so if you grab the scrollbar, and pull, the scroll event is
+fired every time the bar moves, not when you release the mouse.
+John_Resig_reports_that_Twitter_ran_into_some_problems_with_thisÂ - they had a
+function bound directly to the scroll event being fired every time anyone
+scrolled (at all!). Resig has also reported a nice solution though, which I&#8217;ll
+pass on here. It&#8217;s actually quite simple. Instead of binding a complicated
+function to the scroll event, you simply set a flag variable to let something
+else know that the window has been scrolled. The second piece of the solution
+is a function running via setInterval - that is, a function being called on a
+scheduled basis. The first task of this function is to check this flag - if it
+is set, it can perform any task (Such as showing a &#8216;Back to Top&#8217; link, and set
+the flag variable back to false.Â 
+The end result of this solution is that you basically have a polling function,
+rather than an event-driven one. This is actually a good thing though, when it
+comes to this type of event. Instead of having a complex function called every
+time the window is scrolled, a function is called every quarter second or so,
+and only executes if the window has been scrolledÂ - much better!
+I personally used an object variable, rather than just a flag - this object was
+populated with the object that was scrolled on, and I then checked if this
+object was populated in my polling function (rather than just is true), and
+could then use the context it provided in this function. Since then, however, I
+have realized that in my case, this object will alwaysbe the window object - so
+I may as well have a cheaper variable assignment and just directly refer to the
+object in my polling function.</p>
+</div>
+  
+  
+
+
+  </article>
+
+
+  <article>
+    
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/04/12/i-just-found-this-it-s-a-little-promotional-thing-that-the/">I Just Found This - It&#8217;s a Little Promotional Thing That The&#8230;</a></h1>
     
     
@@ -140,132 +258,6 @@ more elegant solution that anything else I&#8217;ve seen suggested.</p>
 
   </article>
 
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/04/08/i18n-always-escapes-dots-in-chained-backends/">I18n ALWAYS Escapes Dots in Chained Backends :-(</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-04-08T00:00:00+12:00" pubdate  data-updated="true" >Apr 8<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Just a quick tip I&#8217;ve come across while browsing through the comments on a
-Railscast_I&#8217;ve_been_watching. It looks like the I18n gems that get
-automatically installed with Rails 3 have a teensy bug.
-When storing a translation to the backend (be it YAML, Redis, whatever), there
-is an :escape option that can be passed to enable (or prevent) the key from
-containing the dot character (.) (Among others, I&#8217;m sure). This seems to work
-fine when dealing with a single backend, but unfortunately when you are using
-chained backends (For example I am using Redis preferentially, but falling back
-on YAML when necessary), the options hash that you would pass the :escape
-option in is mistakenly initialized to an empty hash.
-It&#8217;s a simple fix - there is already a closed pull request on the issue here.
-It looks like the latest stable version is only 0.50 though, so the fix isn&#8217;t
-going to filter through to the actual gem just yet. For now, the best option is
-probably to class_eval into that particular section, or just change the file
-yourself.</p>
-</div>
-  
-  
-
-
-  </article>
-
-
-  <article>
-    
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/03/10/spree-hosted-gateway/">Spree Hosted Gateway</a></h1>
-    
-    
-      <p class="meta">
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-03-10T00:00:00+13:00" pubdate  data-updated="true" >Mar 10<span>th</span>, 2011</time></p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Spree Hosted Gateway is my second &#8216;big&#8217; extension - one of the ones that isn&#8217;t
-just adding one or two bits of nice functionality, but actually and end-to-end
-solution to add something that I think would be useful to a broad range of
-Spree developers (My first was spree-import-products, see my post on it here).
-Spree (for those of you unfamiliar with it), is an open-source eCommerce
-framework written in Ruby on Rails, and has recently been upgraded to Rails 3,
-which has enabled extensions to now be packaged as Rails engines, making them
-far easier to create, implement and share. Out of the box, Spree is able to
-provide much of what a basic online store requires, but something I have felt
-is missing is support for alternative payment methods that are much more
-rudimentary than those catered for by Railsdog&#8217;s_fork_of_ActiveShipping.Â 
-Inspired by a project I was working on at 3Months, I decided to develop an
-extension that provided a new type of Payment Method (Alongside Cheque and
-Creditcard) - External (Or Hosted) Gateway - this type of payment method was
-characterized in the following ways:</p>
-
-<pre><code>* Redirection - the customer was required by the gateway to be redirected
-  to an off-site form to make payment.
-* Tracing the payment and order: attributes required for payment (Amount,
-  etc.) were gathered by the payment gateway from POSTed form data.
-* Communications: there was no type of complex back-and-forth between Spree
-  and the gateway provider behind the scenes - information was transmitted
-  to the gateway, and all Spree is able to do from that point is listen for
-  a postback and collect any information from that.
-</code></pre>
-
-<p>These type of gateways are (unfortunately) quite prevalent, especially around
-small-to-medium independent companies - they tend to be cheaper than more
-widely-known solutions, at the expense of a more reliable and secure
-transaction for the customer.
-Spree Hosted Gateway, as I have mentioned, hooks into Spree in the form of
-registering itself as a Payment Method that can be configured from the admin
-interface. After seeing all theÂ arbitraryÂ information that I was required to
-POST to the payment gateway I was testing against, I also made it easily
-extendable, and used Spree&#8217;s preferences system to allow any number of key-
-value pairs to be created (Which could be modified in the Spree Admin UI),
-which are automatically posted to the payment gateway when I customer is
-redirected (Unless the preference key is added to the exclusion list, of
-course!).
-I conjunction to the &#8216;transmit&#8217; function of the extension, I have also
-implemented a kind of &#8216;landing pad&#8217; for postbacks from the Payment Gateway to
-hit. When this happens, the extension is able to detect whether the transaction
-was successful or not, and continue processing the order. If the customer has
-made an payment that is not sufficient to cover the cost of the order they are
-redirected back to the payment page, and if the transaction was not successful,
-an error message is presented to them.
-All in all, I&#8217;m happy with this extension - it was a great way to learn about
-how Spree itself handles payment methods, different types of gateway and
-payment validation and handling, and I&#8217;m hoping this extension will help out
-some of the Spree developers out there working on smaller stores that don&#8217;t
-need such a large (expensive) gateway.</p>
-</div>
-  
-  
-
-
-  </article>
-
 <nav role="pagination">
   <div>
     
@@ -309,19 +301,19 @@ need such a large (expensive) gateway.</p>
       </li>
     
       <li class="post">
+        <a href="/2012/02/08/treatme-lite-part-one-the-backend/">Treatme Lite: Part One - the Backend</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/06/treatme-lite-adventures-in-javascript/">Treatme Lite: Adventures in Javascript</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/14/upcoming-ratemycourses/">Upcoming: RateMyCourses</a>
       </li>
     
       <li class="post">
         <a href="/2011/11/12/add-jquery-to-any-page/">Add jQuery to Any Page Really, Really Easily</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/11/03/generating-gem-install-commands-from-gem-list/">Generating &#8216;Gem Install&#8217; Commands From &#8216;Gem List&#8217;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/10/20/a-fun-little-bookmarklet/">A Fun Little Bookmarklet</a>
       </li>
     
   </ul>

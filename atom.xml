@@ -4,7 +4,7 @@
   <title>blog.joshmcarthur.com</title>
   <link href="http://blog.joshmcarthur.com/atom.xml" rel="self"/>
   <link href="http://blog.joshmcarthur.com/"/>
-  <updated>2012-02-28T09:46:42+13:00</updated>
+  <updated>2012-02-28T21:33:01+13:00</updated>
   <id>http://blog.joshmcarthur.com/</id>
   <author>
     <name>@sudojosh</name>
@@ -30,7 +30,8 @@ heroku git@heroku.com:writeideally.git (push)
 &lt;/pre&gt;
 
 
-&lt;p&gt;The source is just below - at the moment, though it's only compatible with OS X and Linux - Ubuntu that I know of, but I believe that RedHat won't work without installing packages - see &lt;a href=&quot;http://stackoverflow.com/questions/5116473/linux-command-to-open-url-in-default-browser&quot;&gt;this StackOverflow thread&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;l
+The source is just below - at the moment, though it's only compatible with OS X and Linux - Ubuntu that I know of, but I believe that RedHat won't work without installing packages - see &lt;a href=&quot;http://stackoverflow.com/questions/5116473/linux-command-to-open-url-in-default-browser&quot;&gt;this StackOverflow thread&lt;/a&gt;&lt;/p&gt;
 
 &lt;div&gt;&lt;script src='https://gist.github.com/1926673.js?file=git-browse'&gt;&lt;/script&gt;
 &lt;noscript&gt;&lt;pre&gt;&lt;code&gt;#!/usr/bin/env ruby
@@ -63,6 +64,168 @@ end&lt;/code&gt;&lt;/pre&gt;&lt;/noscript&gt;&lt;/div&gt;
 &lt;p&gt;Extensions to this idea should be pretty easy - something I would be keen to see in a pull request, for example, would be to support opening arbitrary files - i.e. &lt;code&gt;git browse lib/writeideally/api.rb&lt;/code&gt; would open &lt;a href=&quot;https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb&quot;&gt;https://github.com/joshmcarthur/WriteIdeally/blob/master/lib/writeideally/api.rb&lt;/a&gt;. Having said that, my gsubbing is pretty gross, so that needs refactoring as well.&lt;/p&gt;
 
 &lt;p&gt;In any case, enjoy!&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title>Treatme Lite: Part One - the Backend</title>
+    <link href="http://blog.joshmcarthur.com/2012/02/08/treatme-lite-part-one-the-backend/"/>
+    <updated>2012-02-08T21:07:00+13:00</updated>
+    <id>http://blog.joshmcarthur.com/2012/02/08/treatme-lite-part-one-the-backend</id>
+    <content type="html">&lt;h2&gt;The Backend&lt;/h2&gt;
+
+&lt;blockquote&gt;&lt;p&gt;This article first is in a series of three blog posts documenting how I created &lt;a href=&quot;http://treatmelite.herokuapp.com&quot;&gt;TreatMe Lite&lt;/a&gt;, an HTMl5 web app using Zepto.js, Coffeescript, and a range of other frameworks and tools, all backed by an &lt;a href=&quot;http://expressjs.org&quot;&gt;Express JS&lt;/a&gt; web service. See my &lt;a href=&quot;http://blog.joshmcarthur.com/2012/02/06/treatme-lite-adventures-in-javascript/&quot;&gt;previous post&lt;/a&gt; for more information about the application.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Last post (the intro), I left off explaining why I set out the build the application, and the technologies I had selected to build each part. This post is going to detail the steps I took to create the web service using &lt;a href=&quot;http://nodejs.org&quot;&gt;NodeJS&lt;/a&gt; and &lt;a href=&quot;http://expressjs.org&quot;&gt;Express&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;First of all, I needed a way to serve the deal JSON. In actuality, this is something that I could have done just as easily directly from the front-end Javascript, however, I'd started off with a NodeJS application, and it seemed just as sensible to request the JSON from &lt;a href=&quot;http://treatme.co.nz&quot;&gt;TreatMe&lt;/a&gt; using Node's &lt;a href=&quot;http://nodejs.org/docs/latest/api/http.html#http.get&quot;&gt;support for HTTP requests&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To kick off the node app, I cloned a starter application from Github:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+git clone git://github.com/twilson63/express-coffee.git treatmelite
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This application gives us an easy base with support for &lt;a href=&quot;http://coffeescript.org&quot;&gt;Coffeescript&lt;/a&gt;, &lt;a href=&quot;http://jade-lang.com/&quot;&gt;Jade templating&lt;/a&gt; and a bunch of other CSS stuff, like the &lt;a href=&quot;http://getskeleton.com&quot;&gt;Skeleton grid&lt;/a&gt; (which I'm a big fan of).&lt;/p&gt;
+
+&lt;p&gt;To satisfy the requirements for the front-end, my NodeJS application needed to perform two tasks:&lt;/p&gt;
+
+&lt;h4&gt;/deals/:latitude/:longitude: Retrieve a list of nearby deals from TreatMe&lt;/h4&gt;
+
+&lt;p&gt;The code:&lt;/p&gt;
+
+&lt;div&gt;&lt;script src='https://gist.github.com/1766753.js?file=app.coffee'&gt;&lt;/script&gt;
+&lt;noscript&gt;&lt;pre&gt;&lt;code&gt;# Create a GET route, with named route segments for the latitude and longitude
+app.get '/deals/:latitude/:longitude', (req, resp) -&amp;gt;
+
+  # Set the response content type to JSON
+  resp.contentType(&amp;quot;application/json&amp;quot;)
+
+  # Build the URI for retrieving deals from TreatMe
+  api_options = {
+    host: 'treatme.co.nz',
+    port: 80,
+    path: &amp;quot;/now/GetCategorizedDeals?latitude=#{req.params['latitude']}&amp;amp;longitude=#{req.params['longitude']}&amp;quot;
+  }
+
+  try
+ 
+    # Make the HTTP request - the callback will be executed when the 
+    # response starts to come in, and by listening for the 'data' and 'end' 
+    # events, we can build up the JSON we want to send back to the front-end
+    http.get api_options, (res) -&amp;gt;
+
+      res.on 'error', -&amp;gt;
+        resp.send(error_json(), 500)
+
+      json = &amp;quot;&amp;quot;
+      res.on 'data', (chunk) -&amp;gt;
+        json += chunk
+
+      res.on 'end', -&amp;gt;
+        resp.send(json)
+  catch error
+    # Respond with an error message if anything went wrong
+    resp.send(error_json(), 500)
+&lt;/code&gt;&lt;/pre&gt;&lt;/noscript&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Explanation:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, we make the HTTP request, passing a callback that will get a response object as an argument&lt;/li&gt;
+&lt;li&gt;We listen for certain events while we receive the data from the response - if we hit an error, we return an error message. We listen for when we receive some data, and append it to the string we want to return to the front-end, and when we reach the end of the data, we return this string.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h4&gt;/geocode: Geocode an address, and pass back the information we need to display to the user&lt;/h4&gt;
+
+&lt;p&gt;The Code:&lt;/p&gt;
+
+&lt;div&gt;&lt;script src='https://gist.github.com/1766776.js?file=app.coffee'&gt;&lt;/script&gt;
+&lt;noscript&gt;&lt;pre&gt;&lt;code&gt;app.get '/geocode', (req, resp) -&amp;gt;
+
+  # Set the content type of the response
+  resp.contentType(&amp;quot;application/json&amp;quot;)
+
+  # Assemble the base URL to Google's geocoding service
+  geocode_url = {
+    host: 'maps.googleapis.com',
+    port: 80,
+    path: '/maps/api/geocode/json?sensor=true'
+  }
+
+  # The remainder of the Google geocoding URL depends on whether a lat/lng or an address
+  # has been passed to the web service - basically, the URL is constructed to make sure
+  # that the geocoding results contain enough information to fill the gaps - i.e.
+  # an address to go with the lat/lng, or vice-versa
+  if (req.query['latlng'])
+    geocode_url.path += &amp;quot;&amp;amp;latlng=#{req.query['latlng']}&amp;quot;
+  else if (req.query['address'])
+    geocode_url.path += &amp;quot;&amp;amp;address=#{req.query['address']}&amp;quot;
+
+  # Try and retrieve the geocoding results. Once we reach the end of the response
+  # parse them into a JSON object, which we then use to assemble a 'location' object
+  # to send back to the frontend
+  try
+    http.get geocode_url, (res) -&amp;gt;
+      geocode_results = &amp;quot;&amp;quot;
+      res.on 'data', (chunk) -&amp;gt;
+        geocode_results += chunk
+
+      res.on 'end', -&amp;gt;
+        geocode_results = JSON.parse(geocode_results)
+        result = geocode_results.results[0]
+        if (result)
+          location = {
+            name: result.formatted_address,
+            latitude: result.geometry.location.lat,
+            longitude: result.geometry.location.lng
+          }
+        else
+          resp.send(error_json())
+          return false
+
+        resp.send(JSON.stringify(location))
+  catch error
+    resp.send(error_json(), 500)
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/noscript&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Explanation:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We build the path to the Google Geocoder using either the latitude and longitude from the user's current location (i.e. reverse geocoding), or the address (typically a city name like 'Wellington, New Zealand')&lt;/li&gt;
+&lt;li&gt;We follow a similar pattern to the Deals action, requesting a geocoding result, waiting for a response, and parsing the data we need out of that response. In this case, we build a JSON structure containing the geocoded address, it's latitude, and it's longitude.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;p&gt;A note on Geocoding: We use &lt;a href=&quot;http://%20code.google.com/apis/maps/documentation/geocoding/&quot;&gt;Google's Geocoding service&lt;/a&gt; to retrieve the information we need from either the name of a location, or the latitude and longitude (either way, it fills in the information we need). Once again, this is something we ideally would do from the front-end, however, I ran into some cross domain issues, and so simplified matters by performing the request on the server&lt;/p&gt;&lt;/blockquote&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title>Treatme Lite: Adventures in Javascript</title>
+    <link href="http://blog.joshmcarthur.com/2012/02/06/treatme-lite-adventures-in-javascript/"/>
+    <updated>2012-02-06T21:01:00+13:00</updated>
+    <id>http://blog.joshmcarthur.com/2012/02/06/treatme-lite-adventures-in-javascript</id>
+    <content type="html">&lt;p&gt;For a long time, I've been looking to move into the &lt;a href=&quot;http://nodejs.org&quot;&gt;NodeJS&lt;/a&gt; trend that's been taking the development community by storm. The problem is that coming from a Rails development background, and my inability to follow callbacks through more than 2 levels, has lead to my previous efforts to end in broken code and frustration.&lt;/p&gt;
+
+&lt;p&gt;Happily, however, I took another look at &lt;a href=&quot;http://expressjs.com&quot;&gt;express&lt;/a&gt;, a Sinatra-like framework for NodeJS, and it clicked with me on a level that vanilla Node had not in the past. It supported middleware, was reasonably well-documented, and I was able to find &lt;a href=&quot;https://github.com/twilson63/express-coffee&quot;&gt;a handy project on Github&lt;/a&gt; which allowed me to start from a solid base of proven middleware and NodeJS modules to help me out (I typically now develop in &lt;a href=&quot;http://coffeescript.org&quot;&gt;Coffeescript&lt;/a&gt; for my personal projects - I enjoy the ability to code in something that takes my missing knowledge of how to write beautiful Javascript into account).&lt;/p&gt;
+
+&lt;p&gt;Next, I needed something to build - ideally something I could become reasonably passionate about finishing, but that also would not consume more than a week or so of working in the evenings. Something I've been using recently is &lt;a href=&quot;http://treatme.co.nz/now&quot;&gt;TreatMe Now&lt;/a&gt; - a sort of customers-on-demand voucher system for retailers that is updated throughout the day with some really good deals - typically, these last only a couple of hours though, so it's important to check quite often. Something else I had lamented is that, while there is an iPhone app available, there was no mobile web support, no support for other devices, and the normal web interface is chock full of data-heavy maps and unfriendly panels that are, frankly, downright annoying to use on a smartphone.&lt;/p&gt;
+
+&lt;p&gt;Using Chrome's web inspector, I was able to find a JSON feed of deals, and work out how to filter the results to a particular region. Given this datasource, I was ready to begin building out this experiment, using a number of resources I've wanted to try out in more detail - NodeJS, Express, more in-depth HTML5 things, responsive design, and an adaptive grid system (Normally I use &lt;a href=&quot;https://twitter.github.com/bootstrap&quot;&gt;Twitter Bootstrap&lt;/a&gt;, but I made a conscious effort to keep things light, using Skeleton's adaptive grid system, and Zepto.js in place of jQuery). This blog post is going to detail how I went about building backend and fronted of the application, to the point where I've got &lt;a href=&quot;http://treatmelite.herokuapp.com&quot;&gt;The Final Product&lt;/a&gt;, an express-backed single-page application supporting offline access, local storage and a fully responsive design.&lt;/p&gt;
+
+&lt;p&gt;Over the next three posts, I'm going to be documenting how I went about building a responsive and HTML5-based web application to serve TreatMe Deals, using NodeJS, Express, ZeptoJS,  Coffeescript and the Skeleton CSS framework, including difficulties I ran into, and how I solved them:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Part One: The Backend - an examination of my basic web service written in &lt;a href=&quot;http://expressjs.org&quot;&gt;Express&lt;/a&gt; which serves a JSON datasource of deals, and makes calls to Google's Geocoding service&lt;/li&gt;
+&lt;li&gt;Part Two: The Frontend - a look at the Javascript and CSS tools I used to develop the frontend of the application&lt;/li&gt;
+&lt;li&gt;Part Three: Responsiveness and Extras - some detail about how I added support for offline asset caching and local storage of deals, and made additional tweaks to make the application work fully offline.&lt;/li&gt;
+&lt;/ul&gt;
+
 </content>
   </entry>
   
@@ -942,70 +1105,6 @@ you have to drop back to using has_many :through with a Model representing your
 join table. I can, though, at least vouch that once you have done this, it does
 work as expected, which, in the end, is what we want. It still feels a bit
 hacky though....&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Quick: .rvmrc</title>
-    <link href="http://blog.joshmcarthur.com/2011/06/21/quick-rvmrc/"/>
-    <updated>2011-06-21T00:00:00+12:00</updated>
-    <id>http://blog.joshmcarthur.com/2011/06/21/quick-rvmrc</id>
-    <content type="html">&lt;p&gt;This post is probably something more experienced RVM users will already know,
-but I wanted to post this as it's definitely my discovery of the week. When
-throwing an .rvmrc file into a project, it's a nice thing to do to write the
-script correctly so that it will just work for other developers (As well as
-telling you what gemset you're using when you jump into the directory). In your
-.rvmrc file, put something like this: &lt;code&gt;rvm use 1.9.2@gemset --create&lt;/code&gt; ...this
-will attempt to use that gemset (Printing out a nice message telling you it's
-using that one as it does so), and will create it if it doesn't exist.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>Ubuntu: Quick ImageMagick Install</title>
-    <link href="http://blog.joshmcarthur.com/2011/06/16/ubuntu-quick-imagemagick-install/"/>
-    <updated>2011-06-16T00:00:00+12:00</updated>
-    <id>http://blog.joshmcarthur.com/2011/06/16/ubuntu-quick-imagemagick-install</id>
-    <content type="html">&lt;p&gt;[This is cross-posted from a tweet I posted a while back - I think it's a nice
-bit of advice, and I wanted to store it in a more persistent form]
-Installing ImageMagick is one of the things that Rails developers need to do
-reasonably often when provisioning new servers - basically, if you're doing any
-sort of image processing in your application (including the popularPaperclip
-gem), ImageMagick is what you'll be using.
-The problem is that there is a bit of a magical formula I have needed to use in
-the past - if you just install ImageMagick, it will most likely not work, as it
-needs to have support for different image formats you want to use compiled it
-in right from the get go. Previously, I have just looked up the various
-libraries I have needed (For PNG, JPEG, etc.), and then either found the
-libraries in the Ubuntu package repositories or built them from source.Â 
-A nice quick way of doing it though, is to use an ImageMagick meta-package in
-the Ubuntu repositories named libmagick-9-dev - it is just a collection of
-popular image format libraries, as well as a couple of additional utilities for
-ImageMagick. You can install it on any Ubuntu system by running this command:
-sudo apt-get install libmagick-9-dev
-ImageMagick itself still needs to be installed, of course. The best option here
-is just to build from source - packages in the repositories are horribly out of
-date, and I have found Paperclip, RMagick and Minimagick all require a fairly
-recent version of ImageMagick.
-Building from source sounds really intimidating, but it really isn't - just
-follow these steps:
-First of all, download a tarball of the ImageMagick source onto your computer:
-wget ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick.tar.gz
-Next, extract the tarball:
-tar -xvzf ImageMagick.tar.gz
-Now configure the package - note especially the end of the output (There is a
-lot of output) - it tells you which Image libraries you have installed - any
-with 'yes' next to them it will happily format and convert - because you've
-installed the package above, all the common formats should have a 'yes' next to
-them, but it's worth checking.
-cd ImageMagick-[VERSION] (VERSION will be a series of numbers like '6.7.0-8')
-./configure
-Now all the hard work (By you) is done - you just need to compile the packages:
-make &amp;amp;&amp;amp; sudo make install
-All done! - ImageMagick should be all installed. To check, run the command
-which identify, and check it returns a path to the 'identify' command.
-Note: If you have trouble compiling, make sure Ubunutu's build tools are
-installed: sudo apt-get install build-essential&lt;/p&gt;
 </content>
   </entry>
   
