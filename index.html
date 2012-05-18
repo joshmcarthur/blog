@@ -27,12 +27,12 @@
   <script>
     var redirect = function() {
       host = "http://joshmcarthur.com"
-      path = host + window.location.pathname.replace(/\/{2,}/,  "/")
-      if (path != "http://joshmcarthur.com/") {
+      path = window.location.pathname.replace(/\/{2,}/,  "/")
+      if (path != "/") {
         path = path.replace(/\/$/, '.html')
       }
 
-      window.location = path
+      window.location = host + path
     }
   </script>
 
