@@ -29,11 +29,9 @@
       host = "http://joshmcarthur.com"
       path = window.location.pathname.replace(/\/{2,}/,  "/")
       if (path != "/") {
-        alert(path)
         path = path.replace(/\/$/, '.html')
       }
 
-      window.location = host + path
     }
   </script>
 
