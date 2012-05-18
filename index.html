@@ -28,7 +28,7 @@
     var redirect = function() {
       host = "http://joshmcarthur.com"
       path = host + window.location.pathname.replace(/\/{2,}/,  "/")
-      if (path != "/") {
+      if (path != "http://joshmcarthur.com/") {
         path = path.replace(/\/$/, '.html')
       }
 
